@@ -35,6 +35,7 @@ const ogImage = new URL(image, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {siteConfig.noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -46,7 +47,7 @@ const ogImage = new URL(image, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>document.documentElement.classList.add('js');</script>
-    {siteConfig.gaId && import.meta.env.PROD && (
+    {siteConfig.gaId && !siteConfig.noindex && import.meta.env.PROD && (
       <>
         <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.gaId}`}></script>
         <script is:inline define:vars={{ gaId: siteConfig.gaId }}>

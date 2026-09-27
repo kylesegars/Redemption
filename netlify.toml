@@ -10,3 +10,10 @@
   for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# REVIEW MODE: keep every URL (pages, images, files) out of search engines.
+# Remove this block at launch, and set noindex: false in src/site.config.ts.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

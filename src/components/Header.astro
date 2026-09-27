@@ -58,14 +58,10 @@ const service = settings.serviceTimes[0];
   </div>
 </header>
 
-<!-- Mobile / tablet menu -->
+<!-- Mobile / tablet menu: floating card over a dimmed, blurred page -->
 <div class="mobile-menu" id="mobile-menu" data-mobile-menu aria-hidden="true" inert>
-  <div class="menu-bg" aria-hidden="true">
-    <svg class="menu-rings" viewBox="0 0 400 400">
-      <circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /><circle cx="200" cy="200" r="110" />
-    </svg>
-  </div>
-  <div class="menu-inner">
+  <div class="menu-backdrop" data-menu-close></div>
+  <div class="menu-card" role="dialog" aria-modal="true" aria-label="Site menu">
     <nav aria-label="Mobile">
       <ul class="menu-links">
         <li style="--i:0"><a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a></li>
@@ -73,10 +69,10 @@ const service = settings.serviceTimes[0];
           <li style={`--i:${i + 1}`}>
             {item.children ? (
               <div class="menu-group" data-menu-group>
-                <div class="menu-group-head">
+                <div class="menu-row">
                   <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
                   <button type="button" class="group-toggle" aria-expanded="false" aria-controls={`menu-sub-${i}`} aria-label={`Show ${item.label} pages`}>
-                    <Icon name="chevron-down" size={22} />
+                    <Icon name="chevron-down" size={18} />
                   </button>
                 </div>
                 <div class="menu-sub" id={`menu-sub-${i}`}>
@@ -95,25 +91,15 @@ const service = settings.serviceTimes[0];
       </ul>
     </nav>
 
-    <div class="menu-actions" style={`--i:${siteConfig.nav.length + 1}`}>
-      <a class="btn" href={siteConfig.navCta.href}>{siteConfig.navCta.label} <Icon name="arrow" /></a>
-      <a class="btn btn-outline" href="/contact#visit" data-plan-visit>Plan a visit</a>
-    </div>
-
-    <div class="menu-card" style={`--i:${siteConfig.nav.length + 2}`}>
+    <div class="menu-foot" style={`--i:${siteConfig.nav.length + 1}`}>
+      <div class="menu-actions">
+        <a class="btn" href={siteConfig.navCta.href}>{siteConfig.navCta.label}</a>
+        <a class="btn btn-outline" href="/contact#visit" data-plan-visit>Plan a visit</a>
+      </div>
       {service && (
-        <p class="menu-card-row">
-          <Icon name="clock" />
-          <span><strong>{service.day} at {service.time}</strong><br />{service.note}</span>
-        </p>
-      )}
-      {fullAddress && (
-        <p class="menu-card-row">
-          <Icon name="pin" />
-          <span>
-            <strong>{settings.location.venue}</strong><br />{fullAddress}
-            {settings.location.mapUrl && <><br /><a href={settings.location.mapUrl} target="_blank" rel="noopener">Get directions</a></>}
-          </span>
+        <p class="menu-info">
+          <Icon name="clock" size={16} />
+          <span>{service.day} at {service.time}{fullAddress && <> · <a href={settings.location.mapUrl ?? '/contact'} target={settings.location.mapUrl ? '_blank' : undefined} rel="noopener">{settings.location.street}, {settings.location.city}</a></>}</span>
         </p>
       )}
       {socials.length > 0 && (
@@ -136,10 +122,10 @@ const service = settings.serviceTimes[0];
     /* One shadow for the bar + logo circle together: drop-shadow follows their
        combined outline, so it only shows along the bottom edge and the circle's
        lower half. Slightly deeper once the page scrolls under the header. */
-    filter: drop-shadow(0 6px 10px rgb(2 26 38 / 0.22));
+    filter: drop-shadow(0 3px 4px rgb(0 0 0 / 0.45)) drop-shadow(0 12px 22px rgb(0 0 0 / 0.55));
     transition: filter .3s ease;
   }
-  .site-header.is-scrolled { filter: drop-shadow(0 8px 14px rgb(2 26 38 / 0.30)); }
+  .site-header.is-scrolled { filter: drop-shadow(0 3px 5px rgb(0 0 0 / 0.5)) drop-shadow(0 14px 26px rgb(0 0 0 / 0.6)); }
   .header-inner {
     position: relative; height: 100%;
     display: grid; grid-template-columns: 1fr var(--badge-size) 1fr; align-items: center;
@@ -215,98 +201,85 @@ const service = settings.serviceTimes[0];
     .menu-toggle { display: none; }
   }
 
-  /* ---- Mobile / tablet menu ---------------------------------------------- */
-  .mobile-menu {
-    position: fixed; inset: 0; z-index: 45; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
-    background:
-      radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 60%),
-      var(--color-ink);
-    color: var(--color-on-dark);
-    clip-path: circle(0 at 50% var(--header-height));
-    visibility: hidden;
-    transition: clip-path .6s cubic-bezier(.7,0,.2,1), visibility 0s linear .6s;
-  }
-  .mobile-menu.is-open { clip-path: circle(150% at 50% var(--header-height)); visibility: visible; transition: clip-path .7s cubic-bezier(.7,0,.2,1); }
+  /* ---- Mobile / tablet menu: floating card ---------------------------- */
+  .mobile-menu { position: fixed; inset: 0; z-index: 45; visibility: hidden; transition: visibility 0s linear .35s; }
+  .mobile-menu.is-open { visibility: visible; transition: none; }
   @media (min-width: 1080px) { .mobile-menu { display: none; } }
 
-  /* Decoration lives in its own clipped layer so the menu never gains sideways scroll */
-  .menu-bg { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
-  .menu-rings {
-    position: absolute; right: -140px; bottom: -120px; width: 460px;
-    fill: none; stroke: var(--color-accent); stroke-width: 8; opacity: .08; pointer-events: none;
+  .menu-backdrop {
+    position: absolute; inset: 0;
+    background: rgb(2 26 38 / 0.6);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    opacity: 0; transition: opacity .35s ease;
   }
-  .menu-inner {
-    position: relative; width: 100%; max-width: 560px; margin-inline: auto;
-    padding: calc(var(--header-height) + var(--header-overhang) + 20px) var(--gutter) 48px;
-    display: grid; gap: 28px;
+  .mobile-menu.is-open .menu-backdrop { opacity: 1; }
+
+  .menu-card {
+    position: absolute; left: 12px; right: 12px; margin-inline: auto; max-width: 440px;
+    top: calc(var(--header-height) + var(--header-overhang) + 12px);
+    max-height: calc(100dvh - var(--header-height) - var(--header-overhang) - 24px);
+    overflow-y: auto; overscroll-behavior: contain;
+    padding: 10px 20px 20px; border-radius: 22px;
+    background: #0a2837; color: var(--color-on-dark);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 16%, transparent);
+    box-shadow: 0 30px 60px rgb(0 0 0 / 0.45), 0 2px 0 rgb(255 255 255 / 0.04) inset;
+    transform-origin: 50% 0;
+    opacity: 0; transform: translateY(-10px) scale(0.97);
+    transition: opacity .25s ease, transform .35s cubic-bezier(.2,.8,.2,1);
   }
+  .mobile-menu.is-open .menu-card { opacity: 1; transform: none; }
 
   .menu-links { list-style: none; padding: 0; margin: 0; }
-  .menu-links > li { border-bottom: 1px solid color-mix(in srgb, var(--color-on-dark) 12%, transparent); }
-  .menu-links > li > a, .menu-group-head > a {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 2px; text-decoration: none;
-    font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;
-    font-size: clamp(1.7rem, 7.5vw, 2.3rem); line-height: 1.1;
-    transition: color .2s ease, padding .25s ease;
+  .menu-links > li { border-bottom: 1px solid color-mix(in srgb, var(--color-on-dark) 10%, transparent); }
+  .menu-links > li > a, .menu-row > a {
+    display: flex; align-items: center; min-height: 54px; flex: 1;
+    font-family: var(--font-nav); font-weight: 700; font-size: 0.95rem;
+    letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+    transition: color .2s ease;
   }
-  .menu-links a:hover { color: var(--color-accent); }
-  .menu-links a[aria-current='page'] { color: var(--color-accent); }
-  .menu-group-head { display: flex; align-items: center; justify-content: space-between; }
+  .menu-links a:hover, .menu-links a[aria-current='page'] { color: var(--color-accent); }
+  .menu-row { display: flex; align-items: center; gap: 12px; }
   .group-toggle {
-    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
-    border: 1.5px solid color-mix(in srgb, var(--color-on-dark) 25%, transparent);
-    background: transparent; color: inherit; transition: background-color .2s ease, border-color .2s ease;
+    flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+    border: 0; background: color-mix(in srgb, var(--color-on-dark) 8%, transparent); color: inherit;
+    transition: background-color .2s ease, color .2s ease;
   }
   .group-toggle :global(svg) { transition: transform .3s ease; }
-  .group-toggle[aria-expanded='true'] { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
+  .group-toggle[aria-expanded='true'] { background: var(--color-accent); color: var(--color-accent-ink); }
   .group-toggle[aria-expanded='true'] :global(svg) { transform: rotate(180deg); }
+
   /* Collapsible sub-list: animates height via grid rows 0fr → 1fr */
-  .menu-sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
-  .menu-sub > ul { min-height: 0; overflow: hidden; list-style: none; margin: 0; padding: 0 0 0 2px; }
+  .menu-sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+  .menu-sub > ul { min-height: 0; overflow: hidden; list-style: none; margin: 0; padding: 0 0 0 14px; border-left: 2px solid color-mix(in srgb, var(--color-accent) 35%, transparent); }
   .menu-group.open .menu-sub { grid-template-rows: 1fr; }
-  .menu-group.open .menu-sub > ul { padding-bottom: 14px; }
+  .menu-group.open .menu-sub > ul { margin-bottom: 12px; }
   .menu-sub a {
-    display: block; padding: 8px 0; text-decoration: none;
-    font-family: var(--font-nav); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase;
-    color: color-mix(in srgb, var(--color-on-dark) 78%, transparent);
+    display: block; padding: 9px 0; text-decoration: none;
+    font-family: var(--font-body); font-weight: 500; font-size: 0.95rem;
+    color: color-mix(in srgb, var(--color-on-dark) 75%, transparent);
   }
   .menu-sub a:hover, .menu-sub a[aria-current='page'] { color: var(--color-accent); }
 
+  .menu-foot { display: grid; gap: 16px; padding-top: 18px; }
   .menu-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .menu-actions .btn { padding-inline: 12px; }
-
-  .menu-card {
-    display: grid; gap: 16px; padding: 22px;
-    border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--color-on-dark) 6%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-on-dark) 12%, transparent);
-    font-size: 0.95rem; line-height: 1.5;
-  }
-  .menu-card-row { display: flex; gap: 14px; color: color-mix(in srgb, var(--color-on-dark) 80%, transparent); }
-  .menu-card-row strong { color: var(--color-on-dark); }
-  .menu-card-row :global(svg) { flex: none; color: var(--color-accent); margin-top: 2px; }
-  .menu-card-row a { color: var(--color-accent); font-weight: 600; text-underline-offset: 3px; }
-  .menu-socials { list-style: none; padding: 0; margin: 0; display: flex; gap: 10px; }
+  .menu-actions .btn { min-height: 48px; padding-inline: 10px; }
+  .menu-info { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: color-mix(in srgb, var(--color-on-dark) 70%, transparent); }
+  .menu-info :global(svg) { flex: none; color: var(--color-accent); }
+  .menu-info a { color: inherit; text-underline-offset: 3px; white-space: nowrap; }
+  .menu-socials { list-style: none; padding: 0; margin: 0; display: flex; gap: 8px; }
   .menu-socials a {
-    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
-    border: 1.5px solid color-mix(in srgb, var(--color-on-dark) 25%, transparent);
+    display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    background: color-mix(in srgb, var(--color-on-dark) 8%, transparent);
     transition: background-color .2s ease, color .2s ease;
   }
-  .menu-socials a:hover { background: var(--color-on-dark); color: var(--color-ink); }
-  .menu-socials :global(svg) { width: 20px; height: 20px; }
+  .menu-socials a:hover { background: var(--color-accent); color: var(--color-accent-ink); }
+  .menu-socials :global(svg) { width: 18px; height: 18px; }
 
-  /* Staggered entrance */
-  .menu-links > li, .menu-actions, .menu-card {
-    opacity: 0; transform: translateY(18px);
-    transition: opacity .45s ease, transform .55s cubic-bezier(.2,.7,.2,1);
-  }
-  .mobile-menu.is-open .menu-links > li, .mobile-menu.is-open .menu-actions, .mobile-menu.is-open .menu-card {
-    opacity: 1; transform: none; transition-delay: calc(0.18s + var(--i, 0) * 0.05s);
-  }
+  /* Quick stagger as the card opens */
+  .menu-links > li, .menu-foot { opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .35s ease; }
+  .mobile-menu.is-open .menu-links > li, .mobile-menu.is-open .menu-foot { opacity: 1; transform: none; transition-delay: calc(0.08s + var(--i, 0) * 0.035s); }
   @media (prefers-reduced-motion: reduce) {
-    .mobile-menu, .mobile-menu.is-open { transition: none; }
-    .menu-links > li, .menu-actions, .menu-card { transition: none; transform: none; }
+    .menu-backdrop, .menu-card, .menu-links > li, .menu-foot { transition: none !important; transform: none !important; }
   }
 
   :global(body.menu-open) { overflow: hidden; }
@@ -331,10 +304,12 @@ const service = settings.serviceTimes[0];
     menu.toggleAttribute('inert', !open);
     document.body.classList.toggle('menu-open', open);
     if (open) menu.querySelector<HTMLElement>('.menu-links a')?.focus({ preventScroll: true });
+    else if (document.activeElement && menu.contains(document.activeElement)) toggle.focus({ preventScroll: true });
   };
   toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
   // Close after choosing a destination (including in-page links and the Plan a Visit dialog)
   menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  menu?.querySelector('[data-menu-close]')?.addEventListener('click', () => setOpen(false));
   window.matchMedia('(min-width: 1080px)').addEventListener('change', (e) => e.matches && setOpen(false));
 
   // Expandable groups in the mobile menu (e.g. About)

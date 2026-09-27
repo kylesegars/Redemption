@@ -18,6 +18,12 @@ export const siteConfig = {
   /** Map coordinates of the church building (used in the Church schema). */
   geo: { latitude: 34.7003793, longitude: -89.9459022 },
 
+  /**
+   * Review mode: while the site is being reviewed, keep it out of search engines.
+   * Set to false at launch, AND remove the X-Robots-Tag block in netlify.toml.
+   */
+  noindex: true,
+
   /** Google Analytics 4 measurement ID (leave empty to disable). */
   gaId: 'G-4RCKL8E1PK',
 
