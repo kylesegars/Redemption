@@ -17,7 +17,6 @@ export const siteConfig = {
     { label: 'About', href: '/about' },
     { label: 'Events', href: '/events' },
     { label: 'Blog', href: '/blog' },
-    { label: 'Partner', href: '/partner' },
     { label: 'Contact', href: '/contact' },
   ],
   /** The highlighted button at the end of the nav. */

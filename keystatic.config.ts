@@ -45,7 +45,7 @@ export default config({
   storage,
   ...(cloudProject ? { cloud: { project: cloudProject } } : {}),
   ui: {
-    brand: { name: 'Church Website' },
+    brand: { name: 'Redemption Church Coldwater' },
     navigation: {
       Content: ['posts', 'events'],
       Church: ['team', 'settings'],

@@ -7,7 +7,7 @@ import netlify from '@astrojs/netlify';
 
 export default defineConfig({
   // Replace with the church's production URL (used for canonical URLs and social cards).
-  site: 'https://example-church.netlify.app',
+  site: 'https://redemptioncoldwater.com',
   output: 'static',
   adapter: netlify(),
   integrations: [react(), markdoc(), keystatic()],

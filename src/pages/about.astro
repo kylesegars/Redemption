@@ -9,34 +9,39 @@ import { getTeam } from '../lib/content';
 const team = await getTeam();
 const city = settings.location.city ?? 'our city';
 
-/* Page copy lives here so the layout stays locked. Edit freely per church. */
+/* Page copy lives here so the layout stays locked. Edit freely. */
 const values = [
-  { title: 'Jesus at the center', text: 'Everything we do flows from the good news that Jesus lived, died, and rose again for us.' },
-  { title: 'Family, not an event', text: 'Church isn’t a building we visit. It’s a family we belong to — seven days a week.' },
-  { title: 'For the city', text: `We exist for the good of ${city}. We want our neighbors to be glad we’re here.` },
-  { title: 'Everyone plays', text: 'No spectators. Every person has gifts to share and a place to serve.' },
+  { title: 'Expositional preaching', text: 'We value the teaching of all Scripture faithfully and plainly through expositional preaching, so that people understand the whole story of the Bible and God’s redemption through Jesus.' },
+  { title: 'Gathered worship', text: 'We value the weekly gathering as a faith family for worship through the preaching of the Word, prayer, singing, fellowship, giving, and the ordinances: the Lord’s Supper and baptism.' },
+  { title: 'Community', text: 'We strive to be a close-knit faith family, with small groups where relationships are made and deepened through fellowship, learning, encouragement, and serving together.' },
+  { title: 'Biblical leadership', text: 'We value a plurality of qualified pastor-elders who provide biblical oversight with the congregation’s affirmation, and deacons who serve the physical and logistical needs of the church.' },
+  { title: 'Missions', text: 'We answer the Great Commission through acts of service, evangelism, church planting, and missionary partnerships, taking the gospel to our neighbors and around the world.' },
 ];
 
 const beliefs = [
-  { q: 'God', a: 'We believe in one God, eternally existing in three persons: Father, Son, and Holy Spirit.' },
-  { q: 'Jesus', a: 'We believe Jesus Christ is fully God and fully man, that he lived a sinless life, died for our sins, rose bodily from the dead, and is coming again.' },
-  { q: 'Salvation', a: 'We believe salvation is a gift of God’s grace, received through faith in Jesus — not earned by our good works.' },
-  { q: 'The Bible', a: 'We believe the Bible is God’s inspired Word, true and trustworthy, and our final authority for faith and life.' },
-  { q: 'The Church', a: 'We believe the church is God’s family — called to worship, grow together, and share the good news with the world.' },
+  { q: 'Southern Baptist', a: 'We are a Southern Baptist church plant, sent out by Longview Point Baptist Church in Hernando, Mississippi.' },
+  { q: 'Abstract of Principles', a: 'We affirm the Abstract of Principles as a concise and specific summary of the beliefs and doctrines we hold.' },
+  { q: 'Church leadership', a: 'We are a pastor-led, congregationally affirmed, deacon-served church, with believers equipped for gospel work. The office of Pastor/Elder is one of God’s designed offices for the healthy function of the church; deacons free the pastors to devote themselves to the Word, prayer, and equipping the saints for ministry.' },
 ];
 
+const rhythms = [
+  { name: 'Pulpit', shape: 'triangle', text: 'Our Sunday gathering centers on prayer, Scripture reading, corporate singing, the preaching of the Word, the ordinances, fellowship, and giving. Its direction is the worship of God and growth toward Him.' },
+  { name: 'Table', shape: 'circle', text: 'In homes, coffee shops, or wherever a group can gather, we learn to live in authentic community. Community Groups (15–20 people) discuss the sermon, share a meal, and pray and care for one another. Life on Life Groups (3–5 people, same gender) help believers walk closer to Jesus.' },
+  { name: 'Square', shape: 'square', text: 'The square is our community and world. We intentionally engage Coldwater and beyond through acts of service, evangelism, church planting, and missionary partnerships.' },
+] as const;
+
 const expect = [
-  { icon: 'coffee', title: 'A warm welcome', text: 'Our welcome team will meet you at the door. Grab a coffee and make yourself at home.' },
-  { icon: 'music', title: 'Worship', text: 'We sing songs old and new, led by a band. Sing along or just take it in.' },
-  { icon: 'book', title: 'Teaching', text: 'Practical, Bible-centered messages about 30 minutes long.' },
-  { icon: 'smile', title: 'Kids', text: settings.serviceTimes[0]?.note ?? 'Safe, fun environments for kids every week.' },
+  { icon: 'coffee', title: 'A warm welcome', text: 'Someone will meet you at the door. Come as you are and make yourself at home.' },
+  { icon: 'music', title: 'Worship', text: 'We pray, read Scripture, and sing together as a faith family.' },
+  { icon: 'book', title: 'Preaching', text: 'Faithful, plain, expositional preaching straight through books of the Bible.' },
+  { icon: 'smile', title: 'Fellowship', text: 'Stick around afterward. We’d love to get to know you and your family.' },
 ] as const;
 ---
 <BaseLayout title="About" description={`The story, beliefs, and people of ${settings.churchName}.`} overlayHeader>
   <PageHero
     eyebrow="About us"
-    title="A church for the whole city"
-    lede={`${settings.churchName} is a new church in ${city}. Here's who we are and why we're here.`}
+    title="Love God. Love people. Make disciples."
+    lede={`${settings.churchName} is a Southern Baptist church plant in ${city}, Mississippi. Here's who we are and why we're here.`}
     image="/images/site/story.svg"
   />
 
@@ -45,19 +50,21 @@ const expect = [
     <div class="container story">
       <div class="stack story-copy" data-reveal>
         <span class="eyebrow">Our story</span>
-        <h2>It started around a kitchen table</h2>
+        <h2>A building given for the gospel</h2>
         <p class="lede">
-          In 2025, a small group of families began praying about what it would look like to plant a
-          church that loved {city} well.
+          In 2023, Longview Point Baptist Church was given a building by a church that had shut its
+          doors. The keys were handed over with the hope of seeing it filled and used once again to
+          bring the gospel to Tate County.
         </p>
         <p>
-          What began as a handful of people sharing meals has grown into a launch team of neighbors,
-          friends, and families who believe the local church can be one of the most beautiful things
-          in a city. We're just getting started — and we'd love for you to be part of the story.
+          At the same time, Longview Point connected with Sam Henderson about becoming a church
+          planting resident. In January 2024, Sam and his family (Natalie, Sammy, and James) came to
+          Longview Point with the intent of planting in Coldwater.
         </p>
         <p>
-          This paragraph is placeholder copy. Replace it with the real story of how this church began,
-          who is involved, and what God has been doing.
+          Since then, Sam has been building a core group: leading a community Bible study, canvassing,
+          hosting events, and getting to know the town. Our hope is that anyone who walks through our
+          doors feels welcomed, loved, and encouraged to follow Jesus.
         </p>
       </div>
       <div class="media story-media" data-reveal><img src="/images/site/community.svg" alt="" loading="lazy" /></div>
@@ -68,8 +75,8 @@ const expect = [
   <section class="section section-dark">
     <div class="container">
       <div class="mission" data-reveal>
-        <span class="eyebrow">Our mission</span>
-        <p class="mission-text">To help people <em>find hope</em> in Jesus, <em>find family</em> in the church, and <em>find purpose</em> in serving {city}.</p>
+        <span class="eyebrow">Our mission &amp; core values</span>
+        <p class="mission-text">We exist to <em>love God</em>, <em>love people</em>, and <em>make disciples</em> of Jesus Christ.</p>
       </div>
       <ol class="values">
         {values.map((v, i) => (
@@ -89,7 +96,7 @@ const expect = [
       <div class="stack">
         <span class="eyebrow">What we believe</span>
         <h2>Our beliefs</h2>
-        <p class="muted">The core convictions that shape everything we do.</p>
+        <p class="muted">The convictions that shape everything we do.</p>
       </div>
       <div class="accordion">
         {beliefs.map((b, i) => (
@@ -99,6 +106,32 @@ const expect = [
           </details>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- Life at Redemption: Pulpit, Table, Square -->
+  <section class="section section-dark" id="life">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Life at Redemption</span>
+          <h2>Pulpit. Table. Square.</h2>
+        </div>
+        <p class="lede">A simple approach to discipleship, where every area of church life is connected.</p>
+      </div>
+      <ol class="rhythms">
+        {rhythms.map((r, i) => (
+          <li data-reveal style={`transition-delay:${i * 70}ms`}>
+            <svg class="rhythm-shape" viewBox="0 0 48 48" aria-hidden="true">
+              {r.shape === 'triangle' && <path d="M6 10h36L24 40z" />}
+              {r.shape === 'circle' && <circle cx="24" cy="24" r="17" />}
+              {r.shape === 'square' && <rect x="8" y="8" width="32" height="32" />}
+            </svg>
+            <h3 class="h3">{r.name}</h3>
+            <p class="muted">{r.text}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
@@ -175,9 +208,14 @@ const expect = [
   .mission-text em { font-style: normal; color: var(--color-accent); }
   .values { list-style: none; padding: 0; display: grid; gap: 40px 32px; }
   @media (min-width: 700px) { .values { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1100px) { .values { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 1100px) { .values { grid-template-columns: repeat(5, 1fr); } }
   .values li { display: grid; gap: 12px; align-content: start; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--color-on-dark) 25%, transparent); }
   .value-num { font-family: var(--font-display); font-weight: 800; font-stretch: var(--display-stretch); color: var(--color-accent); }
+
+  .rhythms { list-style: none; padding: 0; display: grid; gap: 40px 32px; }
+  @media (min-width: 860px) { .rhythms { grid-template-columns: repeat(3, 1fr); } }
+  .rhythms li { display: grid; gap: 14px; align-content: start; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--color-on-dark) 25%, transparent); }
+  .rhythm-shape { width: 44px; height: 44px; fill: none; stroke: var(--color-accent); stroke-width: 3; stroke-linejoin: round; }
 
   .beliefs { display: grid; gap: 40px; }
   @media (min-width: 960px) { .beliefs { grid-template-columns: 0.8fr 1.2fr; gap: 80px; } }

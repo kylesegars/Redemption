@@ -1,41 +1,41 @@
 {
-  "churchName": "Ember Church",
-  "tagline": "A new church for the whole city of Springfield.",
+  "churchName": "Redemption Church Coldwater",
+  "tagline": "Proclaiming Christ, Cultivating Community, Making Disciples",
   "logo": null,
   "serviceTimes": [
-    { "day": "Sundays", "time": "10:00 AM", "note": "Kids program for birth–5th grade" }
+    { "day": "Sundays", "time": "10:45 AM", "note": "Worship, prayer, Bible teaching and fellowship" }
   ],
   "location": {
-    "venue": "Lincoln Elementary School",
-    "street": "1200 Placeholder Ave",
-    "city": "Springfield",
-    "state": "IL",
-    "zip": "62701",
-    "mapUrl": "https://maps.google.com",
-    "arrival": "Park in the east lot and look for the orange flags. Our welcome team will meet you at the main doors and help you check in your kids."
+    "venue": "Redemption Church Coldwater",
+    "street": "2045 MS-306",
+    "city": "Coldwater",
+    "state": "MS",
+    "zip": "38618",
+    "mapUrl": "https://maps.google.com/?q=2045+MS-306,+Coldwater,+MS+38618",
+    "arrival": "We gather Sunday mornings at 10:45. Come as you are. We'd love for you to feel welcomed, loved, and encouraged to follow Jesus."
   },
-  "email": "hello@example.church",
-  "phone": "(555) 010-0000",
+  "email": null,
+  "phone": null,
   "social": {
-    "instagram": "https://instagram.com",
-    "facebook": "https://facebook.com",
-    "youtube": "https://youtube.com"
+    "instagram": null,
+    "facebook": "https://www.facebook.com/redemptioncoldwater/",
+    "youtube": null
   },
   "planVisit": {
     "enabled": true,
     "heading": "We'd love to meet you",
-    "blurb": "Let us know you're coming and we'll save you a seat, have someone meet you at the door, and help get your kids checked in."
+    "blurb": "Let us know you're coming and we'll be looking for you on Sunday morning."
   },
   "giving": {
-    "provider": "planning-center",
-    "url": "https://example.churchcenter.com/giving",
-    "mailingAddress": "Ember Church\nPO Box 0000\nSpringfield, IL 62701",
-    "note": "Ember Church is a 501(c)(3) nonprofit. All gifts are tax-deductible to the extent allowed by law."
+    "provider": "other",
+    "url": null,
+    "mailingAddress": null,
+    "note": "Our giving is administered through our sending church, Longview Point Baptist Church in Hernando. Their platform is set up with several different funds, so please be sure to leave the fund selection on \"Coldwater Church Plant – Sam Henderson\" to ensure that your gifts are allocated properly."
   },
   "newsletter": {
-    "enabled": true,
+    "enabled": false,
     "heading": "Stay in the loop",
-    "blurb": "A short email every other week with what's coming up and how God is moving.",
+    "blurb": "",
     "formAction": null
   }
 }
