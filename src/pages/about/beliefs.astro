@@ -7,28 +7,25 @@ import Icon from '../../components/Icon.astro';
 /* Page copy lives here so the layout stays locked. Edit freely. */
 const docs = [
   {
-    eyebrow: 'Baptist Faith & Message',
-    title: 'BF&M 2000',
+    title: 'Baptist Faith & Message 2000',
     text: 'We are full in participation and affirmation with the Baptist Faith and Message 2000 as a SBC fellowship.',
     link: { label: 'Read the Baptist Faith & Message 2000', href: 'https://bfm.sbc.net/bfm2000/' },
   },
   {
-    eyebrow: 'Abstract of Principles',
     title: 'Abstract of Principles',
     text: 'We also affirm the Abstract of Principles. This document represents a more concise and specific version of our beliefs and doctrines at Redemption Church Coldwater.',
     link: { label: 'Read the Abstract of Principles', href: 'https://www.sbts.edu/abstract-of-principles/' },
   },
 ];
 ---
-<BaseLayout title="Beliefs" description="Redemption Church Coldwater affirms the Baptist Faith & Message 2000 and the Abstract of Principles.">
-  <PageHero eyebrow="Beliefs" title="What we believe" lede="We are a Southern Baptist church, joyfully united with other SBC churches around a shared confession of faith." />
+<BaseLayout title="What We Believe" description="Redemption Church, a Southern Baptist church in Coldwater, Mississippi, affirms the Baptist Faith & Message 2000 and the Abstract of Principles.">
+  <PageHero title="What Our Coldwater, MS Church Believes" lede="We are a Southern Baptist church, joyfully united with other SBC churches around a shared confession of faith." />
   <AboutNav />
 
   <section class="section">
     <div class="container docs">
       {docs.map((d, i) => (
         <article class="doc" data-reveal style={`transition-delay:${i * 80}ms`}>
-          <span class="eyebrow">{d.eyebrow}</span>
           <h2 class="h2">{d.title}</h2>
           <p class="lede">{d.text}</p>
           <a class="btn btn-dark" href={d.link.href} target="_blank" rel="noopener">{d.link.label} <Icon name="arrow" /></a>

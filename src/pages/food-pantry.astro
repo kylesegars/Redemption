@@ -17,8 +17,8 @@ const policy = [
   { title: 'Referrals and additional help', body: ['When appropriate, we may offer information about other local food resources or assistance programs, and we are always glad to pray with anyone who requests it.'] },
 ];
 ---
-<BaseLayout title="Food Pantry" description="Redemption Church Coldwater's food pantry provides shelf-stable food to neighbors in Tate County, by appointment.">
-  <PageHero eyebrow="Food Pantry" title="Loving our neighbors in deed and in truth" />
+<BaseLayout title="Food Pantry in Coldwater, MS" description="Free food pantry in Coldwater, Mississippi. Redemption Church provides shelf-stable food to neighbors in Tate County, including Coldwater and Independence, by appointment.">
+  <PageHero title="Food Pantry in Coldwater, MS" lede="Shelf-stable food for neighbors in Tate County, by appointment, as an expression of Christ’s love." />
 
   <section class="section">
     <div class="container pantry">
@@ -39,7 +39,7 @@ const policy = [
         </p>
 
         <div class="how">
-          <h2 class="h3">How it works</h2>
+          <h2 class="h3">How the food pantry works</h2>
           <p>Food pantry pickup is <strong>by appointment only</strong> at {settings.churchName}{fullAddress && ` (${fullAddress})`}.</p>
           <p>To request a pickup time:</p>
           <div class="btn-row">
@@ -56,11 +56,11 @@ const policy = [
 
   <section class="section section-sand">
     <div class="container-narrow">
-      <div class="stack policy-head"><span class="eyebrow">Food pantry policy</span><h2>Guidelines</h2></div>
+      <h2 class="policy-head">Food pantry policy</h2>
       <div class="policy">
         {policy.map((p, i) => (
           <details open={i === 0}>
-            <summary>{p.title}<Icon name="chevron-down" /></summary>
+            <summary><h3>{p.title}</h3><Icon name="chevron-down" /></summary>
             <div class="policy-body">
               {p.body.map((t) => <p>{t}</p>)}
               {p.list && <ul>{p.list.map((l) => <li>{l}</li>)}</ul>}
@@ -90,6 +90,7 @@ const policy = [
   .policy { border-top: 1.5px solid var(--color-ink); }
   .policy details { border-bottom: 1px solid var(--color-line); }
   .policy summary { display: flex; justify-content: space-between; gap: 16px; padding: 22px 0; cursor: pointer; list-style: none; font-weight: 700; font-size: 1.15rem; color: var(--color-ink); }
+  .policy summary h3 { font-size: 1.15rem; line-height: 1.3; }
   .policy summary::-webkit-details-marker { display: none; }
   .policy summary :global(svg) { flex: none; transition: transform .3s ease; }
   .policy details[open] summary :global(svg) { transform: rotate(180deg); }

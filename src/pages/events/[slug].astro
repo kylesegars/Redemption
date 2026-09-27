@@ -5,7 +5,8 @@ import Icon from '../../components/Icon.astro';
 import EventCard from '../../components/EventCard.astro';
 import { expiresAt, getUpcomingEvents } from '../../lib/content';
 import { formatEventWhen, googleCalendarUrl, icsDataUrl } from '../../lib/dates';
-import { siteConfig, labelFor } from '../../site.config';
+import JsonLd from '../../components/JsonLd.astro';
+import { eventSchema } from '../../lib/schema';
 
 /*
  * Pages are built for every event (so shared links never 404). Once an event
@@ -27,8 +28,9 @@ const where = [d.location, d.address].filter(Boolean).join(', ');
 const calArgs = { title: d.title, start: d.start, end: d.end, location: where, summary: d.summary, url };
 const more = (await getUpcomingEvents()).filter((e) => e.id !== event.id).slice(0, 3);
 ---
-<BaseLayout title={d.title} description={d.summary} image={d.image ?? undefined} type="article">
+<BaseLayout title={`${d.title} in Coldwater, MS`} description={d.summary} image={d.image ?? undefined} type="article">
   {isPast && <meta slot="head" name="robots" content="noindex" />}
+  <JsonLd slot="head" data={eventSchema(event, Astro.site!)} />
   <div data-expires={expires} data-expire-keep class:list={['event-page', { 'is-past': isPast }]}>
     <section class="container event-hero">
       <a class="back link-arrow" href="/events"><Icon name="arrow-left" /> All events</a>
@@ -39,7 +41,6 @@ const more = (await getUpcomingEvents()).filter((e) => e.id !== event.id).slice(
       </div>
       <div class="event-head">
         <div class="stack">
-          <span class="eyebrow">{labelFor(siteConfig.eventCategories, d.category)}</span>
           <h1 class="event-title">{d.title}</h1>
           <p class="lede">{d.summary}</p>
         </div>
@@ -72,7 +73,7 @@ const more = (await getUpcomingEvents()).filter((e) => e.id !== event.id).slice(
     <section class="section section-sand">
       <div class="container">
         <div class="section-head">
-          <div><span class="eyebrow">Don't miss</span><h2>More events</h2></div>
+          <h2>More upcoming events</h2>
           <a class="link-arrow" href="/events">View all <Icon name="arrow" /></a>
         </div>
         <ul class="more-grid" data-event-list>

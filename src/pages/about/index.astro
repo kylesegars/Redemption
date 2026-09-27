@@ -23,11 +23,10 @@ const expect = [
   { icon: 'users', title: 'Fellowship', text: 'Stick around afterward. We’d love to get to know you and your family.' },
 ] as const;
 ---
-<BaseLayout title="About" description={`The story, mission, and people of ${settings.churchName}.`}>
+<BaseLayout title="About Our Church in Coldwater, MS" description={`The story, mission, and people of ${settings.churchName}, a Southern Baptist church plant in Coldwater, Mississippi.`}>
   <PageHero
-    eyebrow="About us"
-    title="Love God. Love people. Make disciples."
-    lede={`${settings.churchName} is a Southern Baptist church plant in Coldwater, Mississippi, sent out by Longview Point Baptist Church in Hernando.`}
+    title="About Redemption Church in Coldwater, MS"
+    lede={`We exist to love God, love people, and make disciples of Jesus Christ. ${settings.churchName} is a Southern Baptist church plant sent out by Longview Point Baptist Church in Hernando.`}
   />
   <AboutNav />
 
@@ -35,8 +34,7 @@ const expect = [
   <section class="section">
     <div class="container story">
       <div class="stack story-copy" data-reveal>
-        <span class="eyebrow">Our story</span>
-        <h2>A building given for the gospel</h2>
+        <h2>Our story: a building given for the gospel</h2>
         <p class="lede">
           In 2023, Longview Point Baptist Church was given a building by a church that had shut its doors. The
           keys were handed over with the hopes of seeing it filled and used once again to bring the gospel to
@@ -60,9 +58,8 @@ const expect = [
   <!-- Mission -->
   <section class="section section-dark mission-section">
     <div class="container mission" data-reveal>
-      <span class="eyebrow">Our mission</span>
-      <p class="mission-text">We exist to <em>love God</em>, <em>love people</em>, and <em>make disciples</em> of Jesus&nbsp;Christ.</p>
-      <p class="mission-sub">Proclaiming Christ · Cultivating Community · Making Disciples</p>
+      <h2 class="mission-text">We exist to <em>love God</em>, <em>love people</em>, and <em>make disciples</em> of Jesus&nbsp;Christ.</h2>
+      <p class="mission-sub">Proclaiming Christ, cultivating community, and making disciples in Coldwater and Tate County.</p>
     </div>
   </section>
 
@@ -71,8 +68,7 @@ const expect = [
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Get to know us</span>
-          <h2>Explore</h2>
+          <h2>Get to know us</h2>
         </div>
       </div>
       <ul class="explore">
@@ -94,10 +90,9 @@ const expect = [
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Sundays at 10:45 AM</span>
-          <h2>What to expect</h2>
+          <h2>What to expect on Sunday at 10:45 AM</h2>
         </div>
-        <p class="lede">Your first visit anywhere can feel a little awkward. Here's what a Sunday looks like.</p>
+        <p class="lede">Your first visit anywhere can feel a little awkward. Here's what a Sunday in Coldwater looks like.</p>
       </div>
       <div class="expect">
         {expect.map((e) => (
@@ -131,7 +126,7 @@ const expect = [
   .mission { display: grid; gap: 22px; max-width: 1000px; }
   .mission-text { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 4.6vw, 3.8rem); line-height: 1.08; letter-spacing: -0.02em; }
   .mission-text em { font-style: italic; color: var(--color-accent); }
-  .mission-sub { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; opacity: .7; }
+  .mission-sub { font-size: 1.1rem; opacity: .8; max-width: 52ch; }
 
   .explore { list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
   .explore a {

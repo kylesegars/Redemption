@@ -63,6 +63,18 @@ already happened" and are hidden from search engines.
 
 ---
 
+## SEO & structured data
+
+- Every page has one H1 that names Coldwater, MS, followed by H2/H3 headings in order.
+- The home page outputs Church, Organization, and WebSite schema (`src/lib/schema.ts`), built from
+  Church Info, so address/phone/social edits in Keystatic update it automatically. Map coordinates live
+  in `geo` in `src/site.config.ts`.
+- Every event added in Keystatic automatically gets Event schema (on its detail page and the events list),
+  using the event's location/address or, if blank, the church's address.
+- Check the markup anytime with Google's Rich Results Test: https://search.google.com/test/rich-results
+
+---
+
 ## Deploying to Netlify
 
 1. Push this repo to GitHub, then in Netlify choose **Add new site → Import from Git**. The build settings come from `netlify.toml`.

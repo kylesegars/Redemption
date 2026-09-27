@@ -17,8 +17,8 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page, featured, usedCategories } = Astro.props;
 const first = page.currentPage === 1;
 ---
-<BaseLayout title={first ? 'Blog' : `Blog — Page ${page.currentPage}`} description="Stories, teaching, and updates from our church family.">
-  <PageHero eyebrow="Blog" title="Stories & updates" lede="Teaching, stories, and news from our church family." />
+<BaseLayout title={first ? 'Blog' : `Blog, Page ${page.currentPage}`} description="Sermon series, teaching, and updates from Redemption Church, a Southern Baptist church in Coldwater, Mississippi.">
+  <PageHero title="News & Teaching from Our Coldwater Church" lede="Sermon series, stories, and updates from the Redemption Church family in Coldwater, Mississippi." />
   <BlogIndex
     posts={page.data}
     featured={first ? featured : undefined}

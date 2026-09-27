@@ -1,0 +1,8 @@
+---
+/** Renders a schema.org JSON-LD block. Pass it in BaseLayout's "head" slot. */
+interface Props { data: unknown }
+const { data } = Astro.props;
+// Drop undefined fields, and escape "<" so content can't close the script tag.
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+<script type="application/ld+json" set:html={json} />

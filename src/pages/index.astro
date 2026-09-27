@@ -6,6 +6,8 @@ import PostCard from '../components/PostCard.astro';
 import { settings, fullAddress } from '../lib/settings';
 import { getUpcomingEvents, getPosts } from '../lib/content';
 import { siteConfig } from '../site.config';
+import JsonLd from '../components/JsonLd.astro';
+import { homeSchema } from '../lib/schema';
 
 const events = (await getUpcomingEvents()).slice(0, siteConfig.homeEventCount);
 const posts = (await getPosts()).slice(0, 3);
@@ -25,14 +27,21 @@ const rhythms = [
   { name: 'Square', img: '/images/site/square.png', text: 'Engaging Coldwater and the world through service and the gospel.' },
 ];
 ---
-<BaseLayout overlayHeader>
+<BaseLayout
+  overlayHeader
+  title="Southern Baptist Church in Coldwater, MS"
+  description={`${settings.churchName} is a Southern Baptist church in Coldwater, Mississippi. Join us ${service ? `${service.day} at ${service.time}` : 'on Sundays'} at ${fullAddress} for worship, Bible teaching, and fellowship.`}
+>
+  <JsonLd slot="head" data={homeSchema(Astro.site!)} />
   <!-- Hero -->
   <section class="hero on-image">
     <img class="hero-bg" src="/images/site/sanctuary.jpg" alt="" fetchpriority="high" />
     <div class="container hero-inner">
       <img class="hero-logo" src="/images/site/logo-horizontal.png" alt={settings.churchName} width="1313" height="438" />
-      <span class="hero-tagline">{settings.tagline}</span>
-      <h1 class="hero-title">Join us {service ? `${service.day} at ${service.time.replace(' ', '')}` : 'this Sunday'} for&nbsp;worship!</h1>
+      <h1 class="hero-title">Sunday worship in Coldwater, Mississippi</h1>
+      <p class="hero-lede">
+        Join us {service ? `${service.day} at ${service.time}` : 'this Sunday'} as we proclaim Christ, cultivate community, and make disciples in Tate County.
+      </p>
       <div class="btn-row hero-actions">
         <a class="btn" href="/contact#visit" data-plan-visit>Plan a visit <Icon name="arrow" /></a>
         {settings.location.mapUrl && (
@@ -47,8 +56,7 @@ const rhythms = [
   <section class="section">
     <div class="container expect">
       <div class="stack expect-copy" data-reveal>
-        <span class="eyebrow">What to expect</span>
-        <h2>Come as you are</h2>
+        <h2>What to expect on a Sunday</h2>
         <p class="lede">
           Our Sunday morning gatherings are a time when we come together to proclaim and exalt the saving
           gospel of Jesus Christ through worship, prayer, Bible teaching, giving, fellowship, and serving one
@@ -67,8 +75,7 @@ const rhythms = [
       <article class="series" data-reveal>
         <div class="media series-media"><img src={currentSeries.image} alt={`${currentSeries.title}: ${currentSeries.subtitle}`} loading="lazy" /></div>
         <div class="series-copy stack">
-          <span class="eyebrow">Current series</span>
-          <h3 class="h3">{currentSeries.title}: {currentSeries.subtitle}</h3>
+          <h3 class="h3">Current sermon series: {currentSeries.title}, {currentSeries.subtitle}</h3>
           <p class="muted">{currentSeries.text}</p>
           {settings.social.facebook && (
             <a class="btn btn-dark" href={settings.social.facebook} target="_blank" rel="noopener"><Icon name="facebook" /> Listen on Facebook</a>
@@ -83,8 +90,7 @@ const rhythms = [
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">What's happening</span>
-          <h2>Upcoming events</h2>
+          <h2>Upcoming events in Coldwater</h2>
         </div>
       </div>
       {events.length > 0 ? (
@@ -107,8 +113,8 @@ const rhythms = [
     <img class="why-bg" src="/images/site/coldwater-tower.jpg" alt="" loading="lazy" />
     <div class="container why-inner">
       <div class="stack" data-reveal>
-        <span class="eyebrow">Why Coldwater?</span>
-        <h2>“A wonderful place to call home”</h2>
+        <h2>Why plant a church in Coldwater?</h2>
+        <p class="why-quote">“A wonderful place to call home.”</p>
       </div>
       <div class="stack why-copy" data-reveal>
         <p>
@@ -132,8 +138,7 @@ const rhythms = [
     <div class="container story">
       <div class="media story-media" data-reveal><img src="/images/site/first-service.jpg" alt="Redemption Church Coldwater's first service" loading="lazy" /></div>
       <div class="stack story-copy" data-reveal>
-        <span class="eyebrow">Our story</span>
-        <h2>A building given for the gospel</h2>
+        <h2>Our story: a building given for the gospel</h2>
         <p>
           In 2023, Longview Point Baptist Church was given a building by a church that had shut its doors. The
           keys were handed over with the hopes of seeing it filled and used once again to bring the gospel to
@@ -157,8 +162,7 @@ const rhythms = [
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Life at Redemption</span>
-          <h2>Pulpit. Table. Square.</h2>
+          <h2>How we make disciples: Pulpit, Table, Square</h2>
         </div>
         <a class="link-arrow" href="/about/life-at-redemption-coldwater">How we make disciples <Icon name="arrow" /></a>
       </div>
@@ -180,8 +184,7 @@ const rhythms = [
       <div class="container">
         <div class="section-head">
           <div>
-            <span class="eyebrow">From the blog</span>
-            <h2>Latest posts</h2>
+            <h2>Latest from the blog</h2>
           </div>
           <a class="link-arrow" href="/blog">View all posts <Icon name="arrow" /></a>
         </div>
@@ -209,8 +212,8 @@ const rhythms = [
     padding-top: calc(var(--header-height) + 48px); padding-bottom: clamp(120px, 14vw, 180px);
   }
   .hero-logo { width: min(520px, 82vw); height: auto; }
-  .hero-tagline { font-size: clamp(0.66rem, 1.4vw, 0.85rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); }
-  .hero-title { font-style: italic; font-size: clamp(2.4rem, 6.4vw, 5.25rem); line-height: 1.05; max-width: 16ch; }
+  .hero-lede { font-size: clamp(1.05rem, 1.6vw, 1.3rem); font-weight: 500; max-width: 44ch; color: color-mix(in srgb, var(--color-on-dark) 88%, transparent); }
+  .hero-title { font-style: italic; font-size: clamp(2.4rem, 6.4vw, 5.25rem); line-height: 1.05; max-width: 15ch; }
   .hero-actions { justify-content: center; margin-top: 8px; }
   .hero-actions .btn-outline { white-space: normal; }
   .hero-wave { position: absolute; z-index: 2; left: 0; right: 0; bottom: -1px; width: 100%; height: clamp(40px, 7vw, 110px); fill: var(--color-bg); }
@@ -240,6 +243,7 @@ const rhythms = [
   .why-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .why-inner { position: relative; z-index: 2; display: grid; gap: 40px; }
   @media (min-width: 960px) { .why-inner { grid-template-columns: 0.9fr 1.1fr; gap: 80px; align-items: start; } }
+  .why-quote { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: clamp(1.3rem, 2.2vw, 1.7rem); color: var(--color-accent); }
   .why-copy { --stack: 18px; font-size: 1.08rem; color: color-mix(in srgb, var(--color-on-dark) 88%, transparent); }
   .why-copy strong { color: var(--color-accent); }
 

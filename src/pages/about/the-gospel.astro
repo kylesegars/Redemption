@@ -55,8 +55,8 @@ const questions = [
   },
 ];
 ---
-<BaseLayout title="The Gospel" description="What must I do to be saved? Five questions to ask about the gospel of Jesus Christ.">
-  <PageHero eyebrow="The Gospel" title="What is the gospel?" />
+<BaseLayout title="What Is the Gospel?" description="What must I do to be saved? Five questions to ask about the gospel of Jesus Christ, from Redemption Church in Coldwater, Mississippi.">
+  <PageHero title="What Is the Gospel? Good News for Coldwater" />
   <AboutNav />
 
   <section class="section">
@@ -73,14 +73,14 @@ const questions = [
 
   <section class="section-tight questions-section">
     <div class="container-narrow">
-      <div class="stack head"><span class="eyebrow">5 questions to ask</span></div>
+      <h2 class="head">5 questions to ask</h2>
       <ol class="questions">
         {questions.map((item, i) => (
           <li>
             <details open={i === 0}>
               <summary>
                 <span class="num">{i + 1}</span>
-                <span class="q">{item.q}</span>
+                <h3 class="q">{item.q}</h3>
                 <Icon name="chevron-down" />
               </summary>
               <div class="answer prose">

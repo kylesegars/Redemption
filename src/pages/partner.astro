@@ -28,10 +28,9 @@ const needs = [
   { title: 'A/V equipment', text: 'Microphones, cords, stands, TVs, mounts, licenses, software, etc.' },
 ];
 ---
-<BaseLayout title="Partner" description="Pray, provide, and participate in planting Redemption Church Coldwater.">
+<BaseLayout title="Partner with a Church Plant in Coldwater, MS" description="Pray, provide, and participate in planting Redemption Church, a Southern Baptist church plant in Coldwater, Mississippi.">
   <PageHero
-    eyebrow="Partner with us"
-    title="Ways to partner"
+    title="Partner with a Church Plant in Coldwater, MS"
     lede="Every church plant is carried by people who pray, provide, and participate. We'd be honored to have you with us in this new gospel work in Coldwater."
   >
     <div class="btn-row">
@@ -43,11 +42,12 @@ const needs = [
   <!-- Ways to partner -->
   <section class="section">
     <div class="container">
+      <h2 class="ways-heading">Three ways to partner</h2>
       <div class="ways">
         {ways.map((w, i) => (
           <div class="way" data-reveal style={`transition-delay:${i * 80}ms`}>
             <span class="way-icon"><Icon name={w.icon} size={30} /></span>
-            <h2 class="h2">{w.title}</h2>
+            <h3 class="h2">{w.title}</h3>
             <p class="muted">{w.text}</p>
           </div>
         ))}
@@ -60,7 +60,6 @@ const needs = [
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Partnership opportunities</span>
           <h2>Monthly support levels</h2>
         </div>
         <blockquote class="verse">
@@ -71,7 +70,7 @@ const needs = [
       <ul class="levels">
         {levels.map((l, i) => (
           <li data-reveal style={`transition-delay:${i * 80}ms`}>
-            <p class="level-name">{l.name}<br /><span>Partner</span></p>
+            <h3 class="level-name">{l.name}<br /><span>Partner</span></h3>
             <p class="level-range">{l.range}</p>
             <p class="level-per">per month</p>
           </li>
@@ -84,7 +83,6 @@ const needs = [
   <section class="section">
     <div class="container needs-wrap">
       <div class="stack">
-        <span class="eyebrow">Specific needs</span>
         <h2>Help with a specific need</h2>
         <p class="lede">If you'd like to provide for a specific need, we'd be so grateful. Reach out and we'll share the details.</p>
         <div class="checks-box">
@@ -97,7 +95,7 @@ const needs = [
       </div>
       <ul class="needs">
         {needs.map((n) => (
-          <li><p class="need-title">{n.title}</p><p class="muted">{n.text}</p></li>
+          <li><h3 class="need-title">{n.title}</h3><p class="muted">{n.text}</p></li>
         ))}
       </ul>
     </div>
@@ -107,8 +105,7 @@ const needs = [
   <section class="section section-sand" id="partner-form">
     <div class="container form-wrap">
       <div class="stack">
-        <span class="eyebrow">Get involved</span>
-        <h2>Partner with us</h2>
+        <h2>Become a partner</h2>
         <p class="lede">Tell us how you'd like to partner and we'll follow up personally.</p>
         {settings.email && <p class="muted">Or email <a href={`mailto:${settings.email}`}>{settings.email}</a>.</p>}
       </div>
@@ -153,7 +150,7 @@ const needs = [
   @media (min-width: 800px) { .levels { grid-template-columns: repeat(3, 1fr); } }
   .levels li { display: grid; gap: 6px; padding: 36px 32px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-on-dark) 6%, transparent); border: 1px solid color-mix(in srgb, var(--color-on-dark) 16%, transparent); }
   .levels li:nth-child(2) { background: var(--color-accent); color: var(--color-ink); border-color: var(--color-accent); }
-  .level-name { font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; line-height: 1.05; }
+  .level-name { font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; line-height: 1.05; color: inherit; }
   .level-name span { font-size: 1rem; font-weight: 600; font-family: var(--font-body); letter-spacing: .2em; text-transform: uppercase; opacity: .75; }
   .level-range { font-family: var(--font-display); font-weight: 800; font-style: italic; font-size: clamp(1.8rem, 3vw, 2.4rem); margin-top: 18px; }
   .level-per { font-size: .78rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; opacity: .75; }
@@ -165,7 +162,8 @@ const needs = [
   .checks-title { font-size: .78rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 6px; }
   .needs { list-style: none; padding: 0; border-top: 1.5px solid var(--color-ink); }
   .needs li { display: grid; gap: 4px; padding: 20px 0; border-bottom: 1px solid var(--color-line); }
-  .need-title { font-weight: 700; color: var(--color-ink); font-size: 1.1rem; }
+  .need-title { font-family: var(--font-body); font-weight: 700; color: var(--color-ink); font-size: 1.1rem; line-height: 1.4; }
+  .ways-heading { margin-bottom: clamp(28px, 4vw, 48px); }
 
   .form-wrap { display: grid; gap: 48px; align-items: start; }
   @media (min-width: 960px) { .form-wrap { grid-template-columns: 0.9fr 1.1fr; gap: 72px; } }

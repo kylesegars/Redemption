@@ -62,7 +62,6 @@ const related = [...others.filter((p) => p.data.category === d.category), ...oth
         <div class="author-card">
           {author.data.photo && <img src={author.data.photo} alt={author.data.name} width="140" height="140" loading="lazy" />}
           <div class="stack">
-            <span class="eyebrow">Written by</span>
             <h2 class="author-name">{author.data.name}</h2>
             {author.data.role && <p class="author-role">{author.data.role}</p>}
             {author.data.bio && <p class="muted">{author.data.bio}</p>}
@@ -76,7 +75,7 @@ const related = [...others.filter((p) => p.data.category === d.category), ...oth
     <section class="section section-sand related">
       <div class="container">
         <div class="section-head">
-          <div><span class="eyebrow">Keep reading</span><h2>More from the blog</h2></div>
+          <h2>More from the blog</h2>
           <a class="link-arrow" href="/blog">All posts <Icon name="arrow" /></a>
         </div>
         <div class="related-grid">{related.map((p) => <PostCard post={p} />)}</div>

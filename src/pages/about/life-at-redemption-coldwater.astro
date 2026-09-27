@@ -37,10 +37,9 @@ const rhythms = [
   },
 ];
 ---
-<BaseLayout title="Life at Redemption Coldwater" description="Pulpit, Table, Square: the simple approach to discipleship at Redemption Church Coldwater.">
+<BaseLayout title="Life at Redemption Coldwater" description="Pulpit, Table, Square: the simple approach to discipleship, worship, and community groups at Redemption Church in Coldwater, Mississippi.">
   <PageHero
-    eyebrow="Life at Redemption Coldwater"
-    title="Pulpit. Table. Square."
+    title="Discipleship in Coldwater: Pulpit, Table, Square"
     lede="We believe in a simple approach in our discipleship strategy, where all areas of the church are interconnected. To explain that, we use a simple method called “Pulpit, Table, Square.”"
   />
   <AboutNav />
@@ -51,14 +50,13 @@ const rhythms = [
         <article class:list={['rhythm', { flip: i % 2 === 1 }]} data-reveal>
           <div class="rhythm-art"><img src={r.img} alt="" width="220" height="220" loading="lazy" /></div>
           <div class="stack rhythm-copy">
-            <span class="eyebrow">0{i + 1}</span>
-            <h2>{r.name}</h2>
+            <h2><span class="num">0{i + 1}</span> {r.name}</h2>
             {r.body.map((p) => <p>{p}</p>)}
             {r.groups && (
               <div class="groups">
                 {r.groups.map((g) => (
                   <div class="group">
-                    <p class="group-name">{g.name}</p>
+                    <h3 class="group-name">{g.name}</h3>
                     <p class="group-size">{g.size}</p>
                     <p class="muted">{g.text}</p>
                   </div>
@@ -94,7 +92,8 @@ const rhythms = [
   .groups { display: grid; gap: 14px; margin-top: 6px; }
   @media (min-width: 640px) { .groups { grid-template-columns: 1fr 1fr; } }
   .group { padding: 22px; border-radius: var(--radius); background: var(--color-sand); display: grid; gap: 6px; align-content: start; }
-  .group-name { font-weight: 700; color: var(--color-ink); }
+  .group-name { font-family: var(--font-body); font-size: 1.05rem; font-weight: 700; color: var(--color-ink); line-height: 1.3; }
+  .num { color: var(--accent-text); font-size: 0.6em; vertical-align: 0.35em; margin-right: 6px; }
   .group-size { font-size: .75rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--accent-text); }
   .emphases { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; counter-reset: e; }
   .emphases li { counter-increment: e; padding: 8px 14px; border-radius: 999px; background: var(--color-accent-soft); color: var(--color-ink); font-weight: 600; font-size: .9rem; }

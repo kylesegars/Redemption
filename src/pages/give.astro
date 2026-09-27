@@ -8,17 +8,15 @@ const g = settings.giving;
 const embed = g.provider === 'subsplash' && g.url;
 const isPco = g.provider === 'planning-center' && g.url;
 ---
-<BaseLayout title="Give" description={`Give to ${settings.churchName}.`}>
+<BaseLayout title="Give" description={`Give online to ${settings.churchName}, a Southern Baptist church plant in Coldwater, Mississippi.`}>
   <PageHero
-    eyebrow="Give"
-    title="Partnering in the gospel"
+    title="Give to Redemption Church Coldwater"
     lede="Your generosity helps us proclaim Christ, cultivate community, and make disciples in Coldwater and Tate County."
   />
 
   <section class="section">
     <div class="container give-grid">
       <div class="stack give-info" data-reveal>
-        <span class="eyebrow">Information about giving</span>
         <h2 class="h2">Give online</h2>
         {g.note && <p class="lede">{g.note}</p>}
         <blockquote class="verse">
@@ -29,7 +27,7 @@ const isPco = g.provider === 'planning-center' && g.url;
           <div class="by-check">
             <Icon name="mail" />
             <div>
-              <p class="by-check-title">Give by check</p>
+              <h3 class="by-check-title">Give by check</h3>
               <p class="muted">Make checks payable to:</p>
               <address>{g.mailingAddress.split('\n').map((l) => <>{l}<br /></>)}</address>
             </div>
@@ -65,7 +63,7 @@ const isPco = g.provider === 'planning-center' && g.url;
   .verse cite { display: block; margin-top: 10px; font-style: normal; font-weight: 600; color: var(--accent-text); letter-spacing: .15em; text-transform: uppercase; font-size: .78rem; }
   .by-check { display: flex; gap: 16px; padding: 22px 24px; border-radius: var(--radius); background: var(--color-sand); }
   .by-check :global(svg) { flex: none; color: var(--accent-text); margin-top: 2px; }
-  .by-check-title { font-weight: 700; color: var(--color-ink); }
+  .by-check-title { font-family: var(--font-body); font-size: 1rem; font-weight: 700; color: var(--color-ink); line-height: 1.4; }
   .by-check address { font-style: normal; font-weight: 600; margin-top: 4px; }
   .give-form {
     border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface);

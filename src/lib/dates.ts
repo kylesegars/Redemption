@@ -115,3 +115,19 @@ export function icsDataUrl(e: { title: string; start: string; end?: string; loca
   ].join('\r\n');
   return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
 }
+
+/**
+ * Wall-clock string → ISO 8601 with the church's UTC offset, e.g.
+ * "2026-10-04T10:00" → "2026-10-04T10:00:00-05:00". Used for Event schema.
+ */
+export function toIsoWithOffset(wall: string, timeZone = TZ): string {
+  const utc = toInstant(wall, timeZone);
+  const offsetMin = Math.round(tzOffset(utc, timeZone) / 60000);
+  const sign = offsetMin < 0 ? '-' : '+';
+  const abs = Math.abs(offsetMin);
+  const hh = String(Math.floor(abs / 60)).padStart(2, '0');
+  const mm = String(abs % 60).padStart(2, '0');
+  const { y, m, day, h, min } = parts(wall);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${y}-${pad(m)}-${pad(day)}T${pad(h)}:${pad(min)}:00${sign}${hh}:${mm}`;
+}

@@ -15,6 +15,9 @@ export const siteConfig = {
   timezone: 'America/Chicago',
   locale: 'en-US',
 
+  /** Map coordinates of the church building (used in the Church schema). */
+  geo: { latitude: 34.7003793, longitude: -89.9459022 },
+
   /** Google Analytics 4 measurement ID (leave empty to disable). */
   gaId: 'G-4RCKL8E1PK',
 

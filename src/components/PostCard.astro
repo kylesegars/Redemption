@@ -2,8 +2,9 @@
 import { formatDate } from '../lib/dates';
 import { getAuthor, type PostEntry } from '../lib/content';
 import { siteConfig, labelFor } from '../site.config';
-interface Props { post: PostEntry; size?: 'default' | 'large' }
-const { post, size = 'default' } = Astro.props;
+interface Props { post: PostEntry; size?: 'default' | 'large'; /** Heading level for the title, to fit the page outline. */ level?: 2 | 3 }
+const { post, size = 'default', level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
 const author = await getAuthor(post);
 const d = post.data;
 ---
@@ -17,7 +18,7 @@ const d = post.data;
         <span class="chip">{labelFor(siteConfig.blogCategories, d.category)}</span>
         <time datetime={d.publishedDate}>{formatDate(d.publishedDate)}</time>
       </p>
-      <h3 class:list={[size === 'large' ? 'h2' : 'h3']}>{d.title}</h3>
+      <Heading class:list={[size === 'large' ? 'h2' : 'h3']}>{d.title}</Heading>
       <p class="post-excerpt">{d.excerpt}</p>
       {author && (
         <p class="post-author">

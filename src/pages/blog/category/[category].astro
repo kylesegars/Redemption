@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 const { category } = Astro.params;
 const { label, posts, usedCategories } = Astro.props;
 ---
-<BaseLayout title={`${label} — Blog`}>
-  <PageHero eyebrow="Blog" title={label} />
+<BaseLayout title={`${label} Posts`} description={`${label} posts from Redemption Church, a Southern Baptist church in Coldwater, Mississippi.`}>
+  <PageHero title={`${label} Posts from Our Coldwater Church`} />
   <BlogIndex posts={posts} activeCategory={category} usedCategories={usedCategories} />
 </BaseLayout>

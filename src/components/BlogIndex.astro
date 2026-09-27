@@ -18,7 +18,7 @@ const cats = siteConfig.blogCategories.filter((c) => usedCategories.includes(c.v
 ---
 {featured && (
   <section class="container featured-post">
-    <PostCard post={featured} size="large" />
+    <PostCard post={featured} size="large" level={2} />
   </section>
 )}
 
@@ -32,6 +32,7 @@ const cats = siteConfig.blogCategories.filter((c) => usedCategories.includes(c.v
         ))}
       </nav>
     )}
+    {posts.length > 0 && <h2 class="h3 list-heading">{featured ? 'More posts' : 'All posts'}</h2>}
     {posts.length > 0 ? (
       <div class="post-grid">{posts.map((p) => <PostCard post={p} />)}</div>
     ) : (
@@ -49,6 +50,7 @@ const cats = siteConfig.blogCategories.filter((c) => usedCategories.includes(c.v
 <style>
   .featured-post { padding-bottom: clamp(48px, 7vw, 96px); border-bottom: 1px solid var(--color-line); margin-bottom: clamp(24px, 3vw, 40px); }
   .blog-filters { margin-bottom: 40px; }
+  .list-heading { margin-bottom: 28px; }
   .post-grid { display: grid; gap: 56px 28px; }
   @media (min-width: 760px) { .post-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1100px) { .post-grid { grid-template-columns: repeat(3, 1fr); } }
