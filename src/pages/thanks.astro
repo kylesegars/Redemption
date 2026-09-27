@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+<BaseLayout title="Thank you" newsletter={false}>
+  <meta slot="head" name="robots" content="noindex" />
+  <section class="section container-narrow thanks">
+    <span class="check-badge"><Icon name="send" size={34} /></span>
+    <h1 class="h2">Thanks! We got it.</h1>
+    <p class="lede" data-msg>Someone from our team will be in touch soon.</p>
+    <div class="btn-row"><a class="btn" href="/">Back to home <Icon name="arrow" /></a><a class="btn btn-outline" href="/events">See events</a></div>
+  </section>
+</BaseLayout>
+<style>
+  .thanks { display: grid; gap: 24px; justify-items: center; text-align: center; min-height: 60vh; align-content: center; }
+  .thanks .lede { margin-inline: auto; }
+  .check-badge { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; background: var(--color-accent); color: var(--color-accent-ink); }
+</style>
+<script>
+  const msgs: Record<string, string> = {
+    visit: "We can't wait to meet you! Watch your inbox for a quick note with everything you need for your first Sunday.",
+    newsletter: "You're on the list. Look out for our next update in your inbox.",
+    partner: 'Thank you for partnering with us! We’ll reach out personally in the next few days.',
+  };
+  const form = new URLSearchParams(location.search).get('form') ?? '';
+  const el = document.querySelector('[data-msg]');
+  if (el && msgs[form]) el.textContent = msgs[form];
+</script>

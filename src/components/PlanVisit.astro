@@ -1,0 +1,124 @@
+---
+/**
+ * Floating "Plan a Visit" circle (bottom-right on every page) + the visit form dialog.
+ * Any element with [data-plan-visit] also opens the dialog.
+ * Toggle it off in Keystatic → Church Info → Plan a Visit.
+ */
+import Icon from './Icon.astro';
+import { settings, fullAddress } from '../lib/settings';
+const pv = settings.planVisit;
+const ring = 'PLAN A VISIT • PLAN A VISIT • ';
+---
+{pv.enabled && (
+  <>
+    <a class="pv-fab" href="/contact#visit" data-plan-visit aria-label="Plan a visit">
+      <svg class="pv-ring" viewBox="0 0 120 120" aria-hidden="true">
+        <defs><path id="pv-circle" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" /></defs>
+        <text><textPath href="#pv-circle" textLength="274">{ring}</textPath></text>
+      </svg>
+      <span class="pv-core"><Icon name="arrow" size={26} /></span>
+    </a>
+
+    <dialog class="pv-dialog" data-pv-dialog aria-labelledby="pv-title">
+      <div class="pv-panel">
+        <button class="pv-close" type="button" data-pv-close><Icon name="close" label="Close" /></button>
+        <div class="pv-intro stack">
+          <span class="eyebrow">Plan a visit</span>
+          <h2 id="pv-title" class="h2">{pv.heading}</h2>
+          {pv.blurb && <p class="muted">{pv.blurb}</p>}
+          <ul class="pv-facts">
+            {settings.serviceTimes.map((s) => (
+              <li><Icon name="clock" /><span><strong>{s.day} at {s.time}</strong>{s.note && <><br />{s.note}</>}</span></li>
+            ))}
+            {settings.location.venue && (
+              <li><Icon name="pin" /><span><strong>{settings.location.venue}</strong>{fullAddress && <><br />{fullAddress}</>}</span></li>
+            )}
+          </ul>
+        </div>
+
+        <form class="form" name="plan-a-visit" method="POST" action="/thanks?form=visit" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="plan-a-visit" />
+          <p class="hidden-field"><label>Don't fill this out: <input name="bot-field" /></label></p>
+          <div class="form-row">
+            <div class="field"><label for="pv-first">First name</label><input id="pv-first" name="first-name" autocomplete="given-name" required /></div>
+            <div class="field"><label for="pv-last">Last name</label><input id="pv-last" name="last-name" autocomplete="family-name" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="pv-email">Email</label><input id="pv-email" type="email" name="email" autocomplete="email" required /></div>
+            <div class="field"><label for="pv-phone">Phone (optional)</label><input id="pv-phone" type="tel" name="phone" autocomplete="tel" /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="pv-date">When are you planning to come?</label><input id="pv-date" type="date" name="visit-date" /></div>
+            <div class="field"><label for="pv-kids">Bringing kids? Ages?</label><input id="pv-kids" name="kids" placeholder="e.g. 4 and 7" /></div>
+          </div>
+          <div class="field"><label for="pv-q">Anything we can help with?</label><textarea id="pv-q" name="questions" rows="3"></textarea></div>
+          <button class="btn" type="submit">Let us know you're coming <Icon name="arrow" /></button>
+        </form>
+      </div>
+    </dialog>
+  </>
+)}
+
+<style>
+  .pv-fab {
+    position: fixed; right: clamp(16px, 2.5vw, 32px); bottom: clamp(16px, 2.5vw, 32px); z-index: 40;
+    width: clamp(96px, 9vw, 120px); aspect-ratio: 1;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: var(--color-accent); color: var(--color-accent-ink);
+    box-shadow: 0 12px 30px -8px rgb(0 0 0 / .35);
+    text-decoration: none;
+    transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease;
+  }
+  .pv-fab:hover { transform: scale(1.06); box-shadow: 0 16px 36px -8px rgb(0 0 0 / .45); }
+  .pv-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .pv-ring text { fill: currentColor; font-family: var(--font-body); font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; }
+  .pv-core {
+    width: 44%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%;
+    background: var(--color-accent-ink); color: var(--color-accent);
+    transition: transform .3s ease;
+  }
+  .pv-fab:hover .pv-core { transform: rotate(-45deg); }
+  @media (prefers-reduced-motion: no-preference) {
+    .pv-ring { animation: pv-spin 16s linear infinite; }
+    @keyframes pv-spin { to { transform: rotate(360deg); } }
+  }
+  :global(body.menu-open) .pv-fab, :global(body.pv-open) .pv-fab { opacity: 0; pointer-events: none; }
+
+  .pv-dialog {
+    width: min(980px, calc(100% - 24px)); max-height: calc(100dvh - 24px);
+    margin: auto; padding: 0; border: 0; border-radius: var(--radius-lg);
+    background: var(--color-bg); color: var(--color-ink);
+    overflow: auto; overscroll-behavior: contain;
+  }
+  .pv-dialog::backdrop { background: rgb(10 10 10 / .6); backdrop-filter: blur(4px); }
+  @media (prefers-reduced-motion: no-preference) {
+    .pv-dialog[open] { animation: pv-in .35s cubic-bezier(.2,.7,.2,1); }
+    @keyframes pv-in { from { opacity: 0; transform: translateY(24px) scale(.98); } }
+  }
+  .pv-panel { position: relative; display: grid; gap: 36px; padding: clamp(24px, 4vw, 52px); }
+  @media (min-width: 860px) { .pv-panel { grid-template-columns: 0.9fr 1.1fr; gap: 56px; } }
+  .pv-intro .h2 { font-size: clamp(2rem, 4vw, 3rem); }
+  .pv-close {
+    position: absolute; top: 14px; right: 14px; width: 44px; height: 44px;
+    display: grid; place-items: center; border: 0; border-radius: 999px; background: var(--color-sand);
+  }
+  .pv-facts { list-style: none; padding: 0; display: grid; gap: 16px; margin-top: 8px; }
+  .pv-facts li { display: flex; gap: 12px; line-height: 1.45; }
+  .pv-facts :global(svg) { flex: none; color: var(--color-accent); margin-top: 2px; }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-pv-dialog]');
+  if (dialog) {
+    const open = (e: Event) => {
+      e.preventDefault();
+      dialog.showModal();
+      document.body.classList.add('pv-open');
+    };
+    document.querySelectorAll('[data-plan-visit]').forEach((el) => el.addEventListener('click', open));
+    dialog.querySelector('[data-pv-close]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
+    dialog.addEventListener('close', () => document.body.classList.remove('pv-open'));
+  }
+</script>

@@ -1,0 +1,41 @@
+{
+  "churchName": "Ember Church",
+  "tagline": "A new church for the whole city of Springfield.",
+  "logo": null,
+  "serviceTimes": [
+    { "day": "Sundays", "time": "10:00 AM", "note": "Kids program for birth–5th grade" }
+  ],
+  "location": {
+    "venue": "Lincoln Elementary School",
+    "street": "1200 Placeholder Ave",
+    "city": "Springfield",
+    "state": "IL",
+    "zip": "62701",
+    "mapUrl": "https://maps.google.com",
+    "arrival": "Park in the east lot and look for the orange flags. Our welcome team will meet you at the main doors and help you check in your kids."
+  },
+  "email": "hello@example.church",
+  "phone": "(555) 010-0000",
+  "social": {
+    "instagram": "https://instagram.com",
+    "facebook": "https://facebook.com",
+    "youtube": "https://youtube.com"
+  },
+  "planVisit": {
+    "enabled": true,
+    "heading": "We'd love to meet you",
+    "blurb": "Let us know you're coming and we'll save you a seat, have someone meet you at the door, and help get your kids checked in."
+  },
+  "giving": {
+    "provider": "planning-center",
+    "url": "https://example.churchcenter.com/giving",
+    "mailingAddress": "Ember Church\nPO Box 0000\nSpringfield, IL 62701",
+    "note": "Ember Church is a 501(c)(3) nonprofit. All gifts are tax-deductible to the extent allowed by law."
+  },
+  "newsletter": {
+    "enabled": true,
+    "heading": "Stay in the loop",
+    "blurb": "A short email every other week with what's coming up and how God is moving.",
+    "formAction": null
+  }
+}

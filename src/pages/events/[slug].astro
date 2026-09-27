@@ -1,0 +1,107 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import EventCard from '../../components/EventCard.astro';
+import { expiresAt, getUpcomingEvents } from '../../lib/content';
+import { formatEventWhen, googleCalendarUrl, icsDataUrl } from '../../lib/dates';
+import { siteConfig, labelFor } from '../../site.config';
+
+/*
+ * Pages are built for every event (so shared links never 404). Once an event
+ * ends, the page shows a "this event has passed" notice instead of the
+ * registration/calendar buttons, and it's hidden from all listings.
+ */
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map((event) => ({ params: { slug: event.id }, props: { event } }));
+}
+
+const { event } = Astro.props;
+const d = event.data;
+const { Content } = await render(event);
+const expires = expiresAt(event);
+const isPast = expires <= Date.now();
+const url = new URL(`/events/${event.id}`, Astro.site).toString();
+const where = [d.location, d.address].filter(Boolean).join(', ');
+const calArgs = { title: d.title, start: d.start, end: d.end, location: where, summary: d.summary, url };
+const more = (await getUpcomingEvents()).filter((e) => e.id !== event.id).slice(0, 3);
+---
+<BaseLayout title={d.title} description={d.summary} image={d.image ?? undefined} type="article">
+  {isPast && <meta slot="head" name="robots" content="noindex" />}
+  <div data-expires={expires} data-expire-keep class:list={['event-page', { 'is-past': isPast }]}>
+    <section class="container event-hero">
+      <a class="back link-arrow" href="/events"><Icon name="arrow-left" /> All events</a>
+      <div class="past-note" role="status">
+        <Icon name="calendar" />
+        <p><strong>This event has already happened.</strong> Take a look at what's coming up next.</p>
+        <a class="btn btn-dark" href="/events">Upcoming events <Icon name="arrow" /></a>
+      </div>
+      <div class="event-head">
+        <div class="stack">
+          <span class="eyebrow">{labelFor(siteConfig.eventCategories, d.category)}</span>
+          <h1 class="event-title">{d.title}</h1>
+          <p class="lede">{d.summary}</p>
+        </div>
+        <aside class="event-facts">
+          <p><Icon name="calendar" /> <span>{formatEventWhen(d.start, d.end)}</span></p>
+          {d.location && (
+            <p><Icon name="pin" /> <span><strong>{d.location}</strong>{d.address && <><br />{d.address}</>}</span></p>
+          )}
+          <div class="upcoming-only event-actions">
+            {d.registrationUrl && (
+              <a class="btn" href={d.registrationUrl} target="_blank" rel="noopener">{d.registrationLabel ?? 'Register'} <Icon name="arrow" /></a>
+            )}
+            <div class="cal-links">
+              <span>Add to calendar:</span>
+              <a href={googleCalendarUrl(calArgs)} target="_blank" rel="noopener">Google</a>
+              <a href={icsDataUrl(calArgs)} download={`${event.id}.ics`}>Apple / Outlook</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+      {d.image && <div class="media event-image"><img src={d.image} alt="" fetchpriority="high" /></div>}
+    </section>
+
+    <section class="container-narrow prose event-body">
+      <Content />
+    </section>
+  </div>
+
+  {more.length > 0 && (
+    <section class="section section-sand">
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">Don't miss</span><h2>More events</h2></div>
+          <a class="link-arrow" href="/events">View all <Icon name="arrow" /></a>
+        </div>
+        <ul class="more-grid" data-event-list>
+          {more.map((e) => <li data-expire-wrap><EventCard event={e} /></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .event-hero { padding-top: clamp(32px, 5vw, 64px); display: grid; gap: clamp(28px, 4vw, 48px); }
+  .back { justify-self: start; }
+  .event-head { display: grid; gap: 32px; align-items: end; }
+  @media (min-width: 960px) { .event-head { grid-template-columns: 1.4fr 1fr; gap: 64px; } }
+  .event-title { font-size: clamp(2.6rem, 6.5vw, 5.5rem); }
+  .event-facts { display: grid; gap: 18px; padding: 28px; border-radius: var(--radius); background: var(--color-surface); border: 1px solid var(--color-line); }
+  .event-facts > p { display: flex; gap: 12px; line-height: 1.45; font-weight: 500; }
+  .event-facts :global(svg) { flex: none; color: var(--color-accent); }
+  .event-actions { display: grid; gap: 16px; padding-top: 6px; }
+  .cal-links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .95rem; color: var(--color-ink-soft); }
+  .cal-links a { font-weight: 700; color: var(--color-ink); text-underline-offset: 3px; }
+  .event-image { aspect-ratio: 21 / 9; }
+  .event-body { padding-block: clamp(48px, 7vw, 96px); }
+
+  .past-note { display: none; flex-wrap: wrap; align-items: center; gap: 14px 18px; padding: 20px 24px; border-radius: var(--radius); background: var(--color-accent-soft); }
+  .past-note p { flex: 1 1 260px; }
+  .is-past .past-note { display: flex; }
+  .is-past .upcoming-only { display: none; }
+
+  .more-grid { list-style: none; padding: 0; display: grid; gap: 40px 28px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+</style>

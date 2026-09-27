@@ -1,0 +1,47 @@
+/*
+ * THEME — the per-church design knobs.
+ * Change fonts, colors, and shape here to make each site feel custom.
+ * Everything else in the site reads from these variables.
+ *
+ * Swapping fonts: `npm i @fontsource-variable/<font>` and update the two
+ * imports below plus --font-display / --font-body.
+ */
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/dm-sans';
+
+:root {
+  /* ---- Color ---------------------------------------------------------- */
+  --color-bg: #f5f2ec;          /* page background */
+  --color-surface: #ffffff;     /* cards, forms */
+  --color-sand: #ebe5da;        /* alternate section background */
+  --color-ink: #151412;         /* primary text + dark sections */
+  --color-ink-soft: #57524a;    /* secondary text */
+  --color-line: #d9d2c5;        /* borders, dividers */
+  --color-accent: #d4502a;      /* buttons, highlights */
+  --color-accent-ink: #ffffff;  /* text on accent */
+  --color-accent-soft: #f6dccf; /* tags, subtle highlights */
+  --color-on-dark: #f5f2ec;     /* text on dark sections/images */
+
+  /* ---- Type ----------------------------------------------------------- */
+  --font-display: 'Archivo Variable', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'DM Sans Variable', system-ui, sans-serif;
+  --display-weight: 800;
+  --display-stretch: 112%;          /* Archivo width axis: 62%–125% */
+  --display-transform: uppercase;   /* set to none for sentence-case headings */
+  --display-tracking: -0.01em;
+
+  /* ---- Shape ---------------------------------------------------------- */
+  --radius-sm: 6px;
+  --radius: 14px;
+  --radius-lg: 24px;
+  --radius-button: 999px;           /* 999px = pill, 6px = squared */
+
+  /* ---- Layout --------------------------------------------------------- */
+  --max-width: 1280px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --section-space: clamp(64px, 10vw, 140px);
+  --header-height: 76px;
+
+  /* ---- Image treatment ------------------------------------------------ */
+  --hero-overlay: linear-gradient(180deg, rgb(0 0 0 / 0.35) 0%, rgb(0 0 0 / 0.15) 40%, rgb(0 0 0 / 0.65) 100%);
+}

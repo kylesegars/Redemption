@@ -1,0 +1,53 @@
+---
+/**
+ * Newsletter signup band. Turn on/off in Keystatic → Church Info → Newsletter.
+ * Posts to a Mailchimp-style form action if one is set; otherwise Netlify Forms collects the emails.
+ */
+import Icon from './Icon.astro';
+import { settings } from '../lib/settings';
+const n = settings.newsletter;
+const external = Boolean(n.formAction);
+---
+{n.enabled && (
+  <section class="newsletter section-tight section-sand" aria-labelledby="nl-title">
+    <div class="container nl-inner">
+      <div class="stack nl-copy">
+        <h2 id="nl-title" class="h2">{n.heading}</h2>
+        {n.blurb && <p class="muted">{n.blurb}</p>}
+      </div>
+      <form
+        class="nl-form"
+        name="newsletter"
+        method="POST"
+        action={external ? n.formAction! : '/thanks?form=newsletter'}
+        target={external ? '_blank' : undefined}
+        data-netlify={external ? undefined : 'true'}
+        netlify-honeypot={external ? undefined : 'bot-field'}
+      >
+        {!external && <input type="hidden" name="form-name" value="newsletter" />}
+        {!external && <p class="hidden-field"><label>Skip: <input name="bot-field" /></label></p>}
+        <label class="sr-only" for="nl-email">Email address</label>
+        <input id="nl-email" type="email" name={external ? 'EMAIL' : 'email'} placeholder="Your email address" autocomplete="email" required />
+        <button class="btn btn-dark" type="submit">Subscribe <Icon name="arrow" /></button>
+      </form>
+    </div>
+  </section>
+)}
+
+<style>
+  .nl-inner { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 900px) { .nl-inner { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .nl-copy .h2 { font-size: clamp(1.9rem, 3.6vw, 3rem); }
+  .nl-form {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    padding: 8px; border-radius: calc(var(--radius-button) + 8px);
+    background: var(--color-surface); border: 1.5px solid var(--color-line);
+  }
+  .nl-form input { flex: 1 1 200px; min-width: 0; padding: 12px 18px; border: 0; background: transparent; }
+  .nl-form input:focus { outline: none; }
+  .nl-form:focus-within { border-color: var(--color-ink); }
+  @media (max-width: 520px) {
+    .nl-form { border-radius: var(--radius); }
+    .nl-form .btn { width: 100%; }
+  }
+</style>

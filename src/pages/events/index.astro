@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import EventCard from '../../components/EventCard.astro';
+import Icon from '../../components/Icon.astro';
+import { getUpcomingEvents, expiresAt } from '../../lib/content';
+import { formatEventWhen, dateBadge } from '../../lib/dates';
+import { siteConfig, labelFor } from '../../site.config';
+
+const upcoming = await getUpcomingEvents();
+const featured = upcoming.find((e) => e.data.featured) ?? upcoming[0];
+const rest = upcoming.filter((e) => e !== featured);
+const usedCategories = siteConfig.eventCategories.filter((c) => rest.some((e) => e.data.category === c.value));
+---
+<BaseLayout title="Events" description="Upcoming events, gatherings, and ways to get involved.">
+  <PageHero eyebrow="Events" title="What's happening" lede="Gatherings, serve days, and ways to get connected. There's a place for you here." />
+
+  {featured && (
+    <section class="container featured-wrap" data-expire-wrap>
+      <article class="featured on-image" data-expires={expiresAt(featured)}>
+        <img src={featured.data.image ?? '/images/site/community.svg'} alt="" fetchpriority="high" />
+        <div class="featured-copy">
+          <p class="featured-tag"><span class="chip">Featured</span> {labelFor(siteConfig.eventCategories, featured.data.category)}</p>
+          <h2>{featured.data.title}</h2>
+          <p class="featured-when"><Icon name="calendar" size={20} /> {formatEventWhen(featured.data.start, featured.data.end)}</p>
+          {featured.data.location && <p class="featured-when"><Icon name="pin" size={20} /> {featured.data.location}</p>}
+          <p class="featured-summary">{featured.data.summary}</p>
+          <div class="btn-row">
+            <a class="btn" href={`/events/${featured.id}`}>Event details <Icon name="arrow" /></a>
+            {featured.data.registrationUrl && (
+              <a class="btn btn-outline" href={featured.data.registrationUrl} target="_blank" rel="noopener">{featured.data.registrationLabel ?? 'Register'}</a>
+            )}
+          </div>
+        </div>
+        <div class="featured-date" aria-hidden="true">
+          <span>{dateBadge(featured.data.start).month}</span>
+          <strong>{dateBadge(featured.data.start).day}</strong>
+        </div>
+      </article>
+    </section>
+  )}
+
+  <section class="section-tight">
+    <div class="container">
+      {rest.length > 0 && (
+        <div class="events-toolbar">
+          <h2 class="h3">All upcoming events</h2>
+          {usedCategories.length > 1 && (
+            <div class="filter-bar" role="group" aria-label="Filter events by category" data-filters>
+              <button type="button" aria-pressed="true" data-filter="all">All</button>
+              {usedCategories.map((c) => <button type="button" aria-pressed="false" data-filter={c.value}>{c.label}</button>)}
+            </div>
+          )}
+        </div>
+      )}
+      <ul class="events-grid" data-event-list>
+        {rest.map((e) => <li data-expire-wrap data-category={e.data.category}><EventCard event={e} /></li>)}
+      </ul>
+      <p class="empty-state" data-filter-empty hidden>No upcoming events in this category right now.</p>
+      <div class="empty-state" data-empty hidden={upcoming.length > 0}>
+        <h2 class="h3">No upcoming events right now</h2>
+        <p class="muted">New events are added all the time — check back soon, or join us on a Sunday.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .featured-wrap { margin-bottom: clamp(40px, 6vw, 72px); }
+  .featured {
+    position: relative; overflow: hidden; border-radius: var(--radius-lg);
+    min-height: clamp(480px, 60vw, 640px); display: flex; align-items: flex-end;
+    color: var(--color-on-dark);
+  }
+  .featured > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .featured::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgb(0 0 0 / .78) 0%, rgb(0 0 0 / .35) 60%, rgb(0 0 0 / .1)); }
+  .featured-copy { position: relative; z-index: 2; display: grid; gap: 16px; padding: clamp(28px, 5vw, 64px); max-width: 720px; }
+  .featured-tag { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; }
+  .featured-when { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .featured-summary { font-size: 1.1rem; opacity: .88; max-width: 52ch; }
+  .featured-date {
+    position: absolute; z-index: 2; top: clamp(20px, 3vw, 40px); right: clamp(20px, 3vw, 40px);
+    display: grid; justify-items: center; line-height: 1; padding: 16px 20px; border-radius: var(--radius);
+    background: var(--color-accent); color: var(--color-accent-ink);
+  }
+  .featured-date span { font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .85rem; }
+  .featured-date strong { font-family: var(--font-display); font-weight: 800; font-stretch: var(--display-stretch); font-size: clamp(2.4rem, 4vw, 3.4rem); }
+
+  .events-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 36px; }
+  .events-grid { list-style: none; padding: 0; display: grid; gap: 48px 28px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+  .empty-state { padding: 40px 0; display: grid; gap: 8px; }
+  .empty-state[hidden] { display: none; }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-filters]');
+  const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
+  const apply = (value: string) => {
+    let shown = 0;
+    document.querySelectorAll<HTMLElement>('.events-grid > li').forEach((li) => {
+      const match = value === 'all' || li.dataset.category === value;
+      li.hidden = !match;
+      if (match) shown++;
+    });
+    if (empty) empty.hidden = shown > 0 || document.querySelectorAll('.events-grid > li').length === 0;
+  };
+  bar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+    if (!btn) return;
+    bar.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    apply(btn.dataset.filter!);
+  });
+  document.addEventListener('events:expired', () => {
+    const active = bar?.querySelector<HTMLElement>('[aria-pressed="true"]')?.dataset.filter ?? 'all';
+    apply(active);
+  });
+</script>

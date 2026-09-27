@@ -1,0 +1,91 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { siteConfig } from '../site.config';
+import { settings, fullAddress } from '../lib/settings';
+const year = new Date().getFullYear();
+const socials = (['instagram', 'facebook', 'youtube'] as const).filter((k) => settings.social[k]);
+---
+<footer class="site-footer section-dark">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand stack">
+        <Logo />
+        {settings.tagline && <p class="muted">{settings.tagline}</p>}
+        {socials.length > 0 && (
+          <ul class="socials">
+            {socials.map((k) => (
+              <li><a href={settings.social[k]!} target="_blank" rel="noopener"><Icon name={k} label={k} /></a></li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div class="footer-col">
+        <h2 class="footer-heading">Sundays</h2>
+        {settings.serviceTimes.map((s) => (
+          <p><strong>{s.day} · {s.time}</strong>{s.note && <><br /><span class="muted">{s.note}</span></>}</p>
+        ))}
+        {settings.location.venue && <p>{settings.location.venue}</p>}
+        {fullAddress && (
+          settings.location.mapUrl
+            ? <p><a href={settings.location.mapUrl} target="_blank" rel="noopener">{fullAddress}</a></p>
+            : <p>{fullAddress}</p>
+        )}
+      </div>
+
+      <div class="footer-col">
+        <h2 class="footer-heading">Explore</h2>
+        <ul class="footer-links">
+          {siteConfig.nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          <li><a href={siteConfig.navCta.href}>{siteConfig.navCta.label}</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h2 class="footer-heading">Get in touch</h2>
+        {settings.email && <p><a href={`mailto:${settings.email}`}>{settings.email}</a></p>}
+        {settings.phone && <p><a href={`tel:${settings.phone.replace(/[^\d+]/g, '')}`}>{settings.phone}</a></p>}
+        <p><a class="link-arrow" href="/contact">Contact us <Icon name="arrow" /></a></p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {year} {settings.churchName}. All rights reserved.</p>
+      <a href="/keystatic" rel="nofollow">Staff login</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { padding-block: clamp(64px, 8vw, 110px) 32px; }
+  .footer-top { display: grid; gap: 48px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .footer-top { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1080px) { .footer-top { grid-template-columns: 1.5fr 1fr 0.8fr 1fr; } }
+  .footer-brand { --stack: 20px; max-width: 340px; }
+  .footer-heading {
+    font-family: var(--font-body); font-size: 0.8125rem; font-weight: 700; font-stretch: 100%;
+    letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.4;
+    color: var(--color-accent); margin-bottom: 16px;
+  }
+  .footer-col { display: grid; gap: 10px; align-content: start; }
+  .footer-col a { text-decoration: none; }
+  .footer-col a:not(.link-arrow):hover { text-decoration: underline; }
+  .footer-links { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .socials { list-style: none; padding: 0; display: flex; gap: 10px; }
+  .socials a {
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 999px;
+    border: 1.5px solid color-mix(in srgb, var(--color-on-dark) 30%, transparent);
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .socials a:hover { background: var(--color-on-dark); color: var(--color-ink); }
+  .socials :global(svg) { width: 20px; height: 20px; }
+  .footer-bottom {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid color-mix(in srgb, var(--color-on-dark) 18%, transparent);
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+    font-size: 0.875rem; color: color-mix(in srgb, var(--color-on-dark) 60%, transparent);
+  }
+  .footer-bottom a { text-decoration: none; }
+  .footer-bottom a:hover { text-decoration: underline; }
+</style>

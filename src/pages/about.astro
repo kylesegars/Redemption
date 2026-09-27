@@ -1,0 +1,207 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import { settings } from '../lib/settings';
+import { getTeam } from '../lib/content';
+
+const team = await getTeam();
+const city = settings.location.city ?? 'our city';
+
+/* Page copy lives here so the layout stays locked. Edit freely per church. */
+const values = [
+  { title: 'Jesus at the center', text: 'Everything we do flows from the good news that Jesus lived, died, and rose again for us.' },
+  { title: 'Family, not an event', text: 'Church isn’t a building we visit. It’s a family we belong to — seven days a week.' },
+  { title: 'For the city', text: `We exist for the good of ${city}. We want our neighbors to be glad we’re here.` },
+  { title: 'Everyone plays', text: 'No spectators. Every person has gifts to share and a place to serve.' },
+];
+
+const beliefs = [
+  { q: 'God', a: 'We believe in one God, eternally existing in three persons: Father, Son, and Holy Spirit.' },
+  { q: 'Jesus', a: 'We believe Jesus Christ is fully God and fully man, that he lived a sinless life, died for our sins, rose bodily from the dead, and is coming again.' },
+  { q: 'Salvation', a: 'We believe salvation is a gift of God’s grace, received through faith in Jesus — not earned by our good works.' },
+  { q: 'The Bible', a: 'We believe the Bible is God’s inspired Word, true and trustworthy, and our final authority for faith and life.' },
+  { q: 'The Church', a: 'We believe the church is God’s family — called to worship, grow together, and share the good news with the world.' },
+];
+
+const expect = [
+  { icon: 'coffee', title: 'A warm welcome', text: 'Our welcome team will meet you at the door. Grab a coffee and make yourself at home.' },
+  { icon: 'music', title: 'Worship', text: 'We sing songs old and new, led by a band. Sing along or just take it in.' },
+  { icon: 'book', title: 'Teaching', text: 'Practical, Bible-centered messages about 30 minutes long.' },
+  { icon: 'smile', title: 'Kids', text: settings.serviceTimes[0]?.note ?? 'Safe, fun environments for kids every week.' },
+] as const;
+---
+<BaseLayout title="About" description={`The story, beliefs, and people of ${settings.churchName}.`} overlayHeader>
+  <PageHero
+    eyebrow="About us"
+    title="A church for the whole city"
+    lede={`${settings.churchName} is a new church in ${city}. Here's who we are and why we're here.`}
+    image="/images/site/story.svg"
+  />
+
+  <!-- Story -->
+  <section class="section">
+    <div class="container story">
+      <div class="stack story-copy" data-reveal>
+        <span class="eyebrow">Our story</span>
+        <h2>It started around a kitchen table</h2>
+        <p class="lede">
+          In 2025, a small group of families began praying about what it would look like to plant a
+          church that loved {city} well.
+        </p>
+        <p>
+          What began as a handful of people sharing meals has grown into a launch team of neighbors,
+          friends, and families who believe the local church can be one of the most beautiful things
+          in a city. We're just getting started — and we'd love for you to be part of the story.
+        </p>
+        <p>
+          This paragraph is placeholder copy. Replace it with the real story of how this church began,
+          who is involved, and what God has been doing.
+        </p>
+      </div>
+      <div class="media story-media" data-reveal><img src="/images/site/community.svg" alt="" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <!-- Mission + values -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="mission" data-reveal>
+        <span class="eyebrow">Our mission</span>
+        <p class="mission-text">To help people <em>find hope</em> in Jesus, <em>find family</em> in the church, and <em>find purpose</em> in serving {city}.</p>
+      </div>
+      <ol class="values">
+        {values.map((v, i) => (
+          <li data-reveal style={`transition-delay:${i * 70}ms`}>
+            <span class="value-num">0{i + 1}</span>
+            <h3 class="h3">{v.title}</h3>
+            <p class="muted">{v.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Beliefs -->
+  <section class="section">
+    <div class="container beliefs">
+      <div class="stack">
+        <span class="eyebrow">What we believe</span>
+        <h2>Our beliefs</h2>
+        <p class="muted">The core convictions that shape everything we do.</p>
+      </div>
+      <div class="accordion">
+        {beliefs.map((b, i) => (
+          <details open={i === 0}>
+            <summary><span>{b.q}</span><Icon name="chevron-down" /></summary>
+            <p>{b.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Leadership (from Keystatic → Team & Authors) -->
+  {team.length > 0 && (
+    <section class="section section-sand">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Our team</span>
+            <h2>Leadership</h2>
+          </div>
+        </div>
+        <ul class="team">
+          {team.map((m, i) => (
+            <li class="member" data-reveal style={`transition-delay:${i * 70}ms`}>
+              <div class="media member-photo">
+                <img src={m.data.photo ?? '/images/site/community.svg'} alt={m.data.name} loading="lazy" />
+              </div>
+              <h3 class="h3">{m.data.name}</h3>
+              {m.data.role && <p class="member-role">{m.data.role}</p>}
+              {m.data.bio && <p class="muted">{m.data.bio}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <!-- What to expect -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Sundays</span>
+          <h2>What to expect</h2>
+        </div>
+        <p class="lede">Your first visit anywhere can feel a little awkward. Here's what a Sunday looks like.</p>
+      </div>
+      <div class="expect">
+        {expect.map((e) => (
+          <div class="expect-card">
+            <Icon name={e.icon} size={32} />
+            <h3 class="h3">{e.title}</h3>
+            <p class="muted">{e.text}</p>
+          </div>
+        ))}
+      </div>
+      {settings.location.arrival && (
+        <div class="arrival">
+          <Icon name="pin" />
+          <p><strong>When you arrive:</strong> {settings.location.arrival}</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <CtaBand title="Come see for yourself" text="We'd love to meet you this Sunday.">
+    <a class="btn" href="/contact#visit" data-plan-visit>Plan a visit <Icon name="arrow" /></a>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .story { display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 960px) { .story { grid-template-columns: 1fr 1fr; gap: 80px; } }
+  .story-copy { --stack: 22px; }
+  .story-media { aspect-ratio: 4 / 5; }
+
+  .mission { max-width: 1000px; display: grid; gap: 24px; margin-bottom: clamp(56px, 8vw, 100px); }
+  .mission-text {
+    font-family: var(--font-display); font-weight: 600; font-stretch: 100%;
+    font-size: clamp(1.9rem, 4vw, 3.4rem); line-height: 1.12;
+  }
+  .mission-text em { font-style: normal; color: var(--color-accent); }
+  .values { list-style: none; padding: 0; display: grid; gap: 40px 32px; }
+  @media (min-width: 700px) { .values { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .values { grid-template-columns: repeat(4, 1fr); } }
+  .values li { display: grid; gap: 12px; align-content: start; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--color-on-dark) 25%, transparent); }
+  .value-num { font-family: var(--font-display); font-weight: 800; font-stretch: var(--display-stretch); color: var(--color-accent); }
+
+  .beliefs { display: grid; gap: 40px; }
+  @media (min-width: 960px) { .beliefs { grid-template-columns: 0.8fr 1.2fr; gap: 80px; } }
+  .accordion { border-top: 1.5px solid var(--color-ink); }
+  .accordion details { border-bottom: 1px solid var(--color-line); }
+  .accordion summary {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 22px 0; cursor: pointer; list-style: none;
+    font-family: var(--font-display); font-weight: 700; font-stretch: var(--display-stretch);
+    font-size: clamp(1.25rem, 2vw, 1.6rem); text-transform: var(--display-transform);
+  }
+  .accordion summary::-webkit-details-marker { display: none; }
+  .accordion summary :global(svg) { flex: none; transition: transform .3s ease; }
+  .accordion details[open] summary :global(svg) { transform: rotate(180deg); }
+  .accordion details p { padding-bottom: 24px; max-width: 60ch; color: var(--color-ink-soft); font-size: 1.1rem; }
+
+  .team { list-style: none; padding: 0; display: grid; gap: 48px 28px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .member { display: grid; gap: 8px; align-content: start; }
+  .member-photo { aspect-ratio: 4 / 5; margin-bottom: 12px; }
+  .member-role { font-weight: 700; color: var(--color-accent); font-size: 0.95rem; }
+
+  .expect { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .expect-card { display: grid; gap: 14px; align-content: start; padding: 32px; border-radius: var(--radius); background: var(--color-surface); border: 1px solid var(--color-line); }
+  .expect-card :global(svg) { color: var(--color-accent); }
+  .arrival { display: flex; gap: 14px; margin-top: 28px; padding: 24px 28px; border-radius: var(--radius); background: var(--color-accent-soft); }
+  .arrival :global(svg) { flex: none; margin-top: 2px; }
+</style>

@@ -1,0 +1,27 @@
+{
+  "name": "church-template",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/markdoc": "^2.0.9",
+    "@astrojs/netlify": "^8.2.6",
+    "@astrojs/react": "^7.0.0",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "@keystatic/astro": "^6.0.0",
+    "@keystatic/core": "^0.6.9",
+    "astro": "^7.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.0.0"
+  }
+}

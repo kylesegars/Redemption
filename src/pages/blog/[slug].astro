@@ -1,0 +1,146 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getAuthor, getPosts, readingTime } from '../../lib/content';
+import { formatDate } from '../../lib/dates';
+import { siteConfig, labelFor } from '../../site.config';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const author = await getAuthor(post);
+const minutes = readingTime(post.body);
+const url = new URL(`/blog/${post.id}`, Astro.site).toString();
+
+// "Keep reading": same category first, then most recent.
+const others = (await getPosts()).filter((p) => p.id !== post.id);
+const related = [...others.filter((p) => p.data.category === d.category), ...others.filter((p) => p.data.category !== d.category)].slice(0, 3);
+---
+<BaseLayout title={d.title} description={d.excerpt} image={d.featuredImage} type="article">
+  <article class="post">
+    <header class="container-narrow post-header">
+      <p class="post-kicker">
+        <a class="chip" href={`/blog/category/${d.category}`}>{labelFor(siteConfig.blogCategories, d.category)}</a>
+        <span>{minutes} min read</span>
+      </p>
+      <h1 class="post-title">{d.title}</h1>
+      <p class="lede">{d.excerpt}</p>
+      {author && (
+        <div class="byline">
+          {author.data.photo && <img src={author.data.photo} alt="" width="56" height="56" />}
+          <div>
+            <p class="byline-name">{author.data.name}{author.data.role && <span> · {author.data.role}</span>}</p>
+            <p class="byline-date"><time datetime={d.publishedDate}>{formatDate(d.publishedDate)}</time></p>
+          </div>
+        </div>
+      )}
+    </header>
+
+    <figure class="container post-figure">
+      <div class="media"><img src={d.featuredImage} alt={d.featuredImageAlt ?? ''} fetchpriority="high" /></div>
+    </figure>
+
+    <div class="container post-layout">
+      <aside class="share" aria-label="Share this post">
+        <span>Share</span>
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} target="_blank" rel="noopener"><Icon name="facebook" label="Share on Facebook" /></a>
+        <a href={`mailto:?subject=${encodeURIComponent(d.title)}&body=${encodeURIComponent(url)}`}><Icon name="mail" label="Share by email" /></a>
+        <button type="button" data-copy={url}><Icon name="link" label="Copy link" /></button>
+      </aside>
+      <div class="prose post-body"><Content /></div>
+    </div>
+
+    {author && (
+      <footer class="container-narrow">
+        <div class="author-card">
+          {author.data.photo && <img src={author.data.photo} alt={author.data.name} width="140" height="140" loading="lazy" />}
+          <div class="stack">
+            <span class="eyebrow">Written by</span>
+            <h2 class="author-name">{author.data.name}</h2>
+            {author.data.role && <p class="author-role">{author.data.role}</p>}
+            {author.data.bio && <p class="muted">{author.data.bio}</p>}
+          </div>
+        </div>
+      </footer>
+    )}
+  </article>
+
+  {related.length > 0 && (
+    <section class="section section-sand related">
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">Keep reading</span><h2>More from the blog</h2></div>
+          <a class="link-arrow" href="/blog">All posts <Icon name="arrow" /></a>
+        </div>
+        <div class="related-grid">{related.map((p) => <PostCard post={p} />)}</div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .post-header { padding-top: clamp(40px, 7vw, 96px); display: grid; gap: 24px; justify-items: center; text-align: center; }
+  .post-kicker { display: flex; align-items: center; gap: 14px; font-size: .95rem; color: var(--color-ink-soft); }
+  .post-title { font-size: clamp(2.3rem, 5.5vw, 4.4rem); text-transform: none; font-stretch: 100%; line-height: 1.02; }
+  .post-header .lede { margin-inline: auto; }
+  .byline { display: flex; align-items: center; gap: 14px; text-align: left; margin-top: 8px; }
+  .byline img { border-radius: 50%; }
+  .byline-name { font-weight: 700; }
+  .byline-name span { font-weight: 500; color: var(--color-ink-soft); }
+  .byline-date { font-size: .95rem; color: var(--color-ink-soft); }
+
+  .post-figure { margin-block: clamp(40px, 6vw, 72px); }
+  .post-figure .media { aspect-ratio: 16 / 8; }
+  @media (max-width: 700px) { .post-figure .media { aspect-ratio: 4 / 3; } }
+
+  .post-layout { display: grid; gap: 32px; }
+  .post-body { max-width: 700px; width: 100%; margin-inline: auto; }
+  @media (min-width: 1100px) {
+    .post-layout { grid-template-columns: 1fr 700px 1fr; gap: 48px; }
+    .share { justify-self: end; position: sticky; top: calc(var(--header-height) + 32px); align-self: start; flex-direction: column; }
+  }
+  .share { display: flex; align-items: center; gap: 10px; order: 2; }
+  @media (min-width: 1100px) { .share { order: 0; } }
+  .share span { font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--color-ink-soft); }
+  .share a, .share button {
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 999px;
+    border: 1.5px solid var(--color-line); background: transparent; transition: all .2s ease;
+  }
+  .share a:hover, .share button:hover { background: var(--color-ink); color: var(--color-on-dark); border-color: var(--color-ink); }
+  .share :global(svg) { width: 20px; height: 20px; }
+  .share button.copied { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
+
+  .author-card {
+    display: grid; gap: 24px; align-items: center;
+    margin-block: clamp(56px, 8vw, 96px); padding: clamp(28px, 4vw, 44px);
+    border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-line);
+  }
+  @media (min-width: 640px) { .author-card { grid-template-columns: 140px 1fr; gap: 36px; } }
+  .author-card img { border-radius: 50%; width: 140px; height: 140px; object-fit: cover; }
+  .author-card .stack { --stack: 8px; }
+  .author-name { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+  .author-role { font-weight: 700; color: var(--color-accent); }
+
+  .related-grid { display: grid; gap: 48px 28px; }
+  @media (min-width: 760px) { .related-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .related-grid { grid-template-columns: repeat(3, 1fr); } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        btn.classList.add('copied');
+        setTimeout(() => btn.classList.remove('copied'), 1800);
+      } catch {}
+    }),
+  );
+</script>

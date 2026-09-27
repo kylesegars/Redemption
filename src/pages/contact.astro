@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { settings, fullAddress } from '../lib/settings';
+const socials = (['instagram', 'facebook', 'youtube'] as const).filter((k) => settings.social[k]);
+---
+<BaseLayout title="Contact" description={`Get in touch with ${settings.churchName}.`}>
+  <PageHero eyebrow="Contact" title="Let's talk" lede="Questions, prayer requests, or just want to say hi? We'd love to hear from you." />
+
+  <section class="container contact">
+    <form class="form form-card" name="contact" method="POST" action="/thanks?form=contact" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hidden-field"><label>Skip: <input name="bot-field" /></label></p>
+      <div class="form-row">
+        <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" autocomplete="name" required /></div>
+        <div class="field"><label for="c-email">Email</label><input id="c-email" type="email" name="email" autocomplete="email" required /></div>
+      </div>
+      <div class="field">
+        <label for="c-topic">What's this about?</label>
+        <select id="c-topic" name="topic">
+          <option>General question</option>
+          <option>Prayer request</option>
+          <option>Planning a visit</option>
+          <option>Serving / volunteering</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" rows="6" required></textarea></div>
+      <button class="btn" type="submit">Send message <Icon name="send" /></button>
+    </form>
+
+    <aside class="contact-info">
+      <div class="info-block">
+        <h2 class="info-title">Sundays</h2>
+        {settings.serviceTimes.map((s) => <p><strong>{s.day} at {s.time}</strong>{s.note && <><br /><span class="muted">{s.note}</span></>}</p>)}
+      </div>
+      <div class="info-block">
+        <h2 class="info-title">Location</h2>
+        {settings.location.venue && <p><strong>{settings.location.venue}</strong></p>}
+        {fullAddress && <p>{fullAddress}</p>}
+        {settings.location.mapUrl && <p><a class="link-arrow" href={settings.location.mapUrl} target="_blank" rel="noopener">Get directions <Icon name="arrow" /></a></p>}
+      </div>
+      <div class="info-block">
+        <h2 class="info-title">Reach us</h2>
+        {settings.email && <p><a href={`mailto:${settings.email}`}><Icon name="mail" size={18} /> {settings.email}</a></p>}
+        {settings.phone && <p><a href={`tel:${settings.phone.replace(/[^\d+]/g, '')}`}><Icon name="phone" size={18} /> {settings.phone}</a></p>}
+        {socials.length > 0 && (
+          <p class="contact-socials">{socials.map((k) => <a href={settings.social[k]!} target="_blank" rel="noopener"><Icon name={k} label={k} /></a>)}</p>
+        )}
+      </div>
+    </aside>
+  </section>
+
+  <!-- First-time guests -->
+  <section class="section" id="visit">
+    <div class="container"><div class="visit on-image">
+      <img src="/images/site/contact.svg" alt="" loading="lazy" />
+      <div class="visit-copy">
+        <span class="eyebrow">First time?</span>
+        <h2>{settings.planVisit.heading}</h2>
+        {settings.planVisit.blurb && <p class="lede">{settings.planVisit.blurb}</p>}
+        {settings.location.arrival && <p class="arrival">{settings.location.arrival}</p>}
+        <div class="btn-row"><a class="btn" href="#visit" data-plan-visit>Plan your visit <Icon name="arrow" /></a></div>
+      </div>
+    </div></div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact { display: grid; gap: 40px; align-items: start; }
+  @media (min-width: 960px) { .contact { grid-template-columns: 1.3fr 0.7fr; gap: 64px; } }
+  .form-card { padding: clamp(24px, 4vw, 44px); border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-line); }
+  .form-card .field input, .form-card .field textarea, .form-card .field select { background: var(--color-bg); }
+  .contact-info { display: grid; gap: 32px; }
+  .info-block { display: grid; gap: 8px; padding-bottom: 28px; border-bottom: 1px solid var(--color-line); }
+  .info-block:last-child { border: 0; }
+  .info-title { font-family: var(--font-body); font-size: .8125rem; font-weight: 700; font-stretch: 100%; letter-spacing: .14em; text-transform: uppercase; color: var(--color-accent); line-height: 1.4; }
+  .info-block a:not(.link-arrow) { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+  .info-block a:not(.link-arrow):hover { text-decoration: underline; }
+  .contact-socials { display: flex; gap: 12px; margin-top: 8px; }
+
+  .visit { position: relative; overflow: hidden; border-radius: var(--radius-lg); min-height: 520px; display: flex; align-items: flex-end; color: var(--color-on-dark); }
+  .visit > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .visit::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgb(0 0 0 / .75), rgb(0 0 0 / .2)); }
+  .visit-copy { position: relative; z-index: 2; display: grid; gap: 18px; padding: clamp(28px, 6vw, 72px); max-width: 760px; }
+  .visit .eyebrow { color: var(--color-on-dark); }
+  .visit .lede, .visit .arrival { color: color-mix(in srgb, var(--color-on-dark) 85%, transparent); }
+</style>

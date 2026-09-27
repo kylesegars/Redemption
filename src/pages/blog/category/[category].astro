@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import BlogIndex from '../../../components/BlogIndex.astro';
+import { getPosts } from '../../../lib/content';
+import { siteConfig } from '../../../site.config';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const usedCategories = [...new Set(posts.map((p) => p.data.category))];
+  return siteConfig.blogCategories
+    .filter((c) => usedCategories.includes(c.value))
+    .map((c) => ({
+      params: { category: c.value },
+      props: { label: c.label, posts: posts.filter((p) => p.data.category === c.value), usedCategories },
+    }));
+}
+const { category } = Astro.params;
+const { label, posts, usedCategories } = Astro.props;
+---
+<BaseLayout title={`${label} — Blog`}>
+  <PageHero eyebrow="Blog" title={label} />
+  <BlogIndex posts={posts} activeCategory={category} usedCategories={usedCategories} />
+</BaseLayout>

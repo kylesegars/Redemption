@@ -1,0 +1,56 @@
+---
+/** Shared body for /blog, /blog/2… and /blog/category/… */
+import PostCard from './PostCard.astro';
+import Icon from './Icon.astro';
+import type { PostEntry } from '../lib/content';
+import { siteConfig } from '../site.config';
+
+interface Props {
+  posts: PostEntry[];
+  featured?: PostEntry;
+  activeCategory?: string;
+  prevUrl?: string;
+  nextUrl?: string;
+  usedCategories: string[];
+}
+const { posts, featured, activeCategory, prevUrl, nextUrl, usedCategories } = Astro.props;
+const cats = siteConfig.blogCategories.filter((c) => usedCategories.includes(c.value));
+---
+{featured && (
+  <section class="container featured-post">
+    <PostCard post={featured} size="large" />
+  </section>
+)}
+
+<section class="section-tight">
+  <div class="container">
+    {cats.length > 1 && (
+      <nav class="filter-bar blog-filters" aria-label="Blog categories">
+        <a href="/blog" aria-current={!activeCategory ? 'page' : undefined}>All</a>
+        {cats.map((c) => (
+          <a href={`/blog/category/${c.value}`} aria-current={activeCategory === c.value ? 'page' : undefined}>{c.label}</a>
+        ))}
+      </nav>
+    )}
+    {posts.length > 0 ? (
+      <div class="post-grid">{posts.map((p) => <PostCard post={p} />)}</div>
+    ) : (
+      <p class="muted">No posts here yet — check back soon.</p>
+    )}
+    {(prevUrl || nextUrl) && (
+      <nav class="pager" aria-label="Pagination">
+        {prevUrl ? <a class="btn btn-outline" href={prevUrl}><Icon name="arrow-left" /> Newer posts</a> : <span />}
+        {nextUrl && <a class="btn btn-outline" href={nextUrl}>Older posts <Icon name="arrow" /></a>}
+      </nav>
+    )}
+  </div>
+</section>
+
+<style>
+  .featured-post { padding-bottom: clamp(48px, 7vw, 96px); border-bottom: 1px solid var(--color-line); margin-bottom: clamp(24px, 3vw, 40px); }
+  .blog-filters { margin-bottom: 40px; }
+  .post-grid { display: grid; gap: 56px 28px; }
+  @media (min-width: 760px) { .post-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .post-grid { grid-template-columns: repeat(3, 1fr); } }
+  .pager { display: flex; justify-content: space-between; margin-top: 64px; }
+</style>

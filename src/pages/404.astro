@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+<BaseLayout title="Page not found" newsletter={false}>
+  <section class="section container-narrow nf">
+    <p class="nf-code">404</p>
+    <h1 class="h2">This page wandered off</h1>
+    <p class="lede">The page you're looking for doesn't exist or may have moved.</p>
+    <div class="btn-row"><a class="btn" href="/">Go home <Icon name="arrow" /></a><a class="btn btn-outline" href="/events">Upcoming events</a></div>
+  </section>
+</BaseLayout>
+<style>
+  .nf { display: grid; gap: 20px; justify-items: center; text-align: center; min-height: 60vh; align-content: center; }
+  .nf .lede { margin-inline: auto; }
+  .nf-code { font-family: var(--font-display); font-weight: 800; font-stretch: 125%; font-size: clamp(5rem, 18vw, 11rem); line-height: .9; color: var(--color-accent); }
+</style>

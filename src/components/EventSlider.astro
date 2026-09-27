@@ -1,0 +1,63 @@
+---
+/** Horizontal, swipeable slider of upcoming events (home page). */
+import EventCard from './EventCard.astro';
+import Icon from './Icon.astro';
+import type { EventEntry } from '../lib/content';
+interface Props { events: EventEntry[] }
+const { events } = Astro.props;
+---
+<div class="slider" data-slider>
+  <div class="slider-controls">
+    <button type="button" class="slider-btn" data-prev aria-label="Previous events"><Icon name="chevron-left" /></button>
+    <button type="button" class="slider-btn" data-next aria-label="Next events"><Icon name="chevron-right" /></button>
+  </div>
+  <ul class="slider-track" data-event-list data-track tabindex="0" aria-label="Upcoming events">
+    {events.map((e) => <li class="slide" data-expire-wrap><EventCard event={e} variant="slide" /></li>)}
+  </ul>
+  <p class="empty-state" data-empty hidden={events.length > 0}>
+    No upcoming events right now — check back soon!
+  </p>
+</div>
+
+<style>
+  .slider { position: relative; }
+  .slider-controls { position: absolute; top: calc(-1 * clamp(32px, 5vw, 64px) - 56px); right: 0; display: flex; gap: 8px; }
+  @media (max-width: 719px) { .slider-controls { display: none; } }
+  .slider-btn {
+    width: 52px; height: 52px; display: grid; place-items: center; border-radius: 999px;
+    border: 1.5px solid currentColor; background: transparent; color: inherit;
+    transition: background-color .2s ease, color .2s ease, opacity .2s ease;
+  }
+  .slider-btn:hover:not(:disabled) { background: var(--color-on-dark); color: var(--color-ink); }
+  .slider-btn:disabled { opacity: .3; cursor: default; }
+  .slider-track {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-auto-flow: column; grid-auto-columns: min(82%, 360px); gap: clamp(16px, 2vw, 28px);
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 0;
+    scrollbar-width: none; overscroll-behavior-x: contain;
+    padding-bottom: 4px;
+  }
+  @media (min-width: 1100px) { .slider-track { grid-auto-columns: calc((100% - 2 * 28px) / 3); } }
+  .slider-track::-webkit-scrollbar { display: none; }
+  .slide { scroll-snap-align: start; }
+  .empty-state { padding: 48px 0; font-size: 1.15rem; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-slider]').forEach((slider) => {
+    const track = slider.querySelector<HTMLElement>('[data-track]')!;
+    const prev = slider.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = slider.querySelector<HTMLButtonElement>('[data-next]')!;
+    const step = () => (track.querySelector<HTMLElement>('.slide')?.offsetWidth ?? 300) + 24;
+    const update = () => {
+      prev.disabled = track.scrollLeft < 8;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
+    };
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    document.addEventListener('events:expired', update);
+    update();
+  });
+</script>

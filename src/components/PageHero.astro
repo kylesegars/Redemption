@@ -1,0 +1,30 @@
+---
+/** Interior page hero: full-bleed image with big title, or a plain text version. */
+interface Props { title: string; eyebrow?: string; lede?: string; image?: string; align?: 'left' | 'center' }
+const { title, eyebrow, lede, image, align = 'left' } = Astro.props;
+---
+<section class:list={['page-hero', { 'has-image': image, center: align === 'center' }]}>
+  {image && <img class="page-hero-bg" src={image} alt="" fetchpriority="high" />}
+  <div class="container page-hero-inner on-image">
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h1>{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero { position: relative; padding-block: clamp(72px, 10vw, 140px) clamp(48px, 7vw, 96px); overflow: hidden; }
+  .page-hero-inner { position: relative; display: grid; gap: 22px; justify-items: start; }
+  .center .page-hero-inner { justify-items: center; text-align: center; }
+  .center .lede { margin-inline: auto; }
+  .has-image {
+    min-height: min(78vh, 720px); display: flex; align-items: flex-end;
+    color: var(--color-on-dark); padding-top: calc(var(--header-height) + 80px);
+  }
+  .has-image::before { content: ''; position: absolute; inset: 0; z-index: 1; background: var(--hero-overlay); }
+  .has-image .page-hero-inner { z-index: 2; }
+  .has-image .eyebrow { color: var(--color-on-dark); }
+  .has-image .lede { color: color-mix(in srgb, var(--color-on-dark) 85%, transparent); }
+  .page-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+</style>

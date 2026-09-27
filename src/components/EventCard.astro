@@ -1,0 +1,57 @@
+---
+import Icon from './Icon.astro';
+import { dateBadge, formatEventWhen } from '../lib/dates';
+import { expiresAt, type EventEntry } from '../lib/content';
+import { siteConfig, labelFor } from '../site.config';
+
+interface Props { event: EventEntry; variant?: 'grid' | 'slide' }
+const { event, variant = 'grid' } = Astro.props;
+const d = event.data;
+const badge = dateBadge(d.start);
+---
+<article
+  class:list={['event-card', variant]}
+  data-expires={expiresAt(event)}
+  data-category={d.category}
+>
+  <a href={`/events/${event.id}`} class="event-link">
+    <div class="event-media media">
+      <img src={d.image ?? '/images/site/community.svg'} alt="" loading="lazy" decoding="async" />
+      <div class="date-badge" aria-hidden="true">
+        <span class="m">{badge.month}</span>
+        <span class="d">{badge.day}</span>
+      </div>
+    </div>
+    <div class="event-body">
+      <span class="event-cat">{labelFor(siteConfig.eventCategories, d.category)}</span>
+      <h3 class="h3">{d.title}</h3>
+      <p class="event-meta"><Icon name="clock" size={18} /> {formatEventWhen(d.start, d.end)}</p>
+      {d.location && <p class="event-meta"><Icon name="pin" size={18} /> {d.location}</p>}
+    </div>
+  </a>
+</article>
+
+<style>
+  .event-card { height: 100%; }
+  .event-link { display: flex; flex-direction: column; gap: 18px; height: 100%; text-decoration: none; }
+  .event-media { aspect-ratio: 4 / 3; border-radius: var(--radius); }
+  .event-media img { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .event-link:hover img { transform: scale(1.05); }
+  .date-badge {
+    position: absolute; top: 14px; left: 14px;
+    display: grid; justify-items: center; min-width: 62px; padding: 8px 10px 10px;
+    border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-ink);
+    line-height: 1;
+  }
+  .date-badge .m { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
+  .date-badge .d {
+    font-family: var(--font-display); font-weight: var(--display-weight); font-stretch: var(--display-stretch);
+    font-size: 1.9rem; margin-top: 4px;
+  }
+  .event-body { display: grid; gap: 8px; }
+  .event-cat { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink-soft); }
+  .event-link:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .event-meta { display: flex; gap: 8px; align-items: flex-start; font-size: 0.95rem; color: var(--color-ink-soft); line-height: 1.4; }
+  .event-meta :global(svg) { flex: none; margin-top: 1px; }
+  :global(.section-dark) .event-meta, :global(.section-dark) .event-cat { color: color-mix(in srgb, var(--color-on-dark) 70%, transparent); }
+</style>
