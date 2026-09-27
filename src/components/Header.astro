@@ -11,13 +11,20 @@ interface Props {
 const { overlay = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) => path === href || path.startsWith(href + '/');
+/* Desktop: links split around the centered logo, like the original site. */
+const split = Math.ceil(siteConfig.nav.length / 2);
+const navLeft = siteConfig.nav.slice(0, split);
+const navRight = siteConfig.nav.slice(split);
 ---
 <header class:list={['site-header', { overlay }]} data-header>
   <div class="container header-inner">
-    <Logo />
+    <!-- Phones/tablets: compact bar with horizontal logo + menu button -->
+    <Logo class="logo-compact" />
+
+    <!-- Desktop: nav | centered logo badge | nav -->
     <nav class="nav-desktop" aria-label="Main">
-      <ul>
-        {siteConfig.nav.map((item) => (
+      <ul class="nav-left">
+        {navLeft.map((item) => (
           item.children ? (
             <li class="has-sub" data-dropdown>
               <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
@@ -35,8 +42,19 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
           )
         ))}
       </ul>
-      <a class="btn nav-cta" href={siteConfig.navCta.href}>{siteConfig.navCta.label}</a>
+
+      <a href="/" class="logo-badge" aria-label={`${settings.churchName} home`}>
+        <img src="/images/site/logo-mark.png" alt={settings.churchName} width="96" height="96" />
+      </a>
+
+      <ul class="nav-right">
+        {navRight.map((item) => (
+          <li><a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+        <li><a class="btn nav-cta" href={siteConfig.navCta.href}>{siteConfig.navCta.label}</a></li>
+      </ul>
     </nav>
+
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
       <span class="sr-only">Menu</span>
       <Icon name="menu" class="icon-open" />
@@ -80,16 +98,29 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
   .site-header.overlay.is-scrolled { background: var(--color-ink); }
   .header-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 
-  .nav-desktop { display: none; align-items: center; gap: 22px; }
-  .nav-desktop > ul { display: flex; align-items: center; gap: 2px; list-style: none; padding: 0; }
+  .nav-desktop { display: none; }
+  .nav-desktop ul { display: flex; align-items: center; gap: 4px; list-style: none; padding: 0; margin: 0; }
+  .nav-left { justify-content: flex-end; }
+  .nav-right { justify-content: flex-start; }
   .nav-desktop a:not(.btn) {
-    display: block; padding: 10px 12px;
+    display: block; padding: 10px 14px;
     font-family: var(--font-nav); font-weight: 600; font-size: 0.875rem;
-    letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none;
+    letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; white-space: nowrap;
     transition: color .2s ease;
   }
   .nav-desktop a:not(.btn):hover, .nav-desktop a[aria-current='page'] { color: var(--color-accent); }
-  .nav-cta { min-height: 44px; padding: 10px 26px; }
+  .nav-cta { min-height: 44px; padding: 10px 26px; margin-left: 10px; }
+
+  /* Centered circular logo that hangs below the bar, as on the original site */
+  .logo-badge {
+    position: relative; z-index: 2; align-self: start; justify-self: center;
+    display: grid; place-items: center;
+    width: 132px; height: 132px; margin-top: 6px; margin-inline: 16px;
+    border-radius: 50%; background: var(--color-ink);
+    transition: transform .25s ease;
+  }
+  .logo-badge:hover { transform: scale(1.04); }
+  .logo-badge img { width: 150px; height: 150px; max-width: none; margin: -9px; }
 
   .has-sub { position: relative; display: flex; align-items: center; }
   .has-sub > a { padding-right: 2px !important; }
@@ -103,6 +134,8 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     opacity: 0; visibility: hidden; transform: translateY(6px);
     transition: opacity .18s ease, transform .18s ease, visibility .18s;
   }
+  .nav-desktop .sub { display: grid; gap: 2px; z-index: 10; }
+  .has-sub { z-index: 3; }
   .sub::before { content: ''; position: absolute; inset: -12px 0 auto; height: 12px; }
   .has-sub:hover .sub, .has-sub:focus-within .sub, .has-sub.open .sub { opacity: 1; visibility: visible; transform: none; }
   .has-sub:hover .sub-toggle :global(svg), .has-sub.open .sub-toggle :global(svg) { transform: rotate(180deg); }
@@ -116,7 +149,11 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
   .menu-toggle :global(.icon-close) { display: none; }
   .menu-toggle[aria-expanded='true'] :global(.icon-open) { display: none; }
   .menu-toggle[aria-expanded='true'] :global(.icon-close) { display: block; }
-  @media (min-width: 1080px) { .nav-desktop { display: flex; } .menu-toggle { display: none; } }
+  @media (min-width: 1080px) {
+    .header-inner { justify-content: center; }
+    .nav-desktop { display: grid; grid-template-columns: 1fr auto 1fr; grid-template-rows: var(--header-height); align-items: center; width: 100%; }
+    .menu-toggle, .header-inner :global(.logo-compact) { display: none; }
+  }
 
   .mobile-menu {
     position: fixed; inset: var(--header-height) 0 0; z-index: 49;
