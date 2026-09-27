@@ -45,7 +45,13 @@
   --gutter: clamp(16px, 4vw, 48px);
   --section-space: clamp(64px, 9vw, 128px);
   --header-height: 84px;
+  /* How far the centered logo badge hangs below the header (desktop only). */
+  --header-overhang: 0px;
 
   /* ---- Image treatment ------------------------------------------------ */
   --hero-overlay: linear-gradient(180deg, rgb(2 26 38 / 0.72) 0%, rgb(2 26 38 / 0.55) 45%, rgb(2 26 38 / 0.9) 100%);
+}
+
+@media (min-width: 1080px) {
+  :root { --header-overhang: 92px; }
 }

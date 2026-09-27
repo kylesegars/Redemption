@@ -208,7 +208,7 @@ const rhythms = [
   }
   .hero-inner {
     position: relative; z-index: 2; display: grid; justify-items: center; text-align: center; gap: 22px;
-    padding-top: clamp(56px, 8vw, 96px); padding-bottom: clamp(120px, 14vw, 180px);
+    padding-top: calc(clamp(56px, 8vw, 80px) + var(--header-overhang)); padding-bottom: clamp(120px, 14vw, 180px);
   }
   .hero-logo { width: min(520px, 82vw); height: auto; }
   .hero-lede { font-size: clamp(1.05rem, 1.6vw, 1.3rem); font-weight: 500; max-width: 44ch; color: color-mix(in srgb, var(--color-on-dark) 88%, transparent); }

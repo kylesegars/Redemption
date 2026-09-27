@@ -22,7 +22,7 @@ const { title, lede, image, align = 'left' } = Astro.props;
   .page-hero {
     position: relative; overflow: hidden;
     background: var(--color-ink); color: var(--color-on-dark);
-    padding-block: clamp(64px, 9vw, 120px) clamp(56px, 7vw, 96px);
+    padding-block: calc(clamp(56px, 7vw, 96px) + var(--header-overhang)) clamp(56px, 7vw, 96px);
   }
   .page-hero-inner { position: relative; z-index: 2; display: grid; gap: 20px; justify-items: start; }
   .page-hero h1 { max-width: 20ch; }

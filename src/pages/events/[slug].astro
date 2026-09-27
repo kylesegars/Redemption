@@ -85,7 +85,7 @@ const more = (await getUpcomingEvents()).filter((e) => e.id !== event.id).slice(
 </BaseLayout>
 
 <style>
-  .event-hero { padding-top: clamp(32px, 5vw, 64px); display: grid; gap: clamp(28px, 4vw, 48px); }
+  .event-hero { padding-top: calc(clamp(32px, 5vw, 64px) + var(--header-overhang)); display: grid; gap: clamp(28px, 4vw, 48px); }
   .back { justify-self: start; }
   .event-head { display: grid; gap: 32px; align-items: end; }
   @media (min-width: 960px) { .event-head { grid-template-columns: 1.4fr 1fr; gap: 64px; } }

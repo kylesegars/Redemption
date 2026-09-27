@@ -4,11 +4,13 @@
  * designed for dark backgrounds (the header and footer are navy).
  */
 import { settings } from '../lib/settings';
-interface Props { class?: string; size?: 'md' | 'lg' }
-const { class: className, size = 'md' } = Astro.props;
+interface Props { class?: string; size?: 'md' | 'lg'; /** "mark" = just the circular R. */ variant?: 'full' | 'mark' }
+const { class: className, size = 'md', variant = 'full' } = Astro.props;
 ---
 <a href="/" class:list={['logo', `logo-${size}`, className]} aria-label={`${settings.churchName} home`}>
-  {settings.logo ? (
+  {variant === 'mark' ? (
+    <img class="mark" src="/images/site/logo-mark.png" alt={settings.churchName} width="56" height="56" />
+  ) : settings.logo ? (
     <img src={settings.logo} alt={settings.churchName} />
   ) : (
     <span class="logo-word">{settings.churchName}</span>
@@ -19,5 +21,6 @@ const { class: className, size = 'md' } = Astro.props;
   .logo img { height: 52px; width: auto; }
   .logo-lg img { height: 72px; }
   @media (max-width: 600px) { .logo img { height: 44px; } }
+  .logo img.mark { height: 76px; width: 76px; max-width: none; margin: -10px; }
   .logo-word { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 1.2rem; line-height: 1; }
 </style>

@@ -19,7 +19,7 @@ const navRight = siteConfig.nav.slice(split);
 <header class:list={['site-header', { overlay }]} data-header>
   <div class="container header-inner">
     <!-- Phones/tablets: compact bar with horizontal logo + menu button -->
-    <Logo class="logo-compact" />
+    <Logo class="logo-compact" variant="mark" />
 
     <!-- Desktop: nav | centered logo badge | nav -->
     <nav class="nav-desktop" aria-label="Main">
@@ -115,12 +115,12 @@ const navRight = siteConfig.nav.slice(split);
   .logo-badge {
     position: relative; z-index: 2; align-self: start; justify-self: center;
     display: grid; place-items: center;
-    width: 132px; height: 132px; margin-top: 6px; margin-inline: 16px;
+    width: 168px; height: 168px; margin-top: 8px; margin-inline: 20px;
     border-radius: 50%; background: var(--color-ink);
     transition: transform .25s ease;
   }
   .logo-badge:hover { transform: scale(1.04); }
-  .logo-badge img { width: 150px; height: 150px; max-width: none; margin: -9px; }
+  .logo-badge img { width: 204px; height: 204px; max-width: none; margin: -18px; }
 
   .has-sub { position: relative; display: flex; align-items: center; }
   .has-sub > a { padding-right: 2px !important; }
