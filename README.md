@@ -1,11 +1,16 @@
-# Church Plant Website Template
+# Redemption Church Coldwater
 
-An Astro template for church-plant websites. Pastors and staff edit blog posts, events,
-team bios and church info in a simple editor at **`/keystatic`**. They never touch
-layouts or design.
+The website for [Redemption Church Coldwater](https://redemptioncoldwater.com), built with Astro. Staff
+edit blog posts, events, the leadership team, and church info in a simple editor at **`/keystatic`**.
+They never touch layouts or design.
 
-**Pages:** Home · About · Events (+ detail pages) · Blog (+ posts, categories) · Partner · Contact · Give
+**Pages:** Home · About (Our Story, The Gospel, Leadership, Core Values, Beliefs, Life at Redemption) ·
+Events (+ detail pages) · Blog (+ posts, categories) · Food Pantry · Partner · Give · Contact
 **Stack:** Astro 7 · Keystatic (CMS) · Netlify (hosting, forms, nightly rebuild)
+
+**Design:** colors and fonts carry over from the original site. Navy `#021a26`, sky blue `#95d9f7`,
+white and light greys, Raleway ExtraBold headings, Montserrat body text, and Open Sans navigation
+(see `src/styles/theme.css`).
 
 ---
 
@@ -32,15 +37,13 @@ When run locally, Keystatic saves straight to the files in `src/content` and `sr
 | Page copy (About story, beliefs, Partner FAQ, etc.) | `src/pages/*.astro` | Developer |
 | Uploaded images | `public/images/{blog,events,authors,site}` | Keystatic uploads here automatically |
 
-### Customizing a new church
-1. **Theme:** edit `src/styles/theme.css`. Colors, fonts and button shape all come from variables.
-   To change fonts, run `npm i @fontsource-variable/<font>`, then swap the imports at the top of that file.
-   Setting `--display-transform: none` gives sentence-case headings for a softer look.
-2. **Config:** set `timezone` in `src/site.config.ts` (this matters for when events expire) and `site` in `astro.config.mjs`.
-3. **Church info:** fill it in through Keystatic → Church Info.
-4. **Copy and photos:** replace the placeholder copy in `src/pages/*.astro` and the images in `public/images/site/`.
-   Each placeholder is labeled with the kind of photo that belongs there.
-5. **Logo:** upload it in Church Info. Until then, a placeholder mark and the church name are shown.
+### Common edits
+- **Current sermon series (home page):** edit `currentSeries` at the top of `src/pages/index.astro`.
+- **Page copy** (Our Story, Gospel, Core Values, Partner levels, Food Pantry policy, etc.): each page keeps its
+  copy in a list at the top of its file in `src/pages/`.
+- **Navigation / About submenu:** `nav` in `src/site.config.ts`.
+- **Google Analytics:** `gaId` in `src/site.config.ts` (only loads on the production build).
+- **Photos:** `public/images/site/`.
 
 ---
 
@@ -79,10 +82,11 @@ already happened" and are hidden from search engines.
 When staff click **Save** in Keystatic, their change is committed to the repo and Netlify
 rebuilds the site. It goes live in about a minute.
 
-## Giving (Planning Center)
-In Church Info → Giving, choose "Planning Center" and paste the church's Church Center giving URL.
-The Give buttons then open Planning Center's giving form in a pop-up on the site.
-Choosing "Other" makes the Give buttons open any giving link in a new tab.
+## Giving (Subsplash)
+Giving goes through our sending church, Longview Point Baptist Church, on Subsplash. In Church Info → Giving,
+"Subsplash" embeds the giving form (the `wallet.subsplash.com/ui/embed/…` URL) directly on the `/give` page,
+and every Give button links there. "Planning Center" opens a Church Center pop-up instead, and "Other" opens
+any giving link in a new tab.
 
 ---
 

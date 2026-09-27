@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import PlanVisit from '../components/PlanVisit.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { settings } from '../lib/settings';
+import { siteConfig } from '../site.config';
 
 interface Props {
   title?: string;
@@ -20,7 +21,7 @@ interface Props {
 const {
   title,
   description = settings.tagline ?? '',
-  image = '/images/site/hero.svg',
+  image = '/images/site/og-image.jpg',
   overlayHeader = false,
   newsletter = true,
   type = 'website',
@@ -38,7 +39,9 @@ const ogImage = new URL(image, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#021a26" />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -46,6 +49,17 @@ const ogImage = new URL(image, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>document.documentElement.classList.add('js');</script>
+    {siteConfig.gaId && import.meta.env.PROD && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.gaId}`}></script>
+        <script is:inline define:vars={{ gaId: siteConfig.gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </>
+    )}
     <slot name="head" />
   </head>
   <body>

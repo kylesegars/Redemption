@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const rhythms = [
+  {
+    name: 'Pulpit',
+    img: '/images/site/pulpit.png',
+    body: [
+      'The inverted triangle is the pulpit/corporate worship. The upward arrow points the focus and direction of this part of our discipleship strategy, which is the worship of God and growth towards Him.',
+      'Our worship services will center around prayer, scripture reading, corporate singing, preaching of the Word, observing the ordinances (Lord’s Supper, Baptism), fellowship, and giving. The worship gathering will be what binds and directs much of what takes place in the other two areas.',
+    ],
+  },
+  {
+    name: 'Table',
+    img: '/images/site/table.png',
+    body: [
+      'The circle is a table in homes, coffee shops, or wherever a small group can gather. The arrows point inward and toward each other with the goal being to see people learn to live in an authentic community and to become family in Jesus. The community and life-on-life groups aim to see strangers grow from basic fellowship to real friendship into a faithful family in Jesus.',
+    ],
+    groups: [
+      { name: 'Community Groups', size: '15–20 people', text: 'Discussions from the sermon, sharing a meal, praying and caring for one another. Community groups have a specific ministry focus they serve together.' },
+      { name: 'Life on Life Groups', size: '3–5 people, same gender', text: 'Primarily a time for believers to be authentic, challenged and encouraged to walk closer to Jesus.' },
+    ],
+  },
+  {
+    name: 'Square',
+    img: '/images/site/square.png',
+    body: [
+      'The square is the public square, which represents the community/world. The outward pointing arrows show the focus is on the intentional engagement of the community/world.',
+      'This aligns with our core value of Missions with the four points of emphasis being: Acts of Service, Evangelism, Church Planting, and Missionary Partnerships. We want to take the message of the Gospel to our neighbors in the community and around the world and to make a tangible difference in the lives of others, reflecting God’s love and grace to all people.',
+    ],
+    emphases: ['Acts of Service', 'Evangelism', 'Church Planting', 'Missionary Partnerships'],
+  },
+];
+---
+<BaseLayout title="Life at Redemption Coldwater" description="Pulpit, Table, Square: the simple approach to discipleship at Redemption Church Coldwater.">
+  <PageHero
+    eyebrow="Life at Redemption Coldwater"
+    title="Pulpit. Table. Square."
+    lede="We believe in a simple approach in our discipleship strategy, where all areas of the church are interconnected. To explain that, we use a simple method called “Pulpit, Table, Square.”"
+  />
+  <AboutNav />
+
+  <section class="section">
+    <div class="container rhythms">
+      {rhythms.map((r, i) => (
+        <article class:list={['rhythm', { flip: i % 2 === 1 }]} data-reveal>
+          <div class="rhythm-art"><img src={r.img} alt="" width="220" height="220" loading="lazy" /></div>
+          <div class="stack rhythm-copy">
+            <span class="eyebrow">0{i + 1}</span>
+            <h2>{r.name}</h2>
+            {r.body.map((p) => <p>{p}</p>)}
+            {r.groups && (
+              <div class="groups">
+                {r.groups.map((g) => (
+                  <div class="group">
+                    <p class="group-name">{g.name}</p>
+                    <p class="group-size">{g.size}</p>
+                    <p class="muted">{g.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {r.emphases && (
+              <ol class="emphases">{r.emphases.map((e) => <li>{e}</li>)}</ol>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CtaBand title="Find your place" text="Join us on a Sunday and get connected to a community group.">
+    <a class="btn" href="/contact#visit" data-plan-visit>Plan a visit <Icon name="arrow" /></a>
+    <a class="btn btn-outline" href="/events">See events</a>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .rhythms { display: grid; gap: clamp(64px, 9vw, 120px); }
+  .rhythm { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 900px) {
+    .rhythm { grid-template-columns: 0.8fr 1.2fr; gap: 80px; }
+    .rhythm.flip .rhythm-art { order: 2; }
+  }
+  .rhythm-art { aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--color-ink); display: grid; place-items: center; max-width: 440px; width: 100%; }
+  .rhythm.flip .rhythm-art { justify-self: end; }
+  .rhythm-art img { width: 50%; height: auto; }
+  .rhythm-copy { --stack: 18px; font-size: 1.05rem; }
+  .groups { display: grid; gap: 14px; margin-top: 6px; }
+  @media (min-width: 640px) { .groups { grid-template-columns: 1fr 1fr; } }
+  .group { padding: 22px; border-radius: var(--radius); background: var(--color-sand); display: grid; gap: 6px; align-content: start; }
+  .group-name { font-weight: 700; color: var(--color-ink); }
+  .group-size { font-size: .75rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--accent-text); }
+  .emphases { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; counter-reset: e; }
+  .emphases li { counter-increment: e; padding: 8px 14px; border-radius: 999px; background: var(--color-accent-soft); color: var(--color-ink); font-weight: 600; font-size: .9rem; }
+  .emphases li::before { content: counter(e) '. '; color: var(--accent-text); }
+</style>

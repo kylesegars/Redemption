@@ -1,10 +1,16 @@
 ---
-/** Interior page hero: full-bleed image with big title, or a plain text version. */
+/** Interior page hero: navy band with big title, optionally over a full-bleed photo. */
 interface Props { title: string; eyebrow?: string; lede?: string; image?: string; align?: 'left' | 'center' }
 const { title, eyebrow, lede, image, align = 'left' } = Astro.props;
 ---
 <section class:list={['page-hero', { 'has-image': image, center: align === 'center' }]}>
-  {image && <img class="page-hero-bg" src={image} alt="" fetchpriority="high" />}
+  {image ? (
+    <img class="page-hero-bg" src={image} alt="" fetchpriority="high" />
+  ) : (
+    <svg class="page-hero-rings" viewBox="0 0 400 400" aria-hidden="true">
+      <circle cx="200" cy="200" r="190" /><circle cx="200" cy="200" r="150" /><circle cx="200" cy="200" r="110" />
+    </svg>
+  )}
   <div class="container page-hero-inner on-image">
     {eyebrow && <span class="eyebrow">{eyebrow}</span>}
     <h1>{title}</h1>
@@ -14,17 +20,21 @@ const { title, eyebrow, lede, image, align = 'left' } = Astro.props;
 </section>
 
 <style>
-  .page-hero { position: relative; padding-block: clamp(72px, 10vw, 140px) clamp(48px, 7vw, 96px); overflow: hidden; }
-  .page-hero-inner { position: relative; display: grid; gap: 22px; justify-items: start; }
-  .center .page-hero-inner { justify-items: center; text-align: center; }
-  .center .lede { margin-inline: auto; }
-  .has-image {
-    min-height: min(78vh, 720px); display: flex; align-items: flex-end;
-    color: var(--color-on-dark); padding-top: calc(var(--header-height) + 80px);
+  .page-hero {
+    position: relative; overflow: hidden;
+    background: var(--color-ink); color: var(--color-on-dark);
+    padding-block: clamp(64px, 9vw, 120px) clamp(56px, 7vw, 96px);
   }
+  .page-hero-inner { position: relative; z-index: 2; display: grid; gap: 20px; justify-items: start; }
+  .page-hero h1 { max-width: 18ch; }
+  .center .page-hero-inner { justify-items: center; text-align: center; }
+  .center h1, .center .lede { margin-inline: auto; }
+  .page-hero .lede { color: color-mix(in srgb, var(--color-on-dark) 82%, transparent); }
+  .has-image { min-height: min(70vh, 640px); display: flex; align-items: flex-end; padding-top: calc(var(--header-height) + 80px); }
   .has-image::before { content: ''; position: absolute; inset: 0; z-index: 1; background: var(--hero-overlay); }
-  .has-image .page-hero-inner { z-index: 2; }
-  .has-image .eyebrow { color: var(--color-on-dark); }
-  .has-image .lede { color: color-mix(in srgb, var(--color-on-dark) 85%, transparent); }
   .page-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .page-hero-rings {
+    position: absolute; z-index: 1; right: -120px; top: 50%; translate: 0 -50%;
+    width: min(620px, 90vw); fill: none; stroke: var(--color-accent); stroke-width: 10; opacity: 0.14;
+  }
 </style>

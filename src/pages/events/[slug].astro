@@ -91,7 +91,7 @@ const more = (await getUpcomingEvents()).filter((e) => e.id !== event.id).slice(
   .event-title { font-size: clamp(2.6rem, 6.5vw, 5.5rem); }
   .event-facts { display: grid; gap: 18px; padding: 28px; border-radius: var(--radius); background: var(--color-surface); border: 1px solid var(--color-line); }
   .event-facts > p { display: flex; gap: 12px; line-height: 1.45; font-weight: 500; }
-  .event-facts :global(svg) { flex: none; color: var(--color-accent); }
+  .event-facts :global(svg) { flex: none; color: var(--accent-text); }
   .event-actions { display: grid; gap: 16px; padding-top: 6px; }
   .cal-links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .95rem; color: var(--color-ink-soft); }
   .cal-links a { font-weight: 700; color: var(--color-ink); text-underline-offset: 3px; }

@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { settings, fullAddress } from '../lib/settings';
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const policy = [
+  { title: 'Purpose', body: ['The Food Pantry exists to provide short-term, supplemental shelf-stable food to neighbors in need as an expression of Christ’s love. We aim to serve with dignity, discretion, and practical care while helping connect households to longer-term local resources when needed.'] },
+  { title: 'Service area', body: ['Primary service area: Tate County, including the Coldwater and Independence areas.', 'Out-of-area requests will be considered on a case-by-case basis, with a limit of one (1) visit and the potential to connect the household with more localized help.'] },
+  { title: 'Access and scheduling', body: ['The pantry is available by appointment only.', `To request an appointment, email ${settings.email ?? 'us'} or send us a message on Facebook.`, 'Appointments are scheduled based on volunteer availability and current supplies.'] },
+  { title: 'What we provide', body: ['We provide pre-determined amounts of shelf-stable/dried foods. Item availability varies by donations, and we cannot guarantee specific brands or items.'] },
+  { title: 'Frequency and household guidelines', body: ['To serve as many households as possible, the following guidelines apply:'], list: ['A pre-determined amount to a household every 30 days (as supplies allow).', 'Emergency exception: one additional visit within 30 days may be approved at the discretion of the pantry team (as supplies allow).', 'A household is defined as people who live and eat together at the same address.'] },
+  { title: 'Information we collect', body: ['To keep distribution fair, safe, and sustainable, we collect basic information from recipients:'], list: ['Name and basic contact information (phone or email is helpful but not required).', 'General address/area (and/or ZIP code).', 'Household size and any allergies/dietary restrictions.', 'Visit date and distribution record.'] },
+  { title: 'Availability and limitations', body: ['This pantry is sustained by small church and community donations. Supplies may be limited. At times, we may need to adjust amounts, item types, or distribution frequency to remain sustainable and serve more households.'] },
+  { title: 'Respect and safety', body: ['We serve with kindness and ask for respectful conduct in return.', 'If possible, two volunteers will be present during appointments.', 'Threatening behavior may result in refusal of service and/or contacting authorities for safety.'] },
+  { title: 'Referrals and additional help', body: ['When appropriate, we may offer information about other local food resources or assistance programs, and we are always glad to pray with anyone who requests it.'] },
+];
+---
+<BaseLayout title="Food Pantry" description="Redemption Church Coldwater's food pantry provides shelf-stable food to neighbors in Tate County, by appointment.">
+  <PageHero eyebrow="Food Pantry" title="Loving our neighbors in deed and in truth" />
+
+  <section class="section">
+    <div class="container pantry">
+      <div class="stack pantry-copy" data-reveal>
+        <blockquote class="verse">
+          <p>“Little children, let us not love in word or talk but in deed and in truth.”</p>
+          <cite>1 John 3:18</cite>
+        </blockquote>
+        <p class="lede">
+          At Redemption Church Coldwater, we want to love our neighbors in practical ways as we proclaim Christ,
+          cultivate community, and make disciples. In an area with real needs (poverty, hardship, and
+          instability), we want to be a steady presence of care and hope.
+        </p>
+        <p>
+          Our Food Pantry is one simple way we serve: providing dried food and canned goods to individuals and
+          families in our community. This is part of our church’s commitment to missions through acts of
+          service, making a tangible difference while reflecting God’s love and grace.
+        </p>
+
+        <div class="how">
+          <h2 class="h3">How it works</h2>
+          <p>Food pantry pickup is <strong>by appointment only</strong> at {settings.churchName}{fullAddress && ` (${fullAddress})`}.</p>
+          <p>To request a pickup time:</p>
+          <div class="btn-row">
+            {settings.email && <a class="btn" href={`mailto:${settings.email}?subject=Food%20pantry%20pickup`}><Icon name="mail" /> {settings.email}</a>}
+            {settings.social.facebook && <a class="btn btn-dark" href={settings.social.facebook} target="_blank" rel="noopener"><Icon name="facebook" /> Message us on Facebook</a>}
+          </div>
+        </div>
+      </div>
+      <div class="flyer" data-reveal>
+        <img src="/images/site/food-pantry-flyer.png" alt="Redemption Church Coldwater Food Pantry flyer" width="1545" height="1999" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-sand">
+    <div class="container-narrow">
+      <div class="stack policy-head"><span class="eyebrow">Food pantry policy</span><h2>Guidelines</h2></div>
+      <div class="policy">
+        {policy.map((p, i) => (
+          <details open={i === 0}>
+            <summary>{p.title}<Icon name="chevron-down" /></summary>
+            <div class="policy-body">
+              {p.body.map((t) => <p>{t}</p>)}
+              {p.list && <ul>{p.list.map((l) => <li>{l}</li>)}</ul>}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pantry { display: grid; gap: 48px; align-items: start; }
+  @media (min-width: 980px) { .pantry { grid-template-columns: 1.15fr 0.85fr; gap: 72px; } }
+  .pantry-copy { --stack: 22px; }
+  .verse { padding-left: 22px; border-left: 4px solid var(--color-accent); }
+  .verse p { font-family: var(--font-display); font-weight: 800; font-style: italic; font-size: clamp(1.5rem, 2.8vw, 2.2rem); line-height: 1.2; color: var(--color-ink); }
+  .verse cite { display: block; margin-top: 10px; font-style: normal; font-weight: 600; color: var(--accent-text); letter-spacing: .15em; text-transform: uppercase; font-size: .78rem; }
+  .how { display: grid; gap: 12px; padding: 28px; border-radius: var(--radius-lg); background: var(--color-ink); color: var(--color-on-dark); margin-top: 8px; }
+  .how h2 { color: var(--color-on-dark); }
+  .pantry > * { min-width: 0; }
+  .how .btn { white-space: normal; overflow-wrap: anywhere; text-align: left; }
+  .flyer img { border-radius: var(--radius-lg); box-shadow: 0 24px 60px rgb(2 26 38 / 0.15); }
+  @media (min-width: 980px) { .flyer { position: sticky; top: calc(var(--header-height) + 24px); } }
+
+  .policy-head { margin-bottom: 28px; }
+  .policy { border-top: 1.5px solid var(--color-ink); }
+  .policy details { border-bottom: 1px solid var(--color-line); }
+  .policy summary { display: flex; justify-content: space-between; gap: 16px; padding: 22px 0; cursor: pointer; list-style: none; font-weight: 700; font-size: 1.15rem; color: var(--color-ink); }
+  .policy summary::-webkit-details-marker { display: none; }
+  .policy summary :global(svg) { flex: none; transition: transform .3s ease; }
+  .policy details[open] summary :global(svg) { transform: rotate(180deg); }
+  .policy-body { display: grid; gap: 10px; padding-bottom: 24px; color: var(--color-ink-soft); }
+  .policy-body ul { padding-left: 1.2em; display: grid; gap: 6px; }
+  .policy-body li::marker { color: var(--accent-text); }
+</style>

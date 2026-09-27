@@ -4,71 +4,50 @@ import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { settings, givingHref } from '../lib/settings';
 
-const city = settings.location.city ?? 'our city';
 const isPco = settings.giving.provider === 'planning-center' && settings.giving.url;
+const external = settings.giving.provider === 'other' && settings.giving.url;
 
-/* Placeholder copy + numbers: replace per church. */
-const stats = [
-  { n: '170K', l: `people live in ${city}` },
-  { n: '82%', l: 'don’t regularly attend any church' },
-  { n: '42', l: 'people on our launch team' },
-  { n: 'Oct 18', l: 'Launch Sunday' },
-];
+/* Page copy lives here so the layout stays locked. Edit freely. */
 const ways = [
-  { icon: 'hands', title: 'Pray', text: 'Join our prayer team and get monthly updates with specific ways to pray for the plant.' },
-  { icon: 'heart', title: 'Give', text: 'Become a monthly partner or make a one-time gift toward our launch needs.' },
-  { icon: 'users', title: 'Go', text: 'Live nearby? Join the launch team and help build this church from the ground up.' },
+  { icon: 'hands', title: 'Pray', text: 'We need your prayers! Pray that God would bring people to be a part of the core group, that God would use us to see those who are lost become redeemed, and for us and our families that we would grow closer to each other, the Lord, and for protection and strength in the spiritual warfare that takes place when a new work of the Gospel begins. As we continue, we will communicate our prayer needs through social media and a monthly newsletter.' },
+  { icon: 'heart', title: 'Provide', text: 'We need partners who would commit for 1–3 years financially. Our goal is to be self-sustaining in 2–3 years. If you would like to provide for specific needs (materials, food, equipment, etc.), please see the list of partnership options and other ways to partner.' },
+  { icon: 'users', title: 'Participate', text: 'We need individuals, groups, and churches that would want to come and volunteer with activities, canvassing, construction, and other missional opportunities as we begin the work that God has laid before us to do.' },
 ] as const;
-const faqs = [
-  { q: 'Who oversees this church plant?', a: 'Placeholder: name the sending church, network, or denomination that provides accountability and support.' },
-  { q: 'How will my gift be used?', a: 'Placeholder: explain launch budget priorities — e.g. worship gear, kids ministry, outreach, and staff support.' },
-  { q: 'Is my gift tax-deductible?', a: settings.giving.note ?? 'Yes. You will receive a year-end giving statement.' },
+
+const levels = [
+  { name: 'Faith', range: '$25 – $150' },
+  { name: 'Hope', range: '$150 – $350' },
+  { name: 'Love', range: '$500 – $1,000' },
+];
+
+const needs = [
+  { title: 'Pastor health insurance', text: '$700/mo' },
+  { title: 'Renovation labor & materials', text: 'Contact us for more info about specific projects' },
+  { title: 'Items for events', text: 'Food, cups, plates, extension cords, volunteers, etc.' },
+  { title: 'Signage', text: 'Indoor and outdoor' },
+  { title: 'A/V equipment', text: 'Microphones, cords, stands, TVs, mounts, licenses, software, etc.' },
 ];
 ---
-<BaseLayout title="Partner" description={`Help us plant ${settings.churchName} in ${city}.`} overlayHeader>
+<BaseLayout title="Partner" description="Pray, provide, and participate in planting Redemption Church Coldwater.">
   <PageHero
     eyebrow="Partner with us"
-    title={`Plant a church in ${city} with us`}
-    lede="Every church plant is carried by people who pray, give, and go. We'd be honored to have you with us."
-    image="/images/site/partner.svg"
+    title="Ways to partner"
+    lede="Every church plant is carried by people who pray, provide, and participate. We'd be honored to have you with us in this new gospel work in Coldwater."
   >
     <div class="btn-row">
       <a class="btn" href="#partner-form">Become a partner <Icon name="arrow" /></a>
-      <a class="btn btn-outline" href={givingHref} target={isPco ? undefined : '_blank'}>Give now</a>
+      <a class="btn btn-outline" href={givingHref} target={external ? '_blank' : undefined} rel="noopener">Give online</a>
     </div>
   </PageHero>
 
-  <!-- Why this city -->
-  <section class="section">
-    <div class="container why">
-      <div class="stack" data-reveal>
-        <span class="eyebrow">Why {city}</span>
-        <h2>A city worth loving</h2>
-        <p class="lede">
-          {city} is growing fast, and thousands of our neighbors have no church family. We believe a
-          new church can reach people that existing churches aren't reaching.
-        </p>
-        <p class="muted">Placeholder copy: describe the city, the need, and the vision for the plant.</p>
-      </div>
-      <dl class="stats">
-        {stats.map((s) => (
-          <div data-reveal><dt>{s.l}</dt><dd>{s.n}</dd></div>
-        ))}
-      </dl>
-    </div>
-  </section>
-
   <!-- Ways to partner -->
-  <section class="section section-dark">
+  <section class="section">
     <div class="container">
-      <div class="section-head">
-        <div><span class="eyebrow">How to help</span><h2>Three ways to partner</h2></div>
-      </div>
       <div class="ways">
         {ways.map((w, i) => (
           <div class="way" data-reveal style={`transition-delay:${i * 80}ms`}>
             <span class="way-icon"><Icon name={w.icon} size={30} /></span>
-            <h3 class="h2">{w.title}</h3>
+            <h2 class="h2">{w.title}</h2>
             <p class="muted">{w.text}</p>
           </div>
         ))}
@@ -76,14 +55,62 @@ const faqs = [
     </div>
   </section>
 
+  <!-- Partnership opportunities -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Partnership opportunities</span>
+          <h2>Monthly support levels</h2>
+        </div>
+        <blockquote class="verse">
+          <p>“I thank my God in all my remembrance of you, always in every prayer of mine for you all making my prayer with joy, because of your partnership in the gospel from the first day until now.”</p>
+          <cite>Philippians 1:3–5</cite>
+        </blockquote>
+      </div>
+      <ul class="levels">
+        {levels.map((l, i) => (
+          <li data-reveal style={`transition-delay:${i * 80}ms`}>
+            <p class="level-name">{l.name}<br /><span>Partner</span></p>
+            <p class="level-range">{l.range}</p>
+            <p class="level-per">per month</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Specific needs -->
+  <section class="section">
+    <div class="container needs-wrap">
+      <div class="stack">
+        <span class="eyebrow">Specific needs</span>
+        <h2>Help with a specific need</h2>
+        <p class="lede">If you'd like to provide for a specific need, we'd be so grateful. Reach out and we'll share the details.</p>
+        <div class="checks-box">
+          <p class="checks-title">Make checks payable to:</p>
+          <p><strong>Longview Point Baptist Church</strong><br />Memo: Coldwater Church Plant</p>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-dark" href={givingHref} target={external ? '_blank' : undefined} rel="noopener">Give online <Icon name="arrow" /></a>
+        </div>
+      </div>
+      <ul class="needs">
+        {needs.map((n) => (
+          <li><p class="need-title">{n.title}</p><p class="muted">{n.text}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <!-- Form -->
-  <section class="section" id="partner-form">
+  <section class="section section-sand" id="partner-form">
     <div class="container form-wrap">
       <div class="stack">
         <span class="eyebrow">Get involved</span>
-        <h2>Join the team</h2>
+        <h2>Partner with us</h2>
         <p class="lede">Tell us how you'd like to partner and we'll follow up personally.</p>
-        <div class="partner-media media"><img src="/images/site/city.svg" alt="" loading="lazy" /></div>
+        {settings.email && <p class="muted">Or email <a href={`mailto:${settings.email}`}>{settings.email}</a>.</p>}
       </div>
       <form class="form form-card" name="partner" method="POST" action="/thanks?form=partner" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="partner" />
@@ -99,8 +126,9 @@ const faqs = [
         <fieldset class="field checks">
           <legend>I'm interested in…</legend>
           <label class="check"><input type="checkbox" name="interest" value="Pray" /> Praying</label>
-          <label class="check"><input type="checkbox" name="interest" value="Give monthly" /> Giving monthly</label>
-          <label class="check"><input type="checkbox" name="interest" value="Launch team" /> Joining the launch team</label>
+          <label class="check"><input type="checkbox" name="interest" value="Monthly support" /> Monthly support</label>
+          <label class="check"><input type="checkbox" name="interest" value="Specific need" /> A specific need</label>
+          <label class="check"><input type="checkbox" name="interest" value="Volunteer" /> Volunteering</label>
           <label class="check"><input type="checkbox" name="interest" value="Church partnership" /> Church partnership</label>
         </fieldset>
         <div class="field"><label for="p-msg">Anything else?</label><textarea id="p-msg" name="message" rows="4"></textarea></div>
@@ -108,66 +136,40 @@ const faqs = [
       </form>
     </div>
   </section>
-
-  <!-- Partner churches -->
-  <section class="section-tight section-sand">
-    <div class="container partners">
-      <p class="eyebrow">Sent and supported by</p>
-      <ul class="partner-logos">
-        {['Sending Church', 'Church Network', 'Partner Church', 'Partner Church'].map((n) => <li>{n}</li>)}
-      </ul>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="section">
-    <div class="container-narrow">
-      <div class="stack faq-head"><span class="eyebrow">Questions</span><h2>Partner FAQ</h2></div>
-      <div class="faq">
-        {faqs.map((f) => (
-          <details><summary>{f.q}<Icon name="chevron-down" /></summary><p>{f.a}</p></details>
-        ))}
-      </div>
-    </div>
-  </section>
 </BaseLayout>
 
 {isPco && <script is:inline src="https://js.churchcenter.com/modal/v1" defer></script>}
 
 <style>
-  .why { display: grid; gap: 48px; align-items: center; }
-  @media (min-width: 960px) { .why { grid-template-columns: 1fr 1fr; gap: 80px; } }
-  .why .stack { --stack: 22px; }
-  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .stats div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; padding: 28px 24px; border-radius: var(--radius); background: var(--color-surface); border: 1px solid var(--color-line); }
-  .stats dd { font-family: var(--font-display); font-weight: 800; font-stretch: var(--display-stretch); font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1; color: var(--color-accent); }
-  .stats dt { color: var(--color-ink-soft); }
-
   .ways { display: grid; gap: 20px; }
-  @media (min-width: 860px) { .ways { grid-template-columns: repeat(3, 1fr); } }
-  .way { display: grid; gap: 16px; align-content: start; padding: clamp(28px, 3vw, 40px); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--color-on-dark) 20%, transparent); }
+  @media (min-width: 900px) { .ways { grid-template-columns: repeat(3, 1fr); } }
+  .way { display: grid; gap: 16px; align-content: start; padding: clamp(28px, 3vw, 40px); border-radius: var(--radius-lg); border: 1px solid var(--color-line); }
   .way-icon { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: var(--color-accent); color: var(--color-accent-ink); }
+
+  .verse { max-width: 520px; }
+  .verse p { font-family: var(--font-display); font-weight: 700; font-style: italic; font-size: 1.15rem; line-height: 1.45; }
+  .verse cite { display: block; margin-top: 10px; font-style: normal; font-weight: 600; font-size: .78rem; letter-spacing: .15em; text-transform: uppercase; color: var(--color-accent); }
+  .levels { list-style: none; padding: 0; display: grid; gap: 20px; }
+  @media (min-width: 800px) { .levels { grid-template-columns: repeat(3, 1fr); } }
+  .levels li { display: grid; gap: 6px; padding: 36px 32px; border-radius: var(--radius-lg); background: color-mix(in srgb, var(--color-on-dark) 6%, transparent); border: 1px solid color-mix(in srgb, var(--color-on-dark) 16%, transparent); }
+  .levels li:nth-child(2) { background: var(--color-accent); color: var(--color-ink); border-color: var(--color-accent); }
+  .level-name { font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; line-height: 1.05; }
+  .level-name span { font-size: 1rem; font-weight: 600; font-family: var(--font-body); letter-spacing: .2em; text-transform: uppercase; opacity: .75; }
+  .level-range { font-family: var(--font-display); font-weight: 800; font-style: italic; font-size: clamp(1.8rem, 3vw, 2.4rem); margin-top: 18px; }
+  .level-per { font-size: .78rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; opacity: .75; }
+
+  .needs-wrap { display: grid; gap: 48px; align-items: start; }
+  @media (min-width: 960px) { .needs-wrap { grid-template-columns: 1fr 1fr; gap: 80px; } }
+  .needs-wrap > .stack { --stack: 20px; }
+  .checks-box { padding: 22px 24px; border-radius: var(--radius); background: var(--color-accent-soft); color: var(--color-ink); }
+  .checks-title { font-size: .78rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 6px; }
+  .needs { list-style: none; padding: 0; border-top: 1.5px solid var(--color-ink); }
+  .needs li { display: grid; gap: 4px; padding: 20px 0; border-bottom: 1px solid var(--color-line); }
+  .need-title { font-weight: 700; color: var(--color-ink); font-size: 1.1rem; }
 
   .form-wrap { display: grid; gap: 48px; align-items: start; }
   @media (min-width: 960px) { .form-wrap { grid-template-columns: 0.9fr 1.1fr; gap: 72px; } }
   .form-wrap > .stack { --stack: 20px; }
-  .partner-media { aspect-ratio: 4 / 3; margin-top: 12px; }
-  @media (max-width: 959px) { .partner-media { display: none; } }
+  .form-wrap a { color: var(--accent-text); font-weight: 600; }
   .form-card { padding: clamp(24px, 4vw, 44px); border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-line); }
-  .form-card .field input, .form-card .field textarea { background: var(--color-bg); }
-  .form-card .check { background: var(--color-bg); }
-  .form-card .check:has(input:checked) { background: var(--color-ink); }
-
-  .partners { display: grid; gap: 24px; justify-items: center; text-align: center; }
-  .partner-logos { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 48px; }
-  .partner-logos li { font-family: var(--font-display); font-weight: 800; font-stretch: var(--display-stretch); text-transform: uppercase; font-size: 1.2rem; opacity: .45; }
-
-  .faq-head { margin-bottom: 32px; }
-  .faq { border-top: 1.5px solid var(--color-ink); }
-  .faq details { border-bottom: 1px solid var(--color-line); }
-  .faq summary { display: flex; justify-content: space-between; gap: 16px; padding: 22px 0; cursor: pointer; list-style: none; font-weight: 700; font-size: 1.15rem; }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq summary :global(svg) { flex: none; transition: transform .3s ease; }
-  .faq details[open] summary :global(svg) { transform: rotate(180deg); }
-  .faq details p { padding-bottom: 22px; color: var(--color-ink-soft); }
 </style>

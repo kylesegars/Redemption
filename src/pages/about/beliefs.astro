@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import Icon from '../../components/Icon.astro';
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const docs = [
+  {
+    eyebrow: 'Baptist Faith & Message',
+    title: 'BF&M 2000',
+    text: 'We are full in participation and affirmation with the Baptist Faith and Message 2000 as a SBC fellowship.',
+    link: { label: 'Read the Baptist Faith & Message 2000', href: 'https://bfm.sbc.net/bfm2000/' },
+  },
+  {
+    eyebrow: 'Abstract of Principles',
+    title: 'Abstract of Principles',
+    text: 'We also affirm the Abstract of Principles. This document represents a more concise and specific version of our beliefs and doctrines at Redemption Church Coldwater.',
+    link: { label: 'Read the Abstract of Principles', href: 'https://www.sbts.edu/abstract-of-principles/' },
+  },
+];
+---
+<BaseLayout title="Beliefs" description="Redemption Church Coldwater affirms the Baptist Faith & Message 2000 and the Abstract of Principles.">
+  <PageHero eyebrow="Beliefs" title="What we believe" lede="We are a Southern Baptist church, joyfully united with other SBC churches around a shared confession of faith." />
+  <AboutNav />
+
+  <section class="section">
+    <div class="container docs">
+      {docs.map((d, i) => (
+        <article class="doc" data-reveal style={`transition-delay:${i * 80}ms`}>
+          <span class="eyebrow">{d.eyebrow}</span>
+          <h2 class="h2">{d.title}</h2>
+          <p class="lede">{d.text}</p>
+          <a class="btn btn-dark" href={d.link.href} target="_blank" rel="noopener">{d.link.label} <Icon name="arrow" /></a>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .docs { display: grid; gap: 20px; }
+  @media (min-width: 900px) { .docs { grid-template-columns: 1fr 1fr; } }
+  .doc { display: grid; gap: 18px; align-content: start; justify-items: start; padding: clamp(28px, 4vw, 48px); border-radius: var(--radius-lg); background: var(--color-sand); }
+  .doc .btn { white-space: normal; margin-top: 6px; }
+</style>

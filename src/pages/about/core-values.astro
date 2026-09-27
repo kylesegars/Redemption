@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AboutNav from '../../components/AboutNav.astro';
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const values = [
+  { title: 'Teaching', icon: 'teaching', text: 'We value the teaching of all Scripture faithfully and plainly through expositional preaching, aiming to lead people to understand the Bible’s whole narrative and God’s redemption story through Jesus.' },
+  { title: 'Corporate Worship', icon: 'worship', text: 'We value the weekly gathering as a faith family for worship through the preaching of the word, prayer, singing, fellowship, giving, and observing the ordinances: Lord’s supper & baptism. The weekly gathering is an essential part of the life of a follower of Jesus.' },
+  { title: 'Community', icon: 'community', text: 'We value being more than just a group of individuals; we strive to be a close-knit faith family. We place a high priority on our small groups where relationships are made and deepened through fellowship, learning, being challenged, encouraged, and serving together.' },
+  { title: 'Discipleship', icon: 'discipleship', text: 'We value the call of the Great Commission and Jesus’s command to his followers to make disciples. We do that by sharing the gospel in our daily lives, baptizing new believers, teaching them the truths of scripture, training them to walk in righteousness, and equipping them to make disciples who make disciples.' },
+  { title: 'Missions', icon: 'missions', text: 'We value the taking of the message of the Gospel to our neighbors in the community and around the world. Through intentional acts of service, evangelism, church planting, and missionary partnerships, we strive to make a tangible difference in our community and around the world, reflecting God’s love and grace to all people.' },
+  { title: 'Church Membership', icon: 'church-membership', text: 'We value church membership as a public identification with a local body of believers, reflecting a commitment to the shared life of the church. This commitment includes regular worship gathering attendance, fellowship, accountability, giving, to the building up of the body of Christ and to the mission of proclaiming the gospel.' },
+  { title: 'Leadership', icon: 'leadership', text: 'We value a church structure with a plurality of qualified men as pastor-elders who provide biblical oversight, leading the church with the congregation’s affirmation. Deacons serve by caring for many of the physical and logistical needs of the body, helping pastor-elders focus on spiritual care and teaching. Together, the leaders and congregation submit to Christ, building a healthy and accountable church body.' },
+];
+---
+<BaseLayout title="Core Values" description="The seven areas where Redemption Church Coldwater strives to be biblically faithful.">
+  <PageHero eyebrow="Core Values" title="We strive to be biblically faithful in the areas of:" />
+  <AboutNav />
+
+  <section class="section">
+    <div class="container">
+      <ol class="values">
+        {values.map((v, i) => (
+          <li data-reveal style={`transition-delay:${(i % 3) * 60}ms`}>
+            <div class="icon"><img src={`/images/site/value-${v.icon}.png`} alt="" width="56" height="56" loading="lazy" /></div>
+            <h2 class="h3">{v.title}</h2>
+            <p class="muted">{v.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .values { list-style: none; padding: 0; display: grid; gap: 20px; }
+  @media (min-width: 760px) { .values { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .values { grid-template-columns: repeat(3, 1fr); } }
+  .values li { display: grid; gap: 14px; align-content: start; padding: 32px; border-radius: var(--radius-lg); border: 1px solid var(--color-line); background: var(--color-surface); }
+  .values h2 { font-size: clamp(1.3rem, 2vw, 1.6rem); }
+  .icon { width: 72px; height: 72px; border-radius: 50%; background: var(--color-ink); display: grid; place-items: center; }
+  .icon img { width: 40px; height: 40px; object-fit: contain; }
+</style>

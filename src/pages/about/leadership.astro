@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import { getTeam } from '../../lib/content';
+
+const team = await getTeam();
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const structure = [
+  {
+    title: 'Pastor led',
+    text: 'At Redemption Church, we are convinced that the role of Pastor/Elder is one of God’s designed offices for the healthy function of His church. In following God’s design, we will primarily submit and trust the Holy Spirit-empowered wisdom of the Elders in matters of worship, practice, and direction within the church to serve God’s church faithfully and guide her toward health.',
+    refs: 'Hebrews 13:17; 1 Peter 5:3',
+  },
+  {
+    title: 'Congregationally affirmed',
+    text: 'The congregation primarily submits to the leadership of the Pastors. The congregation maintains the right and responsibility to affirm and hold the leadership accountable to the Scriptures and wisdom.',
+    refs: 'Acts 6:1–6; Revelation 2–3',
+  },
+  {
+    title: 'Deacon served',
+    text: 'The deacons’ function is to remove specifically non-pastoral responsibilities from the pastors so that the pastors may devote more of their time to the Word, prayer, and equipping of the saints for ministry.',
+    refs: 'Acts 6:4',
+  },
+  {
+    title: 'Members equipped for gospel work',
+    text: 'The congregation has responsibility just as the pastors and deacons do. Gospel work is the work of the church, not simply the pastors. Gospel work is the discipleship of our children, bringing the gospel to our neighbor, teaching other believers “everything that Jesus commanded” and participating in their baptism.',
+    refs: 'Ephesians 4:12–16',
+  },
+];
+---
+<BaseLayout title="Leadership" description="Meet the pastor of Redemption Church Coldwater and learn how our church is led.">
+  <PageHero eyebrow="Leadership" title="Shepherding God’s church in Coldwater" />
+  <AboutNav />
+
+  <!-- Team (from Keystatic → Team & Authors) -->
+  <section class="section">
+    <div class="container">
+      <ul class="team">
+        {team.map((m) => (
+          <li class="member" data-reveal>
+            <div class="member-photo">
+              {m.data.photo
+                ? <img src={m.data.photo} alt={m.data.name} loading="lazy" />
+                : <img class="placeholder" src="/images/site/logo-mark.png" alt="" loading="lazy" />}
+            </div>
+            <div class="stack member-copy">
+              <h2 class="h2">{m.data.name}</h2>
+              {m.data.role && <p class="member-role">{m.data.role}</p>}
+              {m.data.bio && m.data.bio.split(/\n\n+/).map((p) => <p>{p}</p>)}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Biblical structure -->
+  <section class="section section-sand">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Biblical structure of the local church</span>
+          <h2>How we’re led</h2>
+        </div>
+        <p class="lede">
+          By conviction, we will be an assembly that is a pastor-led, congregationally affirmed, deacon-served
+          church, with believers equipped for gospel work.
+        </p>
+      </div>
+      <ol class="structure">
+        {structure.map((s, i) => (
+          <li data-reveal style={`transition-delay:${i * 60}ms`}>
+            <span class="num">0{i + 1}</span>
+            <h3 class="h3">{s.title}</h3>
+            <p class="muted">{s.text}</p>
+            <p class="refs">{s.refs}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .team { list-style: none; padding: 0; display: grid; gap: 64px; }
+  .member { display: grid; gap: 36px; align-items: start; }
+  @media (min-width: 900px) { .member { grid-template-columns: 360px 1fr; gap: 64px; } }
+  .member-photo { aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-ink); display: grid; place-items: center; }
+  .member-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .member-photo img.placeholder { width: 55%; height: auto; object-fit: contain; }
+  .member-copy { --stack: 16px; font-size: 1.08rem; }
+  .member-role { font-size: .8rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--accent-text); }
+
+  .structure { list-style: none; padding: 0; display: grid; gap: 20px; }
+  @media (min-width: 800px) { .structure { grid-template-columns: repeat(2, 1fr); } }
+  .structure li { display: grid; gap: 12px; align-content: start; padding: 32px; border-radius: var(--radius-lg); background: var(--color-surface); }
+  .num { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--accent-text); }
+  .refs { font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--color-ink); }
+</style>

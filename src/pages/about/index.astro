@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { settings } from '../../lib/settings';
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const explore = [
+  { title: 'The Gospel', text: 'What must I do to be saved? Five questions worth asking.', href: '/about/the-gospel' },
+  { title: 'Leadership', text: 'Meet our pastor and how our church is led.', href: '/about/leadership' },
+  { title: 'Core Values', text: 'The seven areas where we strive to be biblically faithful.', href: '/about/core-values' },
+  { title: 'Beliefs', text: 'Baptist Faith & Message 2000 and the Abstract of Principles.', href: '/about/beliefs' },
+  { title: 'Life at Redemption', text: 'Pulpit, Table, Square: our simple approach to discipleship.', href: '/about/life-at-redemption-coldwater' },
+  { title: 'Partner', text: 'Pray, provide, and participate in this new gospel work.', href: '/partner' },
+];
+
+const expect = [
+  { icon: 'coffee', title: 'A warm welcome', text: 'Come as you are. We’d love to meet you and help you find your way.' },
+  { icon: 'music', title: 'Worship', text: 'Prayer, Scripture reading, and corporate singing as a faith family.' },
+  { icon: 'book', title: 'Preaching', text: 'Faithful, plain, expositional preaching through books of the Bible.' },
+  { icon: 'users', title: 'Fellowship', text: 'Stick around afterward. We’d love to get to know you and your family.' },
+] as const;
+---
+<BaseLayout title="About" description={`The story, mission, and people of ${settings.churchName}.`}>
+  <PageHero
+    eyebrow="About us"
+    title="Love God. Love people. Make disciples."
+    lede={`${settings.churchName} is a Southern Baptist church plant in Coldwater, Mississippi, sent out by Longview Point Baptist Church in Hernando.`}
+  />
+  <AboutNav />
+
+  <!-- Story -->
+  <section class="section">
+    <div class="container story">
+      <div class="stack story-copy" data-reveal>
+        <span class="eyebrow">Our story</span>
+        <h2>A building given for the gospel</h2>
+        <p class="lede">
+          In 2023, Longview Point Baptist Church was given a building by a church that had shut its doors. The
+          keys were handed over with the hopes of seeing it filled and used once again to bring the gospel to
+          Tate County.
+        </p>
+        <p>
+          At the same time, Longview Point had connected with Sam Henderson about becoming a church planting
+          resident. In January 2024, Sam and family (Natalie, Sammy, James) came to Longview Point with the
+          intent of planting in Coldwater, MS.
+        </p>
+        <p>
+          Sam has been building a core group, introducing himself to the area through a community Bible study,
+          canvassing, hosting events, and spending time getting to know the town. In September 2024, Redemption
+          Church Coldwater held its first Sunday service.
+        </p>
+      </div>
+      <div class="media story-media" data-reveal><img src="/images/site/first-service.jpg" alt="First service announcement: Sundays at 10:45 AM" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="section section-dark mission-section">
+    <div class="container mission" data-reveal>
+      <span class="eyebrow">Our mission</span>
+      <p class="mission-text">We exist to <em>love God</em>, <em>love people</em>, and <em>make disciples</em> of Jesus&nbsp;Christ.</p>
+      <p class="mission-sub">Proclaiming Christ · Cultivating Community · Making Disciples</p>
+    </div>
+  </section>
+
+  <!-- Explore -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Get to know us</span>
+          <h2>Explore</h2>
+        </div>
+      </div>
+      <ul class="explore">
+        {explore.map((e, i) => (
+          <li data-reveal style={`transition-delay:${i * 60}ms`}>
+            <a href={e.href}>
+              <h3 class="h3">{e.title}</h3>
+              <p class="muted">{e.text}</p>
+              <span class="explore-arrow"><Icon name="arrow" /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- What to expect -->
+  <section class="section section-sand">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Sundays at 10:45 AM</span>
+          <h2>What to expect</h2>
+        </div>
+        <p class="lede">Your first visit anywhere can feel a little awkward. Here's what a Sunday looks like.</p>
+      </div>
+      <div class="expect">
+        {expect.map((e) => (
+          <div class="expect-card">
+            <Icon name={e.icon} size={32} />
+            <h3 class="h3">{e.title}</h3>
+            <p class="muted">{e.text}</p>
+          </div>
+        ))}
+      </div>
+      {settings.location.arrival && (
+        <div class="arrival">
+          <Icon name="pin" />
+          <p><strong>When you arrive:</strong> {settings.location.arrival}</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <CtaBand title="Come see for yourself" text="We'd love to meet you this Sunday.">
+    <a class="btn" href="/contact#visit" data-plan-visit>Plan a visit <Icon name="arrow" /></a>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .story { display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 960px) { .story { grid-template-columns: 1.1fr 1fr; gap: 80px; } }
+  .story-copy { --stack: 20px; }
+  .story-media { aspect-ratio: 3 / 2; box-shadow: 0 24px 60px rgb(2 26 38 / 0.15); }
+
+  .mission { display: grid; gap: 22px; max-width: 1000px; }
+  .mission-text { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 4.6vw, 3.8rem); line-height: 1.08; letter-spacing: -0.02em; }
+  .mission-text em { font-style: italic; color: var(--color-accent); }
+  .mission-sub { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; opacity: .7; }
+
+  .explore { list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .explore a {
+    position: relative; display: grid; gap: 8px; height: 100%; padding: 28px 28px 64px;
+    border-radius: var(--radius-lg); border: 1px solid var(--color-line); background: var(--color-surface);
+    text-decoration: none; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .explore a:hover { border-color: var(--color-accent); transform: translateY(-3px); box-shadow: 0 18px 40px rgb(2 26 38 / 0.08); }
+  .explore-arrow {
+    position: absolute; left: 28px; bottom: 22px; width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--color-accent); color: var(--color-accent-ink);
+  }
+
+  .expect { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .expect-card { display: grid; gap: 14px; align-content: start; padding: 32px; border-radius: var(--radius); background: var(--color-surface); border: 1px solid var(--color-line); }
+  .expect-card :global(svg) { color: var(--accent-text); }
+  .arrival { display: flex; gap: 14px; margin-top: 28px; padding: 24px 28px; border-radius: var(--radius); background: var(--color-accent-soft); }
+  .arrival :global(svg) { flex: none; margin-top: 2px; color: var(--color-ink); }
+</style>

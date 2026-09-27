@@ -1,9 +1,13 @@
 {
   "churchName": "Redemption Church Coldwater",
   "tagline": "Proclaiming Christ, Cultivating Community, Making Disciples",
-  "logo": null,
+  "logo": "/images/site/logo-horizontal.png",
   "serviceTimes": [
-    { "day": "Sundays", "time": "10:45 AM", "note": "Worship, prayer, Bible teaching and fellowship" }
+    {
+      "day": "Sundays",
+      "time": "10:45 AM",
+      "note": "Worship, prayer, Bible teaching & fellowship"
+    }
   ],
   "location": {
     "venue": "Redemption Church Coldwater",
@@ -11,14 +15,14 @@
     "city": "Coldwater",
     "state": "MS",
     "zip": "38618",
-    "mapUrl": "https://maps.google.com/?q=2045+MS-306,+Coldwater,+MS+38618",
-    "arrival": "We gather Sunday mornings at 10:45. Come as you are. We'd love for you to feel welcomed, loved, and encouraged to follow Jesus."
+    "mapUrl": "https://www.google.com/maps/place/2045+MS-306,+Coldwater,+MS+38618/@34.7003837,-89.9484771,17z",
+    "arrival": "We gather Sunday mornings at 10:45 AM at 2045 MS-306 in Coldwater. Come as you are. We hope you'll feel welcomed, loved, and encouraged to follow Jesus."
   },
-  "email": null,
-  "phone": null,
+  "email": "sam@redemptioncoldwater.com",
+  "phone": "(901) 834-8646",
   "social": {
-    "instagram": null,
-    "facebook": "https://www.facebook.com/redemptioncoldwater/",
+    "instagram": "https://www.instagram.com/redemptioncoldwater/",
+    "facebook": "https://www.facebook.com/redemptioncoldwater",
     "youtube": null
   },
   "planVisit": {
@@ -27,10 +31,10 @@
     "blurb": "Let us know you're coming and we'll be looking for you on Sunday morning."
   },
   "giving": {
-    "provider": "other",
-    "url": null,
-    "mailingAddress": null,
-    "note": "Our giving is administered through our sending church, Longview Point Baptist Church in Hernando. Their platform is set up with several different funds, so please be sure to leave the fund selection on \"Coldwater Church Plant – Sam Henderson\" to ensure that your gifts are allocated properly."
+    "provider": "subsplash",
+    "url": "https://wallet.subsplash.com/ui/embed/W6C5BT/ute_k5ohwC72rjXTl0q-wwbe5NXGrskvgJURz_Oc-aIo_Vaaljp9JHBTFKFSePMOhrP_DR7sexLpvxhJtdbOWuIHVielXwJeZnuxEujexBzDQxkIbQHsjs6XqmuG1Pwoiit0fN0yrMugtCsQ3oaGQuFxPhqJB3tDwvt6iKnRog",
+    "mailingAddress": "Longview Point Baptist Church\nMemo: Coldwater Church Plant",
+    "note": "Our giving is administered through our sending church, Longview Point Baptist Church in Hernando. Their platform is set up with several different funds, so please be sure to leave the fund selection on “Redemption Church Coldwater – Sam Henderson” to ensure that your gift is allocated properly. Thank you for your contribution!"
   },
   "newsletter": {
     "enabled": false,

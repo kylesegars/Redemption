@@ -6,6 +6,7 @@ import Icon from '../../components/Icon.astro';
 import { getUpcomingEvents, expiresAt } from '../../lib/content';
 import { formatEventWhen, dateBadge } from '../../lib/dates';
 import { siteConfig, labelFor } from '../../site.config';
+import { settings, fullAddress } from '../../lib/settings';
 
 const upcoming = await getUpcomingEvents();
 const featured = upcoming.find((e) => e.data.featured) ?? upcoming[0];
@@ -15,10 +16,23 @@ const usedCategories = siteConfig.eventCategories.filter((c) => rest.some((e) =>
 <BaseLayout title="Events" description="Upcoming events, gatherings, and ways to get involved.">
   <PageHero eyebrow="Events" title="What's happening" lede="Gatherings, serve days, and ways to get connected. There's a place for you here." />
 
+  <!-- Weekly worship (always on; from Church Info → Service times) -->
+  <section class="container weekly-wrap">
+    <div class="weekly">
+      <div class="weekly-icon"><img src="/images/site/pulpit.png" alt="" width="56" height="56" /></div>
+      <div class="weekly-copy">
+        <span class="eyebrow">Every week</span>
+        <h2 class="h3">Weekly Worship Service</h2>
+        <p>{settings.serviceTimes.map((s) => `${s.day} at ${s.time}`).join(' · ')}{fullAddress && ` · ${fullAddress}`}</p>
+      </div>
+      {settings.location.mapUrl && <a class="btn" href={settings.location.mapUrl} target="_blank" rel="noopener">Directions <Icon name="arrow" /></a>}
+    </div>
+  </section>
+
   {featured && (
     <section class="container featured-wrap" data-expire-wrap>
       <article class="featured on-image" data-expires={expiresAt(featured)}>
-        <img src={featured.data.image ?? '/images/site/community.svg'} alt="" fetchpriority="high" />
+        <img src={featured.data.image ?? '/images/site/sanctuary.jpg'} alt="" fetchpriority="high" />
         <div class="featured-copy">
           <p class="featured-tag"><span class="chip">Featured</span> {labelFor(siteConfig.eventCategories, featured.data.category)}</p>
           <h2>{featured.data.title}</h2>
@@ -59,13 +73,24 @@ const usedCategories = siteConfig.eventCategories.filter((c) => rest.some((e) =>
       <p class="empty-state" data-filter-empty hidden>No upcoming events in this category right now.</p>
       <div class="empty-state" data-empty hidden={upcoming.length > 0}>
         <h2 class="h3">No upcoming events right now</h2>
-        <p class="muted">New events are added all the time — check back soon, or join us on a Sunday.</p>
+        <p class="muted">New events are added all the time. Check back soon, or join us on a Sunday!</p>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  .weekly-wrap { margin-top: clamp(32px, 5vw, 56px); margin-bottom: clamp(32px, 5vw, 56px); }
+  .weekly {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px;
+    padding: clamp(22px, 3vw, 32px); border-radius: var(--radius-lg);
+    background: var(--color-ink); color: var(--color-on-dark); --accent-text: var(--color-accent);
+  }
+  .weekly h2 { color: var(--color-on-dark); margin: 4px 0; }
+  .weekly-copy { flex: 1 1 320px; }
+  .weekly-copy p { opacity: .85; }
+  .weekly-icon { flex: none; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid color-mix(in srgb, var(--color-accent) 60%, transparent); }
+  .weekly-icon img { width: 40px; height: 40px; }
   .featured-wrap { margin-bottom: clamp(40px, 6vw, 72px); }
   .featured {
     position: relative; overflow: hidden; border-radius: var(--radius-lg);

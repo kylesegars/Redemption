@@ -22,7 +22,7 @@ const socials = (['instagram', 'facebook', 'youtube'] as const).filter((k) => se
       </div>
 
       <div class="footer-col">
-        <h2 class="footer-heading">Sundays</h2>
+        <h2 class="footer-heading">Join us</h2>
         {settings.serviceTimes.map((s) => (
           <p><strong>{s.day} · {s.time}</strong>{s.note && <><br /><span class="muted">{s.note}</span></>}</p>
         ))}
@@ -52,7 +52,7 @@ const socials = (['instagram', 'facebook', 'youtube'] as const).filter((k) => se
 
     <div class="footer-bottom">
       <p>© {year} {settings.churchName}. All rights reserved.</p>
-      <a href="/keystatic" rel="nofollow">Staff login</a>
+      <p>Web design by Segars Design · <a href="/keystatic" rel="nofollow">Staff login</a></p>
     </div>
   </div>
 </footer>
@@ -66,7 +66,7 @@ const socials = (['instagram', 'facebook', 'youtube'] as const).filter((k) => se
   .footer-heading {
     font-family: var(--font-body); font-size: 0.8125rem; font-weight: 700; font-stretch: 100%;
     letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.4;
-    color: var(--color-accent); margin-bottom: 16px;
+    color: var(--accent-text); margin-bottom: 16px;
   }
   .footer-col { display: grid; gap: 10px; align-content: start; }
   .footer-col a { text-decoration: none; }

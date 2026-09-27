@@ -22,7 +22,7 @@ export interface Settings {
   social: { instagram?: Maybe<string>; facebook?: Maybe<string>; youtube?: Maybe<string> };
   planVisit: { enabled: boolean; heading?: Maybe<string>; blurb?: Maybe<string> };
   giving: {
-    provider: 'planning-center' | 'other';
+    provider: 'subsplash' | 'planning-center' | 'other';
     url?: Maybe<string>;
     mailingAddress?: Maybe<string>;
     note?: Maybe<string>;
@@ -42,7 +42,7 @@ export const settings: Settings = {
   phone: r.phone,
   social: r.social ?? {},
   planVisit: { enabled: true, ...r.planVisit },
-  giving: { provider: 'planning-center', ...r.giving },
+  giving: { provider: 'subsplash', ...r.giving },
   newsletter: { enabled: false, ...r.newsletter },
 };
 
@@ -60,7 +60,7 @@ export const fullAddress = [
 /** Planning Center opens giving in an on-page modal when this param is present. */
 export const givingHref = (() => {
   const url = settings.giving.url;
-  if (!url) return '/give';
+  if (!url || settings.giving.provider === 'subsplash') return '/give';
   if (settings.giving.provider === 'planning-center') {
     return url + (url.includes('?') ? '&' : '?') + 'open-in-church-center-modal=true';
   }

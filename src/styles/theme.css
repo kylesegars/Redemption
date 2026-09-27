@@ -1,47 +1,51 @@
 /*
- * THEME — the per-church design knobs.
- * Change fonts, colors, and shape here to make each site feel custom.
+ * THEME — Redemption Church Coldwater.
+ * Colors and fonts carried over from the original site (Avada theme):
+ *   navy #021a26 · sky #95d9f7 · white/light greys · charcoal text #2d2d2d
+ *   Raleway ExtraBold headings · Montserrat body · Open Sans nav
  * Everything else in the site reads from these variables.
- *
- * Swapping fonts: `npm i @fontsource-variable/<font>` and update the two
- * imports below plus --font-display / --font-body.
  */
-@import '@fontsource-variable/archivo/wdth.css';
-@import '@fontsource-variable/dm-sans';
+@import '@fontsource-variable/raleway/wght.css';
+@import '@fontsource-variable/raleway/wght-italic.css';
+@import '@fontsource-variable/montserrat/wght.css';
+@import '@fontsource-variable/open-sans/wght.css';
 
 :root {
   /* ---- Color ---------------------------------------------------------- */
-  --color-bg: #f5f2ec;          /* page background */
+  --color-bg: #ffffff;          /* page background */
   --color-surface: #ffffff;     /* cards, forms */
-  --color-sand: #ebe5da;        /* alternate section background */
-  --color-ink: #151412;         /* primary text + dark sections */
-  --color-ink-soft: #57524a;    /* secondary text */
-  --color-line: #d9d2c5;        /* borders, dividers */
-  --color-accent: #d4502a;      /* buttons, highlights */
-  --color-accent-ink: #ffffff;  /* text on accent */
-  --color-accent-soft: #f6dccf; /* tags, subtle highlights */
-  --color-on-dark: #f5f2ec;     /* text on dark sections/images */
+  --color-sand: #f2f2f2;        /* alternate section background */
+  --color-ink: #021a26;         /* headings + dark (navy) sections */
+  --color-text: #2d2d2d;        /* body copy */
+  --color-ink-soft: #494949;    /* secondary text */
+  --color-line: #e5e5e5;        /* borders, dividers */
+  --color-accent: #95d9f7;      /* buttons, highlights (sky blue) */
+  --color-accent-ink: #021a26;  /* text on accent */
+  --color-accent-strong: #1f7fae; /* sky blue dark enough for text on white */
+  --color-accent-soft: #dff3fc; /* tags, subtle highlights */
+  --color-on-dark: #ffffff;     /* text on dark sections/images */
 
   /* ---- Type ----------------------------------------------------------- */
-  --font-display: 'Archivo Variable', 'Arial Narrow', system-ui, sans-serif;
-  --font-body: 'DM Sans Variable', system-ui, sans-serif;
+  --font-display: 'Raleway Variable', 'Arial', system-ui, sans-serif;
+  --font-body: 'Montserrat Variable', system-ui, sans-serif;
+  --font-nav: 'Open Sans Variable', system-ui, sans-serif;
   --display-weight: 800;
-  --display-stretch: 112%;          /* Archivo width axis: 62%–125% */
-  --display-transform: uppercase;   /* set to none for sentence-case headings */
-  --display-tracking: -0.01em;
+  --display-stretch: 100%;
+  --display-transform: none;        /* set to uppercase for all-caps headings */
+  --display-tracking: -0.03em;
 
   /* ---- Shape ---------------------------------------------------------- */
   --radius-sm: 6px;
-  --radius: 14px;
-  --radius-lg: 24px;
-  --radius-button: 999px;           /* 999px = pill, 6px = squared */
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-button: 8px;
 
   /* ---- Layout --------------------------------------------------------- */
-  --max-width: 1280px;
+  --max-width: 1240px;
   --gutter: clamp(16px, 4vw, 48px);
-  --section-space: clamp(64px, 10vw, 140px);
-  --header-height: 76px;
+  --section-space: clamp(64px, 9vw, 128px);
+  --header-height: 84px;
 
   /* ---- Image treatment ------------------------------------------------ */
-  --hero-overlay: linear-gradient(180deg, rgb(0 0 0 / 0.35) 0%, rgb(0 0 0 / 0.15) 40%, rgb(0 0 0 / 0.65) 100%);
+  --hero-overlay: linear-gradient(180deg, rgb(2 26 38 / 0.72) 0%, rgb(2 26 38 / 0.55) 45%, rgb(2 26 38 / 0.9) 100%);
 }

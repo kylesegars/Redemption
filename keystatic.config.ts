@@ -239,17 +239,18 @@ export default config({
             provider: fields.select({
               label: 'Giving platform',
               options: [
+                { label: 'Subsplash (form embedded on the Give page)', value: 'subsplash' },
                 { label: 'Planning Center (Church Center)', value: 'planning-center' },
                 { label: 'Other (link opens in a new tab)', value: 'other' },
               ],
-              defaultValue: 'planning-center',
+              defaultValue: 'subsplash',
             }),
             url: fields.url({
               label: 'Giving link',
               description:
-                'Planning Center: your Church Center giving URL, e.g. https://yourchurch.churchcenter.com/giving',
+                'Subsplash: the embed URL (https://wallet.subsplash.com/ui/embed/…). Planning Center: your Church Center giving URL.',
             }),
-            mailingAddress: fields.text({ label: 'Give by mail (optional)', multiline: true }),
+            mailingAddress: fields.text({ label: 'Give by check (optional)', description: 'Who to make checks payable to, memo line, mailing address.', multiline: true }),
             note: fields.text({
               label: 'Extra note (optional)',
               multiline: true,

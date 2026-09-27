@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AboutNav from '../../components/AboutNav.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const questions = [
+  {
+    q: 'Do I need to be saved?',
+    verse: 'Romans 5:12',
+    quote: '“Therefore, just as sin came into the world through one man, and death through sin, and so death spread to all men because all sinned…”',
+    body: [
+      'The Bible tells us that all people are born into sin. Imagine being born with a debilitating disease that you could not feel or see. You go to the doctor and you are told you have the issue. You think you feel fine, but the reality is that there is disease. That is how the Bible describes all people ever born. It does not matter your ethnicity, your status, or your heritage. All have sinned (Romans 3:23), and none are righteous (Romans 3:10).',
+    ],
+  },
+  {
+    q: 'What happens if I am not saved?',
+    verse: 'Romans 6:23',
+    quote: '“For the wages of sin is death, but the gift of God is eternal life through Jesus Christ our Lord.”',
+    body: [
+      'The Bible warns us that the cost (or wages) of our sin is death. We will all face human death because of sin coming into our world. Perhaps you have faced the loss of someone you deeply loved. That separation we feel over human death cannot be broken in this lifetime. That separation is painful.',
+      'If we are not saved by Christ, then we will not only face separation from those we love in this world, but we face a greater separation eternally from God. We face a second death, which is greater than the first (Revelation 20:14). Jesus urged us to not simply fear those who can kill our bodies but have the greater fear of the one who can kill both our body and soul in hell (Matthew 10:28).',
+    ],
+  },
+  {
+    q: 'What is the solution?',
+    verse: '1 John 4:14',
+    quote: '“The Father sent the Son to be the Savior of the World.”',
+    body: [
+      'The good news is that God saw our problem, and He acted. You do not need to pay your sin debt, but you do need the debt erased. If you began right now working to pay off your debt of sin, you would never accumulate enough righteousness.',
+      'Besides, all our works are like filthy rags (Isaiah 64:6), so that means that even your hard work would be tainted with the contamination of sin. God saw the issue, acted, and created a solution. He sent himself, in the form of a servant, to live a perfect life without sin (Philippians 2:7).',
+      'Then, at the right time, Christ died for us (Romans 5:6). We should have died as payment for our sin, but Christ died. Most importantly, He then rose from the dead. Today He sits at the right hand of God the Father. The consequences of sin and death did not defeat Him. Therefore, He alone has the power over sin & death, and He offers that salvation to you!',
+    ],
+  },
+  {
+    q: 'How can I be saved?',
+    verse: 'Colossians 2:13–14',
+    quote: '“And you, who were dead in your trespasses… God made alive together with him [Jesus Christ]… by canceling the record of debt that stood against us with its legal demands. This he set aside, nailing it to the cross.”',
+    body: [
+      'The Bible says that salvation is a gift. Gifts should be free and not earned. God’s gift is in no way deserved. Therefore, all one must do is simply believe that Christ alone has taken our sins and that he alone restores our fellowship with God. It really is that simple.',
+      'When the jailer asked that question to Paul and Silas, they answered: “Believe in the Lord Jesus and you will be saved…” (Acts 16:31). Notice they said, “Believe in the Lord Jesus,” not “Believe about the Lord Jesus.” There is a difference. We are not to merely believe that Jesus was a historical figure who lived and died. We are to believe in the sense that we commit our trust to the work, strength, and power of Jesus to save us.',
+      'We are to believe (commit our trust) in Christ’s position of authority to save us. Have you done that? If not, then right now pray to God and admit your sin, confess that you cannot save yourself, and confess to God that you are trusting in Christ alone to save you.',
+    ],
+  },
+  {
+    q: 'What happens after I am saved?',
+    verse: '2 Corinthians 5:17',
+    quote: '“Therefore, if anyone is in Christ, he is a new creation, the old has passed away; behold the new has come.”',
+    body: [
+      'The Bible says much about your new life in Christ. You are now filled with the Holy Spirit of the living God (1 Corinthians 2:12). You are now a part of the body of Christ on earth (Ephesians 2:19). You now are a new citizen of God’s Kingdom (Philippians 3:20). You are not just saved for heaven but for this life also.',
+      'The best thing you can do is gather with other believers who will help you on your new journey. Find a local church that preaches and teaches the Bible. Be both careful and selective. Not every place that claims to be a “Church” or “Christian” is following the Bible. Our local church is here to help.',
+    ],
+  },
+];
+---
+<BaseLayout title="The Gospel" description="What must I do to be saved? Five questions to ask about the gospel of Jesus Christ.">
+  <PageHero eyebrow="The Gospel" title="What is the gospel?" />
+  <AboutNav />
+
+  <section class="section">
+    <div class="container-narrow stack intro">
+      <p class="lede">
+        The most important question of all time was once asked by a jailer who came face to face with life and
+        death. The Bible records that an earthquake struck, and this man was shaken (literally). When he realized
+        how perilous his situation was, he asked two men of God this question: <strong>What must I do to be
+        saved?</strong> (Acts 16:30). He found the answer he was looking for.
+      </p>
+      <p class="ask">Have you asked yourself that question?</p>
+    </div>
+  </section>
+
+  <section class="section-tight questions-section">
+    <div class="container-narrow">
+      <div class="stack head"><span class="eyebrow">5 questions to ask</span></div>
+      <ol class="questions">
+        {questions.map((item, i) => (
+          <li>
+            <details open={i === 0}>
+              <summary>
+                <span class="num">{i + 1}</span>
+                <span class="q">{item.q}</span>
+                <Icon name="chevron-down" />
+              </summary>
+              <div class="answer prose">
+                <blockquote><p>{item.quote}</p><cite>{item.verse}</cite></blockquote>
+                {item.body.map((p) => <p>{p}</p>)}
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <CtaBand title="Our local church is here to help" text="Have questions about following Jesus? We'd love to talk with you.">
+    <a class="btn" href="/contact">Get in touch <Icon name="arrow" /></a>
+    <a class="btn btn-outline" href="/contact#visit" data-plan-visit>Plan a visit</a>
+  </CtaBand>
+</BaseLayout>
+
+<style>
+  .intro { --stack: 24px; }
+  .intro strong { color: var(--color-ink); }
+  .ask { font-family: var(--font-display); font-weight: 800; font-style: italic; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--color-ink); }
+  .head { margin-bottom: 20px; }
+  .questions { list-style: none; padding: 0; border-top: 1.5px solid var(--color-ink); }
+  .questions > li { border-bottom: 1px solid var(--color-line); }
+  .questions summary {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px;
+    padding: 24px 0; cursor: pointer; list-style: none;
+  }
+  .questions summary::-webkit-details-marker { display: none; }
+  .num {
+    width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--color-ink); color: var(--color-accent);
+    font-family: var(--font-display); font-weight: 800; font-size: 1.1rem;
+  }
+  .q { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.25rem, 2.2vw, 1.6rem); color: var(--color-ink); line-height: 1.2; }
+  .questions summary :global(svg) { transition: transform .3s ease; }
+  .questions details[open] summary :global(svg) { transform: rotate(180deg); }
+  .answer { padding: 0 0 32px 62px; font-size: 1.05rem; }
+  @media (max-width: 600px) { .answer { padding-left: 0; } }
+  .answer blockquote { margin-block: 0 1.2em; font-size: 1.2rem; }
+  .answer blockquote cite { display: block; margin-top: 8px; font-family: var(--font-body); font-style: normal; font-size: .78rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--accent-text); }
+</style>

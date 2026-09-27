@@ -5,6 +5,8 @@
  * giving link, etc.) live in Keystatic under "Church Info" instead
  * (src/data/settings.json). Colors and fonts live in src/styles/theme.css.
  */
+export type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
+
 export const siteConfig = {
   /**
    * The church's IANA timezone. Event dates/times entered in Keystatic are read
@@ -13,28 +15,44 @@ export const siteConfig = {
   timezone: 'America/Chicago',
   locale: 'en-US',
 
+  /** Google Analytics 4 measurement ID (leave empty to disable). */
+  gaId: 'G-4RCKL8E1PK',
+
   nav: [
-    { label: 'About', href: '/about' },
+    {
+      label: 'About',
+      href: '/about',
+      children: [
+        { label: 'Our Story', href: '/about' },
+        { label: 'The Gospel', href: '/about/the-gospel' },
+        { label: 'Leadership', href: '/about/leadership' },
+        { label: 'Core Values', href: '/about/core-values' },
+        { label: 'Beliefs', href: '/about/beliefs' },
+        { label: 'Life at Redemption', href: '/about/life-at-redemption-coldwater' },
+      ],
+    },
     { label: 'Events', href: '/events' },
     { label: 'Blog', href: '/blog' },
-    { label: 'Contact', href: '/contact' },
-  ],
+    { label: 'Food Pantry', href: '/food-pantry' },
+    { label: 'Partner', href: '/partner' },
+  ] as NavItem[],
   /** The highlighted button at the end of the nav. */
   navCta: { label: 'Give', href: '/give' },
 
   /** Options shown in the Keystatic dropdowns and as filters on the site. */
   eventCategories: [
-    { label: 'Sunday', value: 'sunday' },
+    { label: 'Worship', value: 'sunday' },
     { label: 'Community', value: 'community' },
-    { label: 'Kids & Students', value: 'kids-students' },
     { label: 'Groups', value: 'groups' },
     { label: 'Serve', value: 'serve' },
+    { label: 'Kids & Students', value: 'kids-students' },
   ],
   blogCategories: [
     { label: 'Church Life', value: 'church-life' },
     { label: 'Teaching', value: 'teaching' },
     { label: 'Stories', value: 'stories' },
     { label: 'Updates', value: 'updates' },
+    { label: 'Missions', value: 'missions' },
   ],
 
   /** How many upcoming events appear in the home page slider. */

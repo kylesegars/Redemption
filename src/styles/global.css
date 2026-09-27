@@ -5,9 +5,13 @@
 * { margin: 0; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Accent used as a *text* color: deep blue on light backgrounds, sky blue on navy/photos. */
+:root { --accent-text: var(--color-accent-strong); }
+.section-dark, .on-image, .site-footer, .mobile-menu { --accent-text: var(--color-accent); }
+
 body {
   background: var(--color-bg);
-  color: var(--color-ink);
+  color: var(--color-text);
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.6;
@@ -39,20 +43,22 @@ button { cursor: pointer; }
   font-weight: var(--display-weight);
   font-stretch: var(--display-stretch);
   letter-spacing: var(--display-tracking);
-  line-height: 0.98;
+  line-height: 1.02;
   text-wrap: balance;
 }
-h1, .h1 { font-size: clamp(2.75rem, 7.5vw, 6.5rem); text-transform: var(--display-transform); }
-h2, .h2 { font-size: clamp(2.1rem, 4.8vw, 4rem); text-transform: var(--display-transform); }
+h1, h2, h3, .display { color: var(--color-ink); }
+.section-dark :is(h1, h2, h3, .display), .on-image :is(h1, h2, h3, .display) { color: inherit; }
+h1, .h1 { font-size: clamp(2.6rem, 7vw, 5.75rem); text-transform: var(--display-transform); }
+h2, .h2 { font-size: clamp(2rem, 4.4vw, 3.6rem); text-transform: var(--display-transform); }
 h3, .h3 { font-size: clamp(1.3rem, 2vw, 1.6rem); line-height: 1.12; }
 p { text-wrap: pretty; }
 
 .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--font-body);
-  font-size: 0.8125rem; font-weight: 700;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--color-accent);
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent-text);
 }
 .eyebrow::before { content: ''; width: 24px; height: 2px; background: currentColor; }
 .lede { font-size: clamp(1.15rem, 1.6vw, 1.35rem); line-height: 1.5; color: var(--color-ink-soft); max-width: 60ch; }
@@ -64,6 +70,7 @@ p { text-wrap: pretty; }
 .section { padding-block: var(--section-space); }
 .section-tight { padding-block: calc(var(--section-space) * 0.6); }
 .section-dark { background: var(--color-ink); color: var(--color-on-dark); }
+.section-sky { background: var(--color-accent); color: var(--color-ink); --accent-text: var(--color-ink); }
 .section-dark .muted, .section-dark .lede { color: color-mix(in srgb, var(--color-on-dark) 72%, transparent); }
 .section-sand { background: var(--color-sand); }
 .section-head {
@@ -80,11 +87,12 @@ p { text-wrap: pretty; }
   min-height: 52px; padding: 14px 26px;
   border-radius: var(--radius-button); border: 2px solid var(--btn-border);
   background: var(--btn-bg); color: var(--btn-fg);
-  font-weight: 700; font-size: 0.975rem; letter-spacing: 0.01em;
+  font-weight: 700; font-size: 0.875rem; letter-spacing: 0.15em; text-transform: uppercase;
   text-decoration: none; white-space: nowrap;
   transition: transform .2s ease, background-color .2s ease, color .2s ease, border-color .2s ease;
 }
-.btn:hover { transform: translateY(-2px); }
+.btn:hover { transform: translateY(-2px); --btn-bg: color-mix(in srgb, var(--color-accent) 82%, white); }
+.btn-dark:hover { --btn-bg: color-mix(in srgb, var(--color-ink) 85%, white); }
 .btn svg { width: 18px; height: 18px; transition: transform .2s ease; }
 .btn:hover svg { transform: translateX(3px); }
 .btn-dark { --btn-bg: var(--color-ink); --btn-fg: var(--color-on-dark); }
@@ -161,10 +169,10 @@ p { text-wrap: pretty; }
 .prose h3 { font-size: 1.4rem; margin-top: 1.8em; }
 .prose h4 { font-size: 1.15rem; margin-top: 1.6em; }
 .prose h2 + *, .prose h3 + *, .prose h4 + * { margin-top: 0.6em; }
-.prose a { color: var(--color-accent); text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
+.prose a { color: var(--accent-text); text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
 .prose ul, .prose ol { padding-left: 1.3em; }
 .prose li + li { margin-top: 0.4em; }
-.prose li::marker { color: var(--color-accent); }
+.prose li::marker { color: var(--accent-text); }
 .prose blockquote {
   margin-block: 2em; padding: 4px 0 4px 28px;
   border-left: 4px solid var(--color-accent);

@@ -5,71 +5,49 @@ import Icon from '../components/Icon.astro';
 import { settings, givingHref } from '../lib/settings';
 
 const g = settings.giving;
+const embed = g.provider === 'subsplash' && g.url;
 const isPco = g.provider === 'planning-center' && g.url;
-const faqs = [
-  { q: 'Is my gift tax-deductible?', a: g.note ?? 'Yes. You will receive a giving statement at the end of the year.' },
-  { q: 'Can I set up recurring giving?', a: 'Yes! Choose "recurring" when you give online and select how often you’d like to give.' },
-  { q: 'How are gifts used?', a: 'Placeholder: explain how gifts support ministry, outreach, and serving the city.' },
-  { q: 'Who can I talk to about giving?', a: settings.email ? `Email us anytime at ${settings.email}.` : 'Reach out through our contact page anytime.' },
-];
 ---
-<BaseLayout title="Give" description={`Give to ${settings.churchName}.`} overlayHeader>
+<BaseLayout title="Give" description={`Give to ${settings.churchName}.`}>
   <PageHero
     eyebrow="Give"
-    title="Generosity changes everything"
-    lede="Your giving helps us reach our neighbors, serve our city, and make room for more people to find hope in Jesus."
-    image="/images/site/give.svg"
-  >
-    <div class="btn-row">
-      <a class="btn" href={givingHref} target={isPco ? undefined : '_blank'} rel="noopener">Give online <Icon name="arrow" /></a>
-    </div>
-  </PageHero>
+    title="Partnering in the gospel"
+    lede="Your generosity helps us proclaim Christ, cultivate community, and make disciples in Coldwater and Tate County."
+  />
 
   <section class="section">
-    <div class="container give-intro">
-      <blockquote class="verse" data-reveal>
-        <p>“Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.”</p>
-        <cite>2 Corinthians 9:7</cite>
-      </blockquote>
-      <p class="lede" data-reveal>
-        We believe giving is an act of worship and trust. Every gift — big or small — helps build a church
-        that serves {settings.location.city ?? 'our city'} for generations.
-      </p>
-    </div>
-  </section>
-
-  <section class="section-tight">
-    <div class="container">
-      <div class="section-head"><div><span class="eyebrow">Ways to give</span><h2>Choose what works for you</h2></div></div>
-      <div class="ways">
-        <div class="way primary">
-          <Icon name="device" size={32} />
-          <h3 class="h3">Online</h3>
-          <p>The fastest way to give once or set up recurring giving.</p>
-          <a class="btn btn-light" href={givingHref} target={isPco ? undefined : '_blank'} rel="noopener">Give online <Icon name="arrow" /></a>
-        </div>
-        <div class="way">
-          <Icon name="gift" size={32} />
-          <h3 class="h3">In person</h3>
-          <p class="muted">Drop cash or a check in the giving box at the back during any Sunday gathering.</p>
-        </div>
+    <div class="container give-grid">
+      <div class="stack give-info" data-reveal>
+        <span class="eyebrow">Information about giving</span>
+        <h2 class="h2">Give online</h2>
+        {g.note && <p class="lede">{g.note}</p>}
+        <blockquote class="verse">
+          <p>“I thank my God in all my remembrance of you … because of your partnership in the gospel from the first day until now.”</p>
+          <cite>Philippians 1:3–5</cite>
+        </blockquote>
         {g.mailingAddress && (
-          <div class="way">
-            <Icon name="mailbox" size={32} />
-            <h3 class="h3">By mail</h3>
-            <p class="muted">Make checks payable to {settings.churchName} and mail to:</p>
-            <address>{g.mailingAddress.split('\n').map((l) => <>{l}<br /></>)}</address>
+          <div class="by-check">
+            <Icon name="mail" />
+            <div>
+              <p class="by-check-title">Give by check</p>
+              <p class="muted">Make checks payable to:</p>
+              <address>{g.mailingAddress.split('\n').map((l) => <>{l}<br /></>)}</address>
+            </div>
           </div>
         )}
+        <p class="muted">Want to support the church plant monthly? <a href="/partner">See ways to partner</a>.</p>
       </div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="container-narrow">
-      <div class="stack faq-head"><span class="eyebrow">Questions</span><h2>Giving FAQ</h2></div>
-      <div class="faq">
-        {faqs.map((f) => <details><summary>{f.q}<Icon name="chevron-down" /></summary><p>{f.a}</p></details>)}
+      <div class="give-form" data-reveal>
+        {embed ? (
+          <iframe src={g.url!} title="Online giving form" loading="lazy" allow="payment"></iframe>
+        ) : (
+          <div class="give-fallback stack">
+            <h3 class="h3">Give securely online</h3>
+            <p>Give once or set up recurring giving.</p>
+            <a class="btn" href={givingHref} target={isPco ? undefined : '_blank'} rel="noopener">Give online <Icon name="arrow" /></a>
+          </div>
+        )}
       </div>
     </div>
   </section>
@@ -78,23 +56,21 @@ const faqs = [
 {isPco && <script is:inline src="https://js.churchcenter.com/modal/v1" defer></script>}
 
 <style>
-  .give-intro { display: grid; gap: 40px; align-items: center; }
-  @media (min-width: 960px) { .give-intro { grid-template-columns: 1.3fr 1fr; gap: 80px; } }
-  .verse p { font-family: var(--font-display); font-weight: 600; font-stretch: 100%; font-size: clamp(1.6rem, 3.2vw, 2.6rem); line-height: 1.2; }
-  .verse cite { display: block; margin-top: 18px; font-style: normal; font-weight: 700; color: var(--color-accent); letter-spacing: .08em; text-transform: uppercase; font-size: .9rem; }
-  .ways { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-  .way { display: grid; gap: 14px; align-content: start; padding: clamp(28px, 3vw, 40px); border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-line); }
-  .way :global(svg) { color: var(--color-accent); }
-  .way.primary { background: var(--color-ink); color: var(--color-on-dark); border-color: var(--color-ink); }
-  .way.primary .btn { justify-self: start; margin-top: 8px; }
-  .way.primary .btn :global(svg) { color: inherit; }
-  .way address { font-style: normal; font-weight: 600; }
-  .faq-head { margin-bottom: 32px; }
-  .faq { border-top: 1.5px solid var(--color-ink); }
-  .faq details { border-bottom: 1px solid var(--color-line); }
-  .faq summary { display: flex; justify-content: space-between; gap: 16px; padding: 22px 0; cursor: pointer; list-style: none; font-weight: 700; font-size: 1.15rem; }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq summary :global(svg) { flex: none; transition: transform .3s ease; }
-  .faq details[open] summary :global(svg) { transform: rotate(180deg); }
-  .faq details p { padding-bottom: 22px; color: var(--color-ink-soft); }
+  .give-grid { display: grid; gap: 48px; align-items: start; }
+  @media (min-width: 980px) { .give-grid { grid-template-columns: 1fr 1fr; gap: 72px; } }
+  .give-info { --stack: 22px; }
+  .give-info a:not(.btn) { color: var(--accent-text); font-weight: 600; text-underline-offset: 3px; }
+  .verse { margin: 8px 0; padding-left: 22px; border-left: 4px solid var(--color-accent); }
+  .verse p { font-family: var(--font-display); font-weight: 700; font-style: italic; font-size: clamp(1.25rem, 2vw, 1.5rem); line-height: 1.35; color: var(--color-ink); }
+  .verse cite { display: block; margin-top: 10px; font-style: normal; font-weight: 600; color: var(--accent-text); letter-spacing: .15em; text-transform: uppercase; font-size: .78rem; }
+  .by-check { display: flex; gap: 16px; padding: 22px 24px; border-radius: var(--radius); background: var(--color-sand); }
+  .by-check :global(svg) { flex: none; color: var(--accent-text); margin-top: 2px; }
+  .by-check-title { font-weight: 700; color: var(--color-ink); }
+  .by-check address { font-style: normal; font-weight: 600; margin-top: 4px; }
+  .give-form {
+    border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface);
+    border: 1px solid var(--color-line); box-shadow: 0 24px 60px rgb(2 26 38 / 0.10);
+  }
+  .give-form iframe { display: block; width: 100%; height: 680px; border: 0; }
+  .give-fallback { padding: 40px; }
 </style>

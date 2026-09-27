@@ -16,7 +16,7 @@ const badge = dateBadge(d.start);
 >
   <a href={`/events/${event.id}`} class="event-link">
     <div class="event-media media">
-      <img src={d.image ?? '/images/site/community.svg'} alt="" loading="lazy" decoding="async" />
+      <img src={d.image ?? '/images/site/sanctuary.jpg'} alt="" loading="lazy" decoding="async" />
       <div class="date-badge" aria-hidden="true">
         <span class="m">{badge.month}</span>
         <span class="d">{badge.day}</span>
@@ -43,7 +43,7 @@ const badge = dateBadge(d.start);
     border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-ink);
     line-height: 1;
   }
-  .date-badge .m { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent); }
+  .date-badge .m { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text); }
   .date-badge .d {
     font-family: var(--font-display); font-weight: var(--display-weight); font-stretch: var(--display-stretch);
     font-size: 1.9rem; margin-top: 4px;

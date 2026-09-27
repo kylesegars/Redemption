@@ -3,81 +3,82 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import EventSlider from '../components/EventSlider.astro';
 import PostCard from '../components/PostCard.astro';
-import { settings, cityState } from '../lib/settings';
+import { settings, fullAddress } from '../lib/settings';
 import { getUpcomingEvents, getPosts } from '../lib/content';
 import { siteConfig } from '../site.config';
 
 const events = (await getUpcomingEvents()).slice(0, siteConfig.homeEventCount);
 const posts = (await getPosts()).slice(0, 3);
-const city = settings.location.city ?? 'our city';
+const service = settings.serviceTimes[0];
+
+/* Page copy lives here so the layout stays locked. Edit freely. */
+const currentSeries = {
+  title: 'Ecclesiastes',
+  subtitle: 'Looking Above the Sun',
+  text: 'Join us on Sunday mornings as we study the book of Ecclesiastes! To listen to the sermons from this series or some of our past series, visit our Facebook page.',
+  image: '/images/blog/ecclesiastes-looking-above-the-sun/featuredImage.jpg',
+};
+
+const rhythms = [
+  { name: 'Pulpit', img: '/images/site/pulpit.png', text: 'Gathered worship on Sunday mornings, pointing us upward to God.' },
+  { name: 'Table', img: '/images/site/table.png', text: 'Community and Life on Life groups where strangers become family.' },
+  { name: 'Square', img: '/images/site/square.png', text: 'Engaging Coldwater and the world through service and the gospel.' },
+];
 ---
 <BaseLayout overlayHeader>
   <!-- Hero -->
   <section class="hero on-image">
-    <img class="hero-bg" src="/images/site/hero.svg" alt="" fetchpriority="high" />
+    <img class="hero-bg" src="/images/site/sanctuary.jpg" alt="" fetchpriority="high" />
     <div class="container hero-inner">
-      <span class="eyebrow">A new church for {cityState || city}</span>
-      <h1 class="hero-title">Find your<br />people.<br /><span>Find hope.</span></h1>
-      <div class="hero-bottom">
-        <p class="lede">
-          {settings.churchName} is a new church family for everyone in {city} — whether you've followed
-          Jesus for years or you're just curious.
-        </p>
-        <div class="btn-row">
-          <a class="btn" href="/contact#visit" data-plan-visit>Plan a visit <Icon name="arrow" /></a>
-          <a class="btn btn-outline" href="/about">Our story</a>
-        </div>
+      <img class="hero-logo" src="/images/site/logo-horizontal.png" alt={settings.churchName} width="1313" height="438" />
+      <span class="hero-tagline">{settings.tagline}</span>
+      <h1 class="hero-title">Join us {service ? `${service.day} at ${service.time.replace(' ', '')}` : 'this Sunday'} for&nbsp;worship!</h1>
+      <div class="btn-row hero-actions">
+        <a class="btn" href="/contact#visit" data-plan-visit>Plan a visit <Icon name="arrow" /></a>
+        {settings.location.mapUrl && (
+          <a class="btn btn-outline" href={settings.location.mapUrl} target="_blank" rel="noopener"><Icon name="pin" /> {fullAddress}</a>
+        )}
       </div>
     </div>
+    <svg class="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120V60C240 10 480 0 720 30s480 70 720 20v70z" /></svg>
   </section>
 
-  <!-- Service info strip -->
-  <section class="info-strip section-dark">
-    <div class="container info-grid">
-      <div class="info-item">
-        <Icon name="clock" />
-        <div>
-          <p class="info-label">Gather with us</p>
-          {settings.serviceTimes.map((s) => <p class="info-value">{s.day} · {s.time}</p>)}
-        </div>
-      </div>
-      <div class="info-item">
-        <Icon name="pin" />
-        <div>
-          <p class="info-label">Location</p>
-          <p class="info-value">{settings.location.venue}</p>
-          {settings.location.mapUrl && <a class="info-link" href={settings.location.mapUrl} target="_blank" rel="noopener">Get directions</a>}
-        </div>
-      </div>
-      <div class="info-item">
-        <Icon name="smile" />
-        <div>
-          <p class="info-label">Kids</p>
-          <p class="info-value">{settings.serviceTimes[0]?.note ?? 'Kids program every week'}</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mission / intro -->
+  <!-- What to expect + current series -->
   <section class="section">
-    <div class="container intro">
-      <div class="intro-copy stack" data-reveal>
-        <span class="eyebrow">Who we are</span>
-        <p class="statement">
-          We're a church for {city} — a family of ordinary people learning to love God,
-          love each other, and <em>love our city</em> the way Jesus does.
+    <div class="container expect">
+      <div class="stack expect-copy" data-reveal>
+        <span class="eyebrow">What to expect</span>
+        <h2>Come as you are</h2>
+        <p class="lede">
+          Our Sunday morning gatherings are a time when we come together to proclaim and exalt the saving
+          gospel of Jesus Christ through worship, prayer, Bible teaching, giving, fellowship, and serving one
+          another.
         </p>
-        <a class="link-arrow" href="/about">More about us <Icon name="arrow" /></a>
+        <p>
+          We hope anyone who walks through the doors of Redemption Church feels welcomed, loved, and
+          encouraged to follow Jesus.
+        </p>
+        <ul class="facts">
+          {service && <li><Icon name="clock" /><span><strong>{service.day} · {service.time}</strong><br />{service.note}</span></li>}
+          {fullAddress && <li><Icon name="pin" /><span><strong>{settings.location.venue}</strong><br />{fullAddress}</span></li>}
+        </ul>
       </div>
-      <div class="intro-media" data-reveal>
-        <div class="media tall"><img src="/images/site/community.svg" alt="" loading="lazy" /></div>
-        <div class="media small"><img src="/images/site/worship.svg" alt="" loading="lazy" /></div>
-      </div>
+
+      <article class="series" data-reveal>
+        <div class="media series-media"><img src={currentSeries.image} alt={`${currentSeries.title}: ${currentSeries.subtitle}`} loading="lazy" /></div>
+        <div class="series-copy stack">
+          <span class="eyebrow">Current series</span>
+          <h3 class="h3">{currentSeries.title}: {currentSeries.subtitle}</h3>
+          <p class="muted">{currentSeries.text}</p>
+          {settings.social.facebook && (
+            <a class="btn btn-dark" href={settings.social.facebook} target="_blank" rel="noopener"><Icon name="facebook" /> Listen on Facebook</a>
+          )}
+        </div>
+      </article>
     </div>
   </section>
 
-  <!-- Events slider -->
+  <!-- Events -->
   <section class="section section-dark events-section">
     <div class="container">
       <div class="section-head">
@@ -86,38 +87,90 @@ const city = settings.location.city ?? 'our city';
           <h2>Upcoming events</h2>
         </div>
       </div>
-      <EventSlider events={events} />
-      <p class="events-all"><a class="btn btn-light" href="/events">See all events <Icon name="arrow" /></a></p>
+      {events.length > 0 ? (
+        <EventSlider events={events} />
+      ) : (
+        <div class="weekly">
+          <img src="/images/site/pulpit.png" alt="" width="64" height="64" />
+          <div>
+            <h3 class="h3">Weekly Worship Service</h3>
+            <p class="muted">Every {service ? `${service.day.replace(/s$/, '')} at ${service.time}` : 'Sunday'}{fullAddress && ` · ${fullAddress}`}</p>
+          </div>
+        </div>
+      )}
+      <p class="events-all"><a class="btn" href="/events">See all events <Icon name="arrow" /></a></p>
     </div>
   </section>
 
-  <!-- Next steps -->
+  <!-- Why Coldwater -->
+  <section class="why on-image">
+    <img class="why-bg" src="/images/site/coldwater-tower.jpg" alt="" loading="lazy" />
+    <div class="container why-inner">
+      <div class="stack" data-reveal>
+        <span class="eyebrow">Why Coldwater?</span>
+        <h2>“A wonderful place to call home”</h2>
+      </div>
+      <div class="stack why-copy" data-reveal>
+        <p>
+          The Coldwater area is like many small towns in Mississippi. There are Dollar Generals less than a mile
+          away from each other, an old town square, railroad tracks criss-crossing the roads, family farms, and
+          endless wooded areas. Amid this scenic southern landscape, there is also brokenness, poverty,
+          addiction, family issues, illness, and lostness.
+        </p>
+        <p>
+          Even in Mississippi, the most religious state in the U.S., there is a great need for healthy new
+          churches that preach the Word, are Christ-centered, gospel-proclaiming, and will missionally engage
+          the community. We hope to be a light in the Coldwater and Tate County area and see the lost and far
+          off from God experience <strong>redemption through Jesus</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our story -->
   <section class="section">
+    <div class="container story">
+      <div class="media story-media" data-reveal><img src="/images/site/first-service.jpg" alt="Redemption Church Coldwater's first service" loading="lazy" /></div>
+      <div class="stack story-copy" data-reveal>
+        <span class="eyebrow">Our story</span>
+        <h2>A building given for the gospel</h2>
+        <p>
+          In 2023, Longview Point Baptist Church was given a building by a church that had shut its doors. The
+          keys were handed over with the hopes of seeing it filled and used once again to bring the gospel to
+          Tate County.
+        </p>
+        <p>
+          At the same time, Longview Point had connected with Sam Henderson about becoming a church planting
+          resident. In January 2024, Sam and family (Natalie, Sammy, and James) came to Longview Point with the
+          intent of planting in Coldwater.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-dark" href="/about">Read our story <Icon name="arrow" /></a>
+          <a class="btn btn-outline" href="/partner">Partner with us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pulpit, Table, Square -->
+  <section class="section section-dark">
     <div class="container">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Next steps</span>
-          <h2>Be part of the story</h2>
+          <span class="eyebrow">Life at Redemption</span>
+          <h2>Pulpit. Table. Square.</h2>
         </div>
-        <p class="lede">Every church plant is built by people who say yes. Here's how to get connected.</p>
+        <a class="link-arrow" href="/about/life-at-redemption-coldwater">How we make disciples <Icon name="arrow" /></a>
       </div>
-      <div class="steps">
-        {[
-          { title: 'Visit on a Sunday', text: 'Come as you are. We’ll save you a seat and help you find your way.', href: '/contact#visit', img: '/images/site/visit.svg', visit: true },
-          { title: 'Partner with us', text: 'Pray, give, or join the launch team as we plant a church in ' + city + '.', href: '/partner', img: '/images/site/partner.svg' },
-          { title: 'Give', text: 'Your generosity helps us reach our neighbors and serve our city.', href: '/give', img: '/images/site/give.svg' },
-        ].map((s, i) => (
-          <a class="step on-image" href={s.href} data-plan-visit={s.visit ? '' : undefined} data-reveal style={`transition-delay:${i * 80}ms`}>
-            <img src={s.img} alt="" loading="lazy" />
-            <div class="step-copy">
-              <span class="step-num">0{i + 1}</span>
-              <h3 class="h3">{s.title}</h3>
-              <p>{s.text}</p>
-              <span class="step-arrow"><Icon name="arrow" /></span>
-            </div>
-          </a>
+      <ol class="rhythms">
+        {rhythms.map((r, i) => (
+          <li data-reveal style={`transition-delay:${i * 80}ms`}>
+            <img src={r.img} alt="" width="96" height="96" loading="lazy" />
+            <h3 class="h3">{r.name}</h3>
+            <p class="muted">{r.text}</p>
+          </li>
         ))}
-      </div>
+      </ol>
     </div>
   </section>
 
@@ -128,7 +181,7 @@ const city = settings.location.city ?? 'our city';
         <div class="section-head">
           <div>
             <span class="eyebrow">From the blog</span>
-            <h2>Latest stories</h2>
+            <h2>Latest posts</h2>
           </div>
           <a class="link-arrow" href="/blog">View all posts <Icon name="arrow" /></a>
         </div>
@@ -141,65 +194,64 @@ const city = settings.location.city ?? 'our city';
 </BaseLayout>
 
 <style>
-  .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; color: var(--color-on-dark); overflow: hidden; }
+  .hero {
+    position: relative; min-height: 100svh; display: flex; align-items: center;
+    color: var(--color-on-dark); background: var(--color-ink); overflow: hidden;
+  }
   .hero::before { content: ''; position: absolute; inset: 0; z-index: 1; background: var(--hero-overlay); }
   .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   @media (prefers-reduced-motion: no-preference) {
     .hero-bg { animation: hero-zoom 18s ease-out both; }
     @keyframes hero-zoom { from { transform: scale(1.08); } }
   }
-  .hero-inner { position: relative; z-index: 2; display: grid; gap: 28px; padding-top: calc(var(--header-height) + 60px); padding-bottom: clamp(48px, 7vw, 96px); }
-  .hero .eyebrow { color: var(--color-on-dark); }
-  .hero-title { font-size: clamp(3.3rem, 11vw, 10rem); line-height: 0.9; }
-  .hero-title span { color: var(--color-accent); }
-  .hero-bottom { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 28px 48px; }
-  .hero .lede { color: color-mix(in srgb, var(--color-on-dark) 88%, transparent); max-width: 46ch; }
-  /* Keep hero buttons clear of the floating Plan a Visit button on phones */
-  @media (max-width: 600px) { .hero-bottom .btn-row { padding-right: 110px; } }
-
-  .info-strip { padding-block: 36px; border-top: 1px solid color-mix(in srgb, var(--color-on-dark) 15%, transparent); }
-  .info-grid { display: grid; gap: 28px; }
-  @media (min-width: 800px) { .info-grid { grid-template-columns: repeat(3, 1fr); } }
-  .info-item { display: flex; gap: 16px; align-items: flex-start; }
-  .info-item > :global(svg) { flex: none; width: 28px; height: 28px; color: var(--color-accent); }
-  .info-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: .65; }
-  .info-value { font-weight: 600; font-size: 1.1rem; }
-  .info-link { font-size: 0.95rem; text-underline-offset: 3px; }
-
-  .intro { display: grid; gap: 56px; align-items: center; }
-  @media (min-width: 960px) { .intro { grid-template-columns: 1.1fr 1fr; gap: 80px; } }
-  .intro-copy { --stack: 28px; }
-  .statement {
-    font-family: var(--font-display); font-stretch: 100%; font-weight: 600;
-    font-size: clamp(1.7rem, 3.3vw, 2.8rem); line-height: 1.15; letter-spacing: -0.01em;
+  .hero-inner {
+    position: relative; z-index: 2; display: grid; justify-items: center; text-align: center; gap: 22px;
+    padding-top: calc(var(--header-height) + 48px); padding-bottom: clamp(120px, 14vw, 180px);
   }
-  .statement em { font-style: normal; color: var(--color-accent); }
-  .intro-media { position: relative; padding-bottom: 18%; }
-  .intro-media .tall { aspect-ratio: 4 / 5; width: 78%; }
-  .intro-media .small { position: absolute; right: 0; bottom: 0; width: 48%; aspect-ratio: 1; border: 8px solid var(--color-bg); }
+  .hero-logo { width: min(520px, 82vw); height: auto; }
+  .hero-tagline { font-size: clamp(0.66rem, 1.4vw, 0.85rem); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-accent); }
+  .hero-title { font-style: italic; font-size: clamp(2.4rem, 6.4vw, 5.25rem); line-height: 1.05; max-width: 16ch; }
+  .hero-actions { justify-content: center; margin-top: 8px; }
+  .hero-actions .btn-outline { white-space: normal; }
+  .hero-wave { position: absolute; z-index: 2; left: 0; right: 0; bottom: -1px; width: 100%; height: clamp(40px, 7vw, 110px); fill: var(--color-bg); }
+  /* Keep hero buttons clear of the floating Plan a Visit button on phones */
+  @media (max-width: 600px) { .hero-actions { padding-inline: 8px; } }
+
+  .expect { display: grid; gap: 56px; align-items: center; }
+  @media (min-width: 1000px) { .expect { grid-template-columns: 1fr 1fr; gap: 80px; } }
+  .expect-copy { --stack: 22px; }
+  .facts { list-style: none; padding: 0; display: grid; gap: 14px; margin-top: 8px; }
+  .facts li { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: var(--radius); background: var(--color-sand); }
+  .facts :global(svg) { flex: none; color: var(--accent-text); margin-top: 2px; }
+  .facts strong { color: var(--color-ink); }
+
+  .series { border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface); border: 1px solid var(--color-line); box-shadow: 0 24px 60px rgb(2 26 38 / 0.10); }
+  .series-media { aspect-ratio: 16 / 9; border-radius: 0; }
+  .series-copy { --stack: 14px; padding: clamp(24px, 3vw, 36px); }
+  .series-copy .btn { justify-self: start; margin-top: 6px; }
 
   .events-section .section-head { margin-bottom: clamp(32px, 5vw, 64px); }
   .events-all { margin-top: 48px; }
+  .weekly { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; padding: clamp(24px, 3vw, 36px); border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--color-on-dark) 18%, transparent); }
+  .weekly img { width: 56px; height: 56px; }
 
-  .steps { display: grid; gap: 20px; }
-  @media (min-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
-  .step {
-    position: relative; overflow: hidden; border-radius: var(--radius-lg);
-    min-height: 460px; display: flex; align-items: flex-end;
-    color: var(--color-on-dark); text-decoration: none;
-  }
-  .step img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
-  .step::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / .75)); }
-  .step:hover img { transform: scale(1.06); }
-  .step-copy { position: relative; z-index: 2; display: grid; gap: 10px; padding: 28px; width: 100%; }
-  .step-num { font-family: var(--font-display); font-weight: 800; font-stretch: var(--display-stretch); color: var(--color-accent); }
-  .step-copy p { opacity: .85; max-width: 32ch; }
-  .step-arrow {
-    position: absolute; right: 24px; top: -28px; width: 52px; height: 52px; border-radius: 50%;
-    display: grid; place-items: center; background: var(--color-on-dark); color: var(--color-ink);
-    transition: transform .3s ease, background-color .3s ease, color .3s ease;
-  }
-  .step:hover .step-arrow { transform: rotate(-45deg); background: var(--color-accent); color: var(--color-accent-ink); }
+  .why { position: relative; color: var(--color-on-dark); background: var(--color-ink); padding-block: var(--section-space); overflow: hidden; }
+  .why::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgb(2 26 38 / .92) 0%, rgb(2 26 38 / .7) 100%); }
+  .why-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .why-inner { position: relative; z-index: 2; display: grid; gap: 40px; }
+  @media (min-width: 960px) { .why-inner { grid-template-columns: 0.9fr 1.1fr; gap: 80px; align-items: start; } }
+  .why-copy { --stack: 18px; font-size: 1.08rem; color: color-mix(in srgb, var(--color-on-dark) 88%, transparent); }
+  .why-copy strong { color: var(--color-accent); }
+
+  .story { display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 960px) { .story { grid-template-columns: 1fr 1fr; gap: 80px; } }
+  .story-copy { --stack: 20px; }
+  .story-media { aspect-ratio: 3 / 2; box-shadow: 0 24px 60px rgb(2 26 38 / 0.15); }
+
+  .rhythms { list-style: none; padding: 0; display: grid; gap: 40px 32px; }
+  @media (min-width: 800px) { .rhythms { grid-template-columns: repeat(3, 1fr); } }
+  .rhythms li { display: grid; gap: 14px; justify-items: start; padding: 32px; border-radius: var(--radius-lg); border: 1px solid color-mix(in srgb, var(--color-on-dark) 18%, transparent); }
+  .rhythms img { width: 72px; height: 72px; }
 
   .post-grid { display: grid; gap: 40px 28px; }
   @media (min-width: 760px) { .post-grid { grid-template-columns: repeat(2, 1fr); } }
