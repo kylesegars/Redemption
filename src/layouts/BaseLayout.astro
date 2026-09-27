@@ -11,8 +11,6 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
-  /** Header floats transparently over a full-bleed hero. */
-  overlayHeader?: boolean;
   /** Show the newsletter band above the footer (when enabled in Church Info). */
   newsletter?: boolean;
   type?: 'website' | 'article';
@@ -22,7 +20,6 @@ const {
   title,
   description = settings.tagline ?? '',
   image = '/images/site/og-image.jpg',
-  overlayHeader = false,
   newsletter = true,
   type = 'website',
 } = Astro.props;
@@ -64,7 +61,7 @@ const ogImage = new URL(image, Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header overlay={overlayHeader} />
+    <Header />
     <main id="main">
       <slot />
     </main>
