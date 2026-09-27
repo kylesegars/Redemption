@@ -133,9 +133,13 @@ const service = settings.serviceTimes[0];
     position: sticky; top: 0; z-index: 50;
     height: var(--header-height);
     background: var(--color-ink); color: var(--color-on-dark);
-    transition: box-shadow .3s ease;
+    /* One shadow for the bar + logo circle together: drop-shadow follows their
+       combined outline, so it only shows along the bottom edge and the circle's
+       lower half. Slightly deeper once the page scrolls under the header. */
+    filter: drop-shadow(0 6px 10px rgb(2 26 38 / 0.22));
+    transition: filter .3s ease;
   }
-  .site-header.is-scrolled { box-shadow: 0 6px 24px rgb(2 26 38 / 0.25); }
+  .site-header.is-scrolled { filter: drop-shadow(0 8px 14px rgb(2 26 38 / 0.30)); }
   .header-inner {
     position: relative; height: 100%;
     display: grid; grid-template-columns: 1fr var(--badge-size) 1fr; align-items: center;
