@@ -61,7 +61,7 @@ const service = settings.serviceTimes[0];
 <!-- Mobile / tablet menu: floating card over a dimmed, blurred page -->
 <div class="mobile-menu" id="mobile-menu" data-mobile-menu aria-hidden="true" inert>
   <div class="menu-backdrop" data-menu-close></div>
-  <div class="menu-card" role="dialog" aria-modal="true" aria-label="Site menu">
+  <div class="menu-card" role="dialog" aria-modal="true" aria-label="Site menu" tabindex="-1">
     <nav aria-label="Mobile">
       <ul class="menu-links">
         <li style="--i:0"><a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a></li>
@@ -228,6 +228,8 @@ const service = settings.serviceTimes[0];
     transition: opacity .25s ease, transform .35s cubic-bezier(.2,.8,.2,1);
   }
   .mobile-menu.is-open .menu-card { opacity: 1; transform: none; }
+  /* The panel itself takes focus on open (no ring); links still show focus when tabbed to */
+  .menu-card:focus { outline: none; }
 
   .menu-links { list-style: none; padding: 0; margin: 0; }
   .menu-links > li { border-bottom: 1px solid color-mix(in srgb, var(--color-on-dark) 10%, transparent); }
@@ -303,7 +305,9 @@ const service = settings.serviceTimes[0];
     menu.setAttribute('aria-hidden', String(!open));
     menu.toggleAttribute('inert', !open);
     document.body.classList.toggle('menu-open', open);
-    if (open) menu.querySelector<HTMLElement>('.menu-links a')?.focus({ preventScroll: true });
+    // Focus the panel (not the first link) so touch browsers don't draw a focus ring on "Home";
+    // keyboard users reach the links with the next Tab.
+    if (open) menu.querySelector<HTMLElement>('.menu-card')?.focus({ preventScroll: true });
     else if (document.activeElement && menu.contains(document.activeElement)) toggle.focus({ preventScroll: true });
   };
   toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
