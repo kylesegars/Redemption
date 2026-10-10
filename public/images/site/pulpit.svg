@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 430" width="430" height="430">
+  <title>Pulpit</title>
+  <path d="M40.1,84.4 Q18,44 64.0,44.0 L366.0,44.0 Q412,44 389.9,84.4 L234.2,368.9 Q215,404 195.8,368.9 Z" fill="#081c26" stroke="#fff" stroke-width="20" stroke-linejoin="round"/>
+  <g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M215 330 V146"/>
+    <path d="M185 180 L215 138 L245 180"/>
+  </g>
+</svg>

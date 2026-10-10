@@ -22,7 +22,7 @@ const currentSeries = {
 };
 
 const rhythms = [
-  { name: 'Pulpit', img: '/images/site/pulpit.png', text: 'Gathered worship on Sunday mornings, pointing us upward to God.' },
+  { name: 'Pulpit', img: '/images/site/pulpit.svg', text: 'Gathered worship on Sunday mornings, pointing us upward to God.' },
   { name: 'Table', img: '/images/site/table.png', text: 'Community and Life on Life groups where strangers become family.' },
   { name: 'Square', img: '/images/site/square.png', text: 'Engaging Coldwater and the world through service and the gospel.' },
 ];
@@ -96,7 +96,7 @@ const rhythms = [
         <EventSlider events={events} />
       ) : (
         <div class="weekly">
-          <img src="/images/site/pulpit.png" alt="" width="64" height="64" />
+          <img src="/images/site/pulpit.svg" alt="" width="64" height="64" />
           <div>
             <h3 class="h3">Weekly Worship Service</h3>
             <p class="muted">Every {service ? `${service.day.replace(/s$/, '')} at ${service.time}` : 'Sunday'}{fullAddress && ` · ${fullAddress}`}</p>
